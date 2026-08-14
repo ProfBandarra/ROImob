@@ -21,8 +21,10 @@ import {
   Activity, 
   AlertOctagon, 
   ShieldAlert, 
-  Gavel 
+  Gavel,
+  FileText
 } from 'lucide-react';
+import { FormalReportModal } from '../ReportExport/FormalReportModal';
 
 const HORIZON_OPTIONS = [1, 3, 5, 10, 15];
 
@@ -136,6 +138,8 @@ export const SellVsRentCalculator: React.FC = () => {
     { key: 'betIndex', rate: 10.5, ...t.sellVsRent.presets.betIndex },
   ];
 
+  const [showReportModal, setShowReportModal] = useState<boolean>(false);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
@@ -166,10 +170,10 @@ export const SellVsRentCalculator: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => window.print()}
-            className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors"
+            onClick={() => setShowReportModal(true)}
+            className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors shadow-md"
           >
-            <Printer className="w-4 h-4 text-slate-400" />
+            <FileText className="w-4 h-4 text-brand-400" />
             <span>{t.sellVsRent.exportReportBtn}</span>
           </button>
         </div>
@@ -1060,6 +1064,18 @@ export const SellVsRentCalculator: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Formal Audit Report Modal */}
+      {showReportModal && (
+        <FormalReportModal
+          type="sellVsRent"
+          sellVsRentData={{
+            inputs,
+            result
+          }}
+          onClose={() => setShowReportModal(false)}
+        />
+      )}
 
     </div>
   );

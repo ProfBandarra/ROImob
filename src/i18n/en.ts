@@ -4,6 +4,7 @@ export const en: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Institutional Real Estate Decision & Tax Engine for Romania',
   nav: {
+    home: 'Home / Overview',
     sellVsRent: 'Owner Strategy: Sell vs. Rent',
     calculator: 'ROI & Romanian Tax Engine',
   },

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { I18nProvider } from './i18n';
 import { Navbar } from './components/Navbar';
+import { HomePage } from './components/HomePage';
 import { SellVsRentCalculator } from './components/SellVsRent/SellVsRentCalculator';
 import { ROICalculator } from './components/FinancialEngine/ROICalculator';
 import { Footer } from './components/Footer';
 
 const MainAppContent: React.FC = () => {
-  // Standalone 2-Calculator Engine
-  const [activeTab, setActiveTab] = useState<'sellVsRent' | 'calculator'>('sellVsRent');
+  // Navigation State: 'home' | 'sellVsRent' | 'calculator'
+  const [activeTab, setActiveTab] = useState<'home' | 'sellVsRent' | 'calculator'>('home');
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-brand-500 selection:text-white">
@@ -18,9 +19,17 @@ const MainAppContent: React.FC = () => {
         setActiveTab={setActiveTab}
       />
 
-      {/* Main Calculator Engine Stage */}
+      {/* Main Content Stage */}
       <main className="flex-1 pb-16">
         
+        {/* HOMEPAGE: Overview, Highlights & Legal Framework */}
+        {activeTab === 'home' && (
+          <HomePage
+            onNavigateToSellVsRent={() => setActiveTab('sellVsRent')}
+            onNavigateToRoiCalculator={() => setActiveTab('calculator')}
+          />
+        )}
+
         {/* ENGINE 1: Owner Strategy - Sell vs. Rent Optimizer */}
         {activeTab === 'sellVsRent' && (
           <SellVsRentCalculator />

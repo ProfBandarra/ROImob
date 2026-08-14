@@ -10,8 +10,10 @@ import {
   Building, 
   Coins, 
   FileSpreadsheet, 
-  Printer 
+  Printer,
+  FileText
 } from 'lucide-react';
+import { FormalReportModal } from '../ReportExport/FormalReportModal';
 
 export const ROICalculator: React.FC = () => {
   const { t } = useI18n();
@@ -82,6 +84,8 @@ export const ROICalculator: React.FC = () => {
     { label: t.roiCalculator.presets.premium, price: 260000, rent: 1350 },
   ];
 
+  const [showReportModal, setShowReportModal] = useState<boolean>(false);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
@@ -102,10 +106,10 @@ export const ROICalculator: React.FC = () => {
 
         <button
           type="button"
-          onClick={() => window.print()}
+          onClick={() => setShowReportModal(true)}
           className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors shrink-0 shadow-lg"
         >
-          <Printer className="w-4 h-4 text-slate-400" />
+          <FileText className="w-4 h-4 text-brand-400" />
           <span>{t.roiCalculator.exportPdfBtn}</span>
         </button>
       </div>
@@ -536,6 +540,29 @@ export const ROICalculator: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Formal Audit Report Modal */}
+      {showReportModal && (
+        <FormalReportModal
+          type="roiCalculator"
+          roiData={{
+            inputs: {
+              purchasePrice,
+              downPaymentPercent,
+              interestRatePercent,
+              loanTermYears,
+              monthlyRentEur,
+              vacancyRatePercent,
+              managementFeePercent,
+              maintenanceReservePercent,
+              customRenovationEur: renovationEur,
+            },
+            calc,
+            taxSettings,
+          }}
+          onClose={() => setShowReportModal(false)}
+        />
+      )}
 
     </div>
   );

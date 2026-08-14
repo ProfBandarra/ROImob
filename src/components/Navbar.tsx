@@ -5,14 +5,15 @@ import {
   Calculator, 
   CheckCircle2, 
   ChevronDown, 
-  Sparkles
+  Sparkles,
+  Home
 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { Language } from '../types';
 
 interface Props {
-  activeTab: 'sellVsRent' | 'calculator';
-  setActiveTab: (tab: 'sellVsRent' | 'calculator') => void;
+  activeTab: 'home' | 'sellVsRent' | 'calculator';
+  setActiveTab: (tab: 'home' | 'sellVsRent' | 'calculator') => void;
 }
 
 const LANGUAGES: { code: Language; label: string; flag: string }[] = [
@@ -24,7 +25,7 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
 ];
 
 export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
-  const { language, setLanguage } = useI18n();
+  const { language, setLanguage, t } = useI18n();
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
 
   const currentLang = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
@@ -36,7 +37,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
           
           {/* Brand Logo */}
           <div 
-            onClick={() => setActiveTab('sellVsRent')}
+            onClick={() => setActiveTab('home')}
             className="flex items-center gap-3 cursor-pointer group"
           >
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-all duration-300 ring-1 ring-white/20">
@@ -52,7 +53,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
                 </span>
               </div>
               <p className="text-[11px] font-medium text-slate-400 hidden sm:block">
-                Institutional Real Estate Decision & Tax Engine
+                {t.appTagline}
               </p>
             </div>
           </div>
@@ -60,30 +61,43 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
           {/* Calculator Suite Navigation Tabs */}
           <nav className="flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 shadow-inner">
             
+            {/* Tab 0: Home / Overview */}
+            <button
+              onClick={() => setActiveTab('home')}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
+                activeTab === 'home'
+                  ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-lg shadow-brand-500/30 ring-1 ring-white/20'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
+              }`}
+            >
+              <Home className="w-4 h-4 text-brand-300" />
+              <span>{t.nav.home}</span>
+            </button>
+
             {/* Tab 1: Sell vs Rent Optimizer */}
             <button
               onClick={() => setActiveTab('sellVsRent')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
                 activeTab === 'sellVsRent'
                   ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-lg shadow-brand-500/30 ring-1 ring-white/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
               }`}
             >
               <Scale className="w-4 h-4 text-emerald-400" />
-              <span>Owner Strategy: Sell vs. Rent</span>
+              <span>{t.nav.sellVsRent}</span>
             </button>
 
             {/* Tab 2: ROI & Fiscal Engine */}
             <button
               onClick={() => setActiveTab('calculator')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
                 activeTab === 'calculator'
                   ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-lg shadow-brand-500/30 ring-1 ring-white/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
               }`}
             >
               <Calculator className="w-4 h-4 text-amber-400" />
-              <span>ROI & Romanian Tax Engine</span>
+              <span>{t.nav.calculator}</span>
             </button>
           </nav>
 

@@ -2,6 +2,7 @@ export interface TranslationDictionary {
   appName: string;
   appTagline: string;
   nav: {
+    home: string;
     sellVsRent: string;
     calculator: string;
   };
