@@ -47,9 +47,10 @@ export const Navbar: React.FC<Props> = ({
 }) => {
   const { language, setLanguage, t } = useI18n();
   const { theme, setTheme, themeConfig } = useTheme();
-  const { currency, setCurrency } = useCurrency();
+  const { currency, setCurrency, currencies, currentConfig } = useCurrency();
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
+  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const currentLang = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
@@ -177,32 +178,56 @@ export const Navbar: React.FC<Props> = ({
                 </button>
               </div>
 
-              {/* Global Currency Toggle (EUR ↔ RON) */}
-              <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-sm text-xs font-mono font-bold">
+              {/* Multi-Currency Dropdown (EUR, RON, USD, GBP, CHF) */}
+              <div className="relative shrink-0">
                 <button
                   type="button"
-                  onClick={() => setCurrency('EUR')}
-                  className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                    currency === 'EUR'
-                      ? 'bg-brand-600 text-white shadow-sm font-black'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="European Euro (€)"
+                  aria-label={t.currencyLabel}
+                  aria-haspopup="true"
+                  aria-expanded={currencyDropdownOpen}
+                  onClick={() => {
+                    setCurrencyDropdownOpen(!currencyDropdownOpen);
+                    setThemeDropdownOpen(false);
+                    setLangDropdownOpen(false);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-mono font-bold text-slate-200 transition-colors shadow-sm cursor-pointer"
+                  title={`${t.currencyLabel}: ${currentConfig.name} (${currentConfig.symbol})`}
                 >
-                  EUR €
+                  <span className="text-brand-400 font-bold">{currentConfig.symbol}</span>
+                  <span className="font-mono">{currency}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrency('RON')}
-                  className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                    currency === 'RON'
-                      ? 'bg-brand-600 text-white shadow-sm font-black'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="Romanian Leu (lei) • BNR 4.975"
-                >
-                  RON lei
-                </button>
+
+                {currencyDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-slate-900 border-2 border-slate-700 shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="px-3.5 py-1.5 text-[10px] font-black text-brand-300 uppercase tracking-wider border-b border-slate-800 mb-1 flex items-center justify-between">
+                      <span>{t.currencyLabel}</span>
+                      <span className="text-slate-400 text-[9px] font-normal">BNR Ref</span>
+                    </div>
+                    {currencies.map((c) => (
+                      <button
+                        key={c.code}
+                        type="button"
+                        onClick={() => {
+                          setCurrency(c.code);
+                          setCurrencyDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3.5 py-2 text-xs text-left transition-colors cursor-pointer ${
+                          currency === c.code
+                            ? 'bg-brand-600 text-white font-bold'
+                            : 'text-slate-200 hover:bg-slate-800 hover:text-white'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono font-bold text-brand-400 w-5 text-center">{c.symbol}</span>
+                          <span className="font-mono font-bold">{c.code}</span>
+                          <span className="text-[11px] text-slate-400">({c.name})</span>
+                        </div>
+                        {currency === c.code && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Theme Selector Dropdown */}
@@ -215,6 +240,7 @@ export const Navbar: React.FC<Props> = ({
                   onClick={() => {
                     setThemeDropdownOpen(!themeDropdownOpen);
                     setLangDropdownOpen(false);
+                    setCurrencyDropdownOpen(false);
                   }}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border-2 border-brand-500/40 hover:border-brand-400 text-xs font-bold text-white transition-all shadow-md cursor-pointer"
                   title={`${t.theme.label}: ${currentThemeObj.label}`}
@@ -313,11 +339,16 @@ export const Navbar: React.FC<Props> = ({
               {/* Currency quick toggle on mobile */}
               <button
                 type="button"
-                onClick={() => setCurrency(currency === 'EUR' ? 'RON' : 'EUR')}
-                className="px-2 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-brand-400 flex items-center gap-1 shadow-sm"
-                title="Toggle Currency (EUR / RON)"
+                onClick={() => {
+                  const codes = currencies.map(c => c.code);
+                  const nextIdx = (codes.indexOf(currency) + 1) % codes.length;
+                  setCurrency(codes[nextIdx]);
+                }}
+                className="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-brand-400 flex items-center gap-1 shadow-sm cursor-pointer"
+                title={`${t.currencyLabel}: ${currentConfig.name} (${currentConfig.symbol})`}
               >
-                <span>{currency === 'EUR' ? '€ EUR' : 'lei RON'}</span>
+                <span>{currentConfig.symbol}</span>
+                <span>{currency}</span>
               </button>
 
               {/* Hamburger Button */}
@@ -325,7 +356,7 @@ export const Navbar: React.FC<Props> = ({
                 type="button"
                 aria-label="Open mobile menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white transition-colors"
+                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -381,7 +412,7 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('home')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold text-left transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold text-left transition-all cursor-pointer ${
                   activeTab === 'home'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-black shadow-lg shadow-brand-500/25'
                     : 'bg-slate-900/80 text-slate-200 border border-slate-800'
@@ -394,7 +425,7 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('sellVsRent')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold text-left transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold text-left transition-all cursor-pointer ${
                   activeTab === 'sellVsRent'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-black shadow-lg shadow-brand-500/25'
                     : 'bg-slate-900/80 text-slate-200 border border-slate-800'
@@ -407,7 +438,7 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('calculator')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold text-left transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold text-left transition-all cursor-pointer ${
                   activeTab === 'calculator'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-black shadow-lg shadow-brand-500/25'
                     : 'bg-slate-900/80 text-slate-200 border border-slate-800'
@@ -429,7 +460,7 @@ export const Navbar: React.FC<Props> = ({
                     key={th.id}
                     type="button"
                     onClick={() => setTheme(th.id)}
-                    className={`flex items-center gap-2 p-3 rounded-xl border text-xs font-bold transition-all ${
+                    className={`flex items-center gap-2 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                       theme === th.id
                         ? 'bg-brand-600 text-white border-brand-500 shadow-md'
                         : 'bg-slate-900 border-slate-800 text-slate-300'
@@ -453,7 +484,7 @@ export const Navbar: React.FC<Props> = ({
                     key={lang.code}
                     type="button"
                     onClick={() => setLanguage(lang.code)}
-                    className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-xs font-bold transition-all ${
+                    className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                       language === lang.code
                         ? 'bg-brand-600 text-white border-brand-500 shadow-md'
                         : 'bg-slate-900 border-slate-800 text-slate-300'
@@ -469,31 +500,24 @@ export const Navbar: React.FC<Props> = ({
             {/* 4. Currency Switcher */}
             <div className="space-y-2 pt-2 border-t border-slate-800">
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-2 block">
-                Base Currency / Monedă
+                {t.currencyLabel}
               </span>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setCurrency('EUR')}
-                  className={`p-3 rounded-xl border text-xs font-bold font-mono transition-all ${
-                    currency === 'EUR'
-                      ? 'bg-brand-600 text-white border-brand-500 shadow-md'
-                      : 'bg-slate-900 border-slate-800 text-slate-300'
-                  }`}
-                >
-                  EUR (€)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrency('RON')}
-                  className={`p-3 rounded-xl border text-xs font-bold font-mono transition-all ${
-                    currency === 'RON'
-                      ? 'bg-brand-600 text-white border-brand-500 shadow-md'
-                      : 'bg-slate-900 border-slate-800 text-slate-300'
-                  }`}
-                >
-                  RON (lei) • 4.975
-                </button>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {currencies.map((c) => (
+                  <button
+                    key={c.code}
+                    type="button"
+                    onClick={() => setCurrency(c.code)}
+                    className={`p-2.5 rounded-xl border text-xs font-bold font-mono transition-all flex flex-col items-center gap-0.5 cursor-pointer ${
+                      currency === c.code
+                        ? 'bg-brand-600 text-white border-brand-500 shadow-md'
+                        : 'bg-slate-900 border-slate-800 text-slate-300'
+                    }`}
+                  >
+                    <span className="text-sm font-black text-brand-300">{c.symbol}</span>
+                    <span>{c.code}</span>
+                  </button>
+                ))}
               </div>
             </div>
 

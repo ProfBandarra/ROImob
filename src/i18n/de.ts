@@ -16,12 +16,13 @@ export const de: TranslationDictionary = {
     accessibility: 'Hoher Kontrast (AAA)',
   },
   mode: {
-    quick: 'Schnellcheck ⚡',
-    quickDesc: '15-Sekunden-Schnellbewertung für Eigentümer & Käufer',
-    pro: 'Profi-Modus (Pro) 🔬',
-    proDesc: 'Vollständige Analyse mit über 20 Parametern und Steuerplänen',
+    quick: 'Schnell (15s)',
+    quickDesc: 'Vereinfachte 3-Schritte-Entscheidung für schnelle Checks',
+    pro: 'Profi-Modus',
+    proDesc: 'Institutionelle Modellierung mit über 20 steuerlichen und rechtlichen Parametern',
     switchMode: 'Modus Wechseln',
   },
+  currencyLabel: 'Währung',
   home: {
     heroBadge: 'ROImob • Immobilien-Finanz- und Steuer-Engine für Rumänien',
     heroTitle: 'Klare Finanz- und Steuerberechnungen für Immobilien in Rumänien',

@@ -20,6 +20,7 @@ export interface TranslationDictionary {
     proDesc: string;
     switchMode: string;
   };
+  currencyLabel: string;
   home: {
     heroBadge: string;
     heroTitle: string;

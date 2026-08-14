@@ -22,6 +22,7 @@ export const ro: TranslationDictionary = {
     proDesc: 'Motor complet cu peste 20 de variabile și legislație fiscală',
     switchMode: 'Schimbă Modul',
   },
+  currencyLabel: 'Monedă',
   home: {
     heroBadge: 'ROImob • Motor Financiar și Fiscal Imobiliar pentru România',
     heroTitle: 'Calcule Financiare și Fiscale Clare pentru Imobiliare în România',

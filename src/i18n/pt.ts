@@ -16,12 +16,13 @@ export const pt: TranslationDictionary = {
     accessibility: 'Alto Contraste (AAA)',
   },
   mode: {
-    quick: 'Modo Rápido ⚡',
-    quickDesc: 'Estimativa rápida em 15 segundos para proprietários e investidores',
-    pro: 'Modo Pro Institucional 🔬',
-    proDesc: 'Motor completo com 20+ variáveis e legislação fiscal romena',
-    switchMode: 'Alterar Modo',
+    quick: 'Rápido (15s)',
+    quickDesc: 'Decisão simplificada em 3 passos para proprietários e análises rápidas',
+    pro: 'Modo Pro',
+    proDesc: 'Modelação institucional completa com mais de 20 parâmetros fiscais e legais',
+    switchMode: 'Alternar Modo',
   },
+  currencyLabel: 'Moeda',
   home: {
     heroBadge: 'ROImob • Motor Financeiro e Fiscal Imobiliário para a Roménia',
     heroTitle: 'Cálculos Financeiros e Fiscais Claros para Imóveis na Roménia',

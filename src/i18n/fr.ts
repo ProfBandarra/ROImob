@@ -22,6 +22,7 @@ export const fr: TranslationDictionary = {
     proDesc: 'Moteur complet avec 20+ variables et barèmes fiscaux officiels',
     switchMode: 'Changer de Mode',
   },
+  currencyLabel: 'Devise',
   home: {
     heroBadge: 'ROImob • Moteur Financier et Fiscal Immobilier pour la Roumanie',
     heroTitle: 'Calculs Financiers et Fiscaux Clairs pour l’Immobilier en Roumanie',

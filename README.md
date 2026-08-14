@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Modes](https://img.shields.io/badge/Modes-Quick%20⚡%20%7C%20Pro%20🔬-amber?style=for-the-badge)](#-dual-mode-architecture-quick-⚡-vs-pro-🔬)
 [![Themes](https://img.shields.io/badge/Themes-4%20Modes%20(incl.%20AAA)-purple?style=for-the-badge)](#-multi-theme-system)
-[![Currency](https://img.shields.io/badge/Currency-EUR%20%7C%20RON%20(BNR)-emerald?style=for-the-badge)](#-global-currency-toggle-eur--ron)
+[![Currency](https://img.shields.io/badge/Currencies-5%20Currencies%20(EUR%20%7C%20RON%20%7C%20USD%20%7C%20GBP%20%7C%20CHF)-emerald?style=for-the-badge)](#-multi-currency-architecture-5-major-currencies)
 [![Languages](https://img.shields.io/badge/Languages-6%20Locales-blue?style=for-the-badge)](#-6-language-localization--translated-audit-reports)
 
 **An open-source, customer-friendly and institutional-grade decision intelligence suite for Romanian real estate owners, buyers, and investors.**
@@ -122,11 +122,16 @@ Generate authenticated, 2-page institutional private bank valuation dossiers in 
 
 ---
 
-## 💱 Global Currency Toggle (EUR ↔ RON)
+## 💱 Multi-Currency Architecture (5 Major Currencies)
 
-- Instant 1-tap currency toggle in the navbar.
-- Converted at the official BNR benchmark exchange rate ($1\text{ EUR} = 4.975\text{ RON}$).
-- Updates every slider, input, KPI card, data table, and printable report dynamically.
+ROImob features an integrated, real-time multi-currency engine supporting 5 major currencies with official BNR reference parity:
+- 🇪🇺 **EUR (€)**: Primary commercial real estate baseline in Romania ($1.00\times$).
+- 🇷🇴 **RON (lei)**: Official national currency & ANAF tax base ($1\text{ EUR} = 4.975\text{ RON}$).
+- 🇺🇸 **USD ($)**: Global reserve benchmark ($1\text{ EUR} = 1.085\text{ USD}$).
+- 🇬🇧 **GBP (£)**: British Pound for diaspora investors in the UK ($1\text{ EUR} = 0.855\text{ GBP}$).
+- 🇨🇭 **CHF (CHF)**: Swiss Franc for European wealth modeling ($1\text{ EUR} = 0.955\text{ CHF}$).
+
+Switching currency in the navigation bar dynamically updates all sliders, KPI scorecards, interactive SVG charts, stress-test matrices, and printable private-bank audit reports.
 
 ---
 

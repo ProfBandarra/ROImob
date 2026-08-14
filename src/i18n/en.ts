@@ -22,6 +22,7 @@ export const en: TranslationDictionary = {
     proDesc: 'Full 20+ variable engine with legal Romanian tax schedules',
     switchMode: 'Switch Mode',
   },
+  currencyLabel: 'Currency',
   home: {
     heroBadge: 'ROImob • Romanian Real Estate Financial & Tax Engine',
     heroTitle: 'Clear Financial & Tax Calculations for Romanian Real Estate',
