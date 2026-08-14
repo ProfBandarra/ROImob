@@ -173,10 +173,10 @@ export const SellVsRentCalculator: React.FC<Props> = ({ onSwitchToSimple }) => {
               type="button"
               onClick={onSwitchToSimple}
               className="px-3.5 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold flex items-center justify-center gap-1.5 border border-amber-500/30 transition-all cursor-pointer shadow-md"
-              title="Switch to Simplified 3-Step Quick Check"
+              title={t.mode.quickDesc}
             >
               <span>⚡</span>
-              <span>Quick 15s Mode</span>
+              <span>{t.mode.quick}</span>
             </button>
           )}
 

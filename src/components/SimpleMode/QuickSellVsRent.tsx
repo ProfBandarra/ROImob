@@ -81,13 +81,13 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold mb-2">
             <Zap className="w-3.5 h-3.5" />
-            <span>Quick Check • 15-Second Result</span>
+            <span>{t.quickCheck.badge}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-            Should I Sell or Rent My Property?
+            {t.quickCheck.svrTitle}
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Instant financial verdict based on Romanian property yields and safe bond returns.
+            {t.quickCheck.svrSubtitle}
           </p>
         </div>
 
@@ -98,7 +98,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
             className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-700 transition-colors cursor-pointer"
           >
             <Settings2 className="w-3.5 h-3.5 text-brand-400" />
-            <span>Switch to Pro Engine (20+ inputs)</span>
+            <span>{t.quickCheck.switchToProSvr}</span>
           </button>
         </div>
       </div>
@@ -110,7 +110,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
             <span className="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-[11px] font-black">1</span>
-            <span>Property Market Value</span>
+            <span>{t.quickCheck.propertyValue}</span>
           </div>
 
           <div className="text-2xl font-black text-white font-mono">
@@ -149,7 +149,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
             <span className="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-[11px] font-black">2</span>
-            <span>Mortgage on Property?</span>
+            <span>{t.quickCheck.mortgageStatus}</span>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -162,7 +162,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
                   : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
               }`}
             >
-              No Debt 🎉
+              {t.quickCheck.noDebt}
             </button>
 
             <button
@@ -174,14 +174,14 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
                   : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
               }`}
             >
-              Have Mortgage 💳
+              {t.quickCheck.haveMortgage}
             </button>
           </div>
 
           {hasMortgage ? (
             <div className="space-y-1.5 pt-1">
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Remaining Loan:</span>
+                <span className="text-slate-400">{t.quickCheck.remainingLoan}</span>
                 <span className="text-purple-300 font-mono font-bold">{formatMoney(mortgageBalanceEur)}</span>
               </div>
               <input
@@ -196,7 +196,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
             </div>
           ) : (
             <div className="text-[11px] text-emerald-400 font-medium pt-2">
-              ✓ 100% owned free and clear. Zero bank installments.
+              {t.quickCheck.freeAndClear}
             </div>
           )}
         </div>
@@ -205,7 +205,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
             <span className="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-[11px] font-black">3</span>
-            <span>Monthly Rental Potential</span>
+            <span>{t.quickCheck.monthlyRentPotential}</span>
           </div>
 
           <div className="text-2xl font-black text-emerald-400 font-mono">
@@ -252,19 +252,19 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-              Decision Recommendation (5-Year Horizon):
+              {t.quickCheck.decisionRecommendation}
             </span>
             <div className="flex items-center gap-3">
               <span className={`px-4 py-1.5 rounded-full text-base font-black uppercase tracking-wide text-white ${
                 isRentBetter ? 'bg-emerald-600' : 'bg-purple-600'
               }`}>
-                {isRentBetter ? '🏡 KEEP & RENT THE PROPERTY' : '💰 BETTER TO SELL NOW'}
+                {isRentBetter ? t.quickCheck.keepAndRentVerdict : t.quickCheck.betterToSellVerdict}
               </span>
             </div>
           </div>
 
           <div className="text-left sm:text-right">
-            <span className="text-[11px] text-slate-400 uppercase block font-bold">5-Year Extra Wealth:</span>
+            <span className="text-[11px] text-slate-400 uppercase block font-bold">{t.quickCheck.extraWealth5Yr}</span>
             <span className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">
               +{formatMoney(delta5Yr)}
             </span>
@@ -279,15 +279,15 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
             isRentBetter ? 'bg-emerald-950/20 border-emerald-500/40' : 'bg-slate-950/60 border-slate-800'
           }`}>
             <div className="flex justify-between items-center">
-              <span className="font-black text-sm text-white">Option A: Keep & Rent</span>
-              {isRentBetter && <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded">Recommended</span>}
+              <span className="font-black text-sm text-white">{t.quickCheck.optionA}</span>
+              {isRentBetter && <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded">{t.quickCheck.recommendedBadge}</span>}
             </div>
 
             <div className="text-xl font-black text-emerald-400 font-mono">
               {formatMoney(rentWealth5Yr)}
             </div>
             <p className="text-[11px] text-slate-300 leading-relaxed">
-              You keep the physical asset growing with market appreciation + collect monthly net rental cash flow in your pocket.
+              {t.quickCheck.optionADesc}
             </p>
           </div>
 
@@ -296,15 +296,15 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
             !isRentBetter ? 'bg-purple-950/20 border-purple-500/40' : 'bg-slate-950/60 border-slate-800'
           }`}>
             <div className="flex justify-between items-center">
-              <span className="font-black text-sm text-white">Option B: Sell & Reinvest</span>
-              {!isRentBetter && <span className="text-[10px] bg-purple-500/20 text-purple-300 font-bold px-2 py-0.5 rounded">Recommended</span>}
+              <span className="font-black text-sm text-white">{t.quickCheck.optionB}</span>
+              {!isRentBetter && <span className="text-[10px] bg-purple-500/20 text-purple-300 font-bold px-2 py-0.5 rounded">{t.quickCheck.recommendedBadge}</span>}
             </div>
 
             <div className="text-xl font-black text-purple-300 font-mono">
               {formatMoney(sellWealth5Yr)}
             </div>
             <p className="text-[11px] text-slate-300 leading-relaxed">
-              You walk away with <strong>{formatMoney(result.netCashProceedsFromSaleEur)}</strong> net liquid cash today, reinvested in safe 6.8% government bonds (Tezaur).
+              {t.quickCheck.optionBDesc}
             </p>
           </div>
 
@@ -318,7 +318,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
             className="w-full sm:w-auto px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors cursor-pointer"
           >
             <FileText className="w-4 h-4 text-brand-400" />
-            <span>Generate Official Printable PDF Audit</span>
+            <span>{t.quickCheck.exportPdfBtn}</span>
           </button>
 
           <button
@@ -326,7 +326,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
             onClick={onSwitchToPro}
             className="text-brand-400 hover:text-brand-300 font-bold flex items-center gap-1 cursor-pointer"
           >
-            <span>Need exact tax breakdowns & 15-year curves? Deep dive in Pro Mode</span>
+            <span>{t.quickCheck.deepDiveProSvr}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

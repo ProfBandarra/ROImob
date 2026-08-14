@@ -51,10 +51,10 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
 
   // Rating badge
   const getYieldRating = (netYield: number) => {
-    if (netYield >= 7.0) return { label: '🔥 Outstanding Yield (Top 10% in RO)', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' };
-    if (netYield >= 5.5) return { label: '⭐ Solid Strong Return', color: 'text-brand-400 bg-brand-500/10 border-brand-500/30' };
-    if (netYield >= 4.0) return { label: '👍 Balanced Capital Preservation', color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' };
-    return { label: '⚠️ Moderate Cash Yield', color: 'text-slate-400 bg-slate-800 border-slate-700' };
+    if (netYield >= 7.0) return { label: t.quickCheck.ratingOutstanding, color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' };
+    if (netYield >= 5.5) return { label: t.quickCheck.ratingSolid, color: 'text-brand-400 bg-brand-500/10 border-brand-500/30' };
+    if (netYield >= 4.0) return { label: t.quickCheck.ratingBalanced, color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' };
+    return { label: t.quickCheck.ratingModerate, color: 'text-slate-400 bg-slate-800 border-slate-700' };
   };
 
   const rating = getYieldRating(calc.netYieldPercent);
@@ -70,13 +70,13 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold mb-2">
             <Zap className="w-3.5 h-3.5" />
-            <span>Quick Check • 15-Second Result</span>
+            <span>{t.quickCheck.badge}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-            Is this Apartment a Good Investment?
+            {t.quickCheck.roiTitle}
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Instant rental yield and in-pocket monthly cash flow calculator for Romania.
+            {t.quickCheck.roiSubtitle}
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
             className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-700 transition-colors cursor-pointer"
           >
             <Settings2 className="w-3.5 h-3.5 text-brand-400" />
-            <span>Switch to Pro Engine (Full Underwriting)</span>
+            <span>{t.quickCheck.switchToProRoi}</span>
           </button>
         </div>
       </div>
@@ -99,7 +99,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
             <span className="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-[11px] font-black">1</span>
-            <span>Purchase Price</span>
+            <span>{t.quickCheck.purchasePrice}</span>
           </div>
 
           <div className="text-2xl font-black text-white font-mono">
@@ -138,7 +138,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
             <span className="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-[11px] font-black">2</span>
-            <span>Financing Method</span>
+            <span>{t.quickCheck.financingMethod}</span>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -151,7 +151,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
                   : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
               }`}
             >
-              🏦 20% Loan
+              {t.quickCheck.loan20}
             </button>
 
             <button
@@ -163,18 +163,18 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
                   : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
               }`}
             >
-              💰 100% Cash
+              {t.quickCheck.cash100}
             </button>
           </div>
 
           <div className="text-[11px] text-slate-400 pt-2 space-y-1">
             <div className="flex justify-between">
-              <span>Down Payment (Avans):</span>
+              <span>{t.quickCheck.downPaymentLabel}</span>
               <strong className="text-white font-mono">{formatMoney(calc.downPaymentEur)}</strong>
             </div>
             {isMortgage && (
               <div className="flex justify-between">
-                <span>Bank Installment:</span>
+                <span>{t.quickCheck.bankInstallmentLabel}</span>
                 <strong className="text-purple-300 font-mono">-{formatMoney(calc.monthlyMortgagePaymentEur)}/mo</strong>
               </div>
             )}
@@ -185,7 +185,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
             <span className="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-[11px] font-black">3</span>
-            <span>Monthly Expected Rent</span>
+            <span>{t.quickCheck.expectedMonthlyRent}</span>
           </div>
 
           <div className="text-2xl font-black text-emerald-400 font-mono">
@@ -229,7 +229,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-              Investment Assessment
+              {t.quickCheck.investmentAssessment}
             </span>
             <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold ${rating.color}`}>
               <span>{rating.label}</span>
@@ -237,7 +237,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
           </div>
 
           <div className="text-left sm:text-right">
-            <span className="text-[11px] text-slate-400 uppercase block font-bold">Gross Annual Yield:</span>
+            <span className="text-[11px] text-slate-400 uppercase block font-bold">{t.quickCheck.grossAnnualYield}</span>
             <span className="text-xl sm:text-2xl font-black text-white font-mono">
               {formatPercent(calc.grossYieldPercent)}
             </span>
@@ -249,38 +249,38 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
           
           {/* Card 1: Net Yield */}
           <div className="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Net Yield</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block">{t.quickCheck.netYieldCard}</span>
             <div className="text-xl font-black text-emerald-400 font-mono">
               {formatPercent(calc.netYieldPercent)}
             </div>
-            <span className="text-[10px] text-slate-500">After taxes & opex</span>
+            <span className="text-[10px] text-slate-500">{t.quickCheck.afterTaxesOpex}</span>
           </div>
 
           {/* Card 2: Cash in Pocket */}
           <div className="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Monthly In Pocket</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block">{t.quickCheck.monthlyInPocketCard}</span>
             <div className={`text-xl font-black font-mono ${calc.monthlyCashFlowAfterDebtEur >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
               {calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatMoney(calc.monthlyCashFlowAfterDebtEur)}
             </div>
-            <span className="text-[10px] text-slate-500">Net take-home cash</span>
+            <span className="text-[10px] text-slate-500">{t.quickCheck.netTakeHomeCash}</span>
           </div>
 
           {/* Card 3: Cash-on-Cash */}
           <div className="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Cash-on-Cash</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block">{t.quickCheck.cashOnCashCard}</span>
             <div className="text-xl font-black text-indigo-400 font-mono">
               {formatPercent(calc.cashOnCashReturnPercent)}
             </div>
-            <span className="text-[10px] text-slate-500">Return on your capital</span>
+            <span className="text-[10px] text-slate-500">{t.quickCheck.returnOnCapital}</span>
           </div>
 
           {/* Card 4: Payback Period */}
           <div className="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Capital Payback</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block">{t.quickCheck.capitalPaybackCard}</span>
             <div className="text-xl font-black text-purple-300 font-mono">
-              {paybackYears} {paybackYears !== 'N/A' ? 'Yrs' : ''}
+              {paybackYears} {paybackYears !== 'N/A' ? t.quickCheck.yearsUnit : ''}
             </div>
-            <span className="text-[10px] text-slate-500">To recover initial cash</span>
+            <span className="text-[10px] text-slate-500">{t.quickCheck.toRecoverCash}</span>
           </div>
 
         </div>
@@ -293,7 +293,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
             className="w-full sm:w-auto px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors cursor-pointer"
           >
             <FileText className="w-4 h-4 text-brand-400" />
-            <span>Generate Official Printable PDF Audit</span>
+            <span>{t.quickCheck.exportPdfBtn}</span>
           </button>
 
           <button
@@ -301,7 +301,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
             onClick={onSwitchToPro}
             className="text-brand-400 hover:text-brand-300 font-bold flex items-center gap-1 cursor-pointer"
           >
-            <span>Need CASS health brackets, loan amortization & tax schedules? Pro Mode</span>
+            <span>{t.quickCheck.deepDiveProRoi}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
