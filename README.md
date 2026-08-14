@@ -14,7 +14,11 @@
 
 **An open-source, institutional-grade decision intelligence and tax optimization suite for Romanian real estate owners, buyers, and investors.**
 
-[Overview](#-project-overview) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Currency & Charts](#-global-currency-toggle-eur--ron) • [Themes](#-multi-theme-system) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization](#-6-language-localization--translated-audit-reports)
+[Overview](#-project-overview) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Audit Reports](#-institutional-audit-reports--printable-dossiers) • [Currency & Charts](#-global-currency-toggle-eur--ron) • [Themes](#-multi-theme-system) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization](#-6-language-localization--translated-audit-reports)
+
+<br />
+
+<img src="public/screenshots/roimob_homepage_preview.jpg" alt="ROImob Decision Intelligence Hub" width="100%" style="border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);" />
 
 </div>
 
@@ -75,6 +79,10 @@ Users can seamlessly toggle between **EUR (€)** and **Romanian Leu (RON lei)**
 
 Designed for residential property owners with or without an active bank mortgage evaluating strategic exit vs. retention options:
 
+<div align="center">
+  <img src="public/screenshots/roimob_sell_vs_rent_preview.jpg" alt="Sell vs Rent Optimizer" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
+</div>
+
 ### 1. Market Valuation & Auto-Benchmarking
 - **Integrated City Estimator**: Auto-estimates market property valuation and expected monthly rent across Romanian urban centers (*Bucharest, Cluj-Napoca, Timișoara, Brașov, Iași, Constanța, Sibiu, Oradea, Ilfov*).
 - Adjusts automatically for neighborhood zone location (*Ultra-Central +30%, Central +10%, Standard Urban Base, Suburban -15%*) and property condition (*Luxury/Renovated +15%, Standard, Needs Renovation -15%*).
@@ -114,6 +122,10 @@ Designed for residential property owners with or without an active bank mortgage
 
 An institutional underwriting calculator for buy-to-let acquisitions:
 
+<div align="center">
+  <img src="public/screenshots/roimob_roi_calculator_preview.jpg" alt="Real Estate ROI and Tax Engine" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
+</div>
+
 ### 1. Capital Structuring & Financing
 - **Flexible Down Payment Presets**: 15% (*Primary Home Statutory Minimum*), 20%, or 25% (*Investment Second Property Standard*).
 - **Mortgage Amortization**: Fixed or variable interest rate (*IRCC benchmark + bank margin*) with customizable loan term (*5 to 30 years*).
@@ -134,6 +146,22 @@ An institutional underwriting calculator for buy-to-let acquisitions:
   - Net rental base $> 24$ gross minimum wages: **8,880 RON / year** (capped at 24)
 - **Local Municipal Building Tax**: 0.1% residential quota.
 - **Mandatory PAD Insurance & Facultative Property Insurance**.
+
+---
+
+## 📑 Institutional Audit Reports & Printable Dossiers
+
+Generate verified, notarized-style A4 audit reports formatted for real estate investors, mortgage advisors, and private wealth banks:
+
+<div align="center">
+  <img src="public/screenshots/roimob_audit_report_preview.jpg" alt="ROImob Verified Fiscal Audit Dossier" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
+</div>
+
+- 🏛️ **Official Dossier Letterhead**: Includes tracking reference ID, date of issue, and BNR currency conversion rates.
+- 🎖️ **Executive Strategic Recommendation Banner**: Clear verdict with exact delta analysis across horizons.
+- 💱 **Dual Currency Transparency**: Simultaneous EUR and RON valuations for legal and banking clarity.
+- 📜 **Statutory Fiscal Compliance Seals**: Validated against Romanian Law 227/2015 and OUG 115/2023.
+- 🖨️ **Print & PDF Isolation**: Formatted with print-only isolation stylesheets for high-resolution A4 export.
 
 ---
 
