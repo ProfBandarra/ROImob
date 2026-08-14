@@ -1,7 +1,8 @@
 {
   "short_name": "ROImob",
-  "name": "ROImob • Romanian Real Estate Financial & Tax Intelligence",
-  "description": "Institutional decision intelligence and tax optimization suite for Romanian real estate.",
+  "name": "ROImob — Calculator Imobiliar România: Vânzare vs Închiriere & ROI",
+  "description": "Platformă inteligentă de calcul decizional și optimizare fiscală imobiliară pentru România.",
+  "lang": "ro",
   "icons": [
     {
       "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230271c5'><path d='M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z'/></svg>",

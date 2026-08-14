@@ -28,11 +28,11 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     const saved = localStorage.getItem('roimob_lang') as Language;
-    if (saved && ['en', 'ro', 'fr', 'de', 'uk', 'pt'].includes(saved)) {
+    if (saved && ['ro', 'en', 'fr', 'de', 'uk', 'pt'].includes(saved)) {
       return saved;
     }
-    // Default to English as primary
-    return 'en';
+    // Default to Romanian as primary
+    return 'ro';
   });
 
   const setLanguage = (lang: Language) => {
