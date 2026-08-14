@@ -366,6 +366,13 @@ export const en: TranslationDictionary = {
       totalNetEquity: 'Total Net Equity',
     },
   },
+  creatorSupport: {
+    title: 'Support the Creator',
+    description: 'ROImob is 100% free and open-source created by Nuno Bandarra to bring transparent, ad-free real estate analytics to everyone. If this tool helped you save money or make a profitable property decision, consider supporting the continuous hosting and development with a coffee or direct tip!',
+    author: 'Created by Nuno Bandarra',
+    bmacLabel: 'Buy Me a Coffee',
+    revolutLabel: 'Support on Revolut',
+  },
   footer: {
     tagline: 'Open-Source Real Estate Decision & Tax Engine for Romania',
     fiscalCompliance: 'Law 227/2015 & OUG 115/2023 Compliant',

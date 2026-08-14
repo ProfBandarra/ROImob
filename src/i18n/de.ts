@@ -366,6 +366,13 @@ export const de: TranslationDictionary = {
       totalNetEquity: 'Gesamtes Netto-Eigenkapital',
     },
   },
+  creatorSupport: {
+    title: 'Unterstütze den Entwickler',
+    description: 'ROImob ist ein 100% kostenloses und Open-Source-Projekt von Nuno Bandarra, um transparente Immobilienanalysen ohne Werbung bereitzustellen. Wenn dir dieses Tool geholfen hat, Geld zu sparen oder fundierte Entscheidungen zu treffen, unterstütze die kontinuierliche Entwicklung und das Hosting gerne mit einem Kaffee oder einer Direktspende!',
+    author: 'Entwickelt von Nuno Bandarra',
+    bmacLabel: 'Kaffee spendieren',
+    revolutLabel: 'Über Revolut unterstützen',
+  },
   footer: {
     tagline: 'Open-Source Immobilien-Entscheidungs- und Steuerrechner für Rumänien',
     fiscalCompliance: 'Konform mit rumänischem Steuerrecht (Gesetz 227/2015 & Eilverordnung 115/2023)',

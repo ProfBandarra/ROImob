@@ -366,6 +366,13 @@ export const pt: TranslationDictionary = {
       totalNetEquity: 'Capital Próprio Acumulado (Equity)',
     },
   },
+  creatorSupport: {
+    title: 'Apoiar o Criador do Projeto',
+    description: 'O ROImob é uma ferramenta 100% gratuita e open-source desenvolvida por Nuno Bandarra para democratizar a análise imobiliária transparente e sem anúncios. Se este simulador o ajudou a tomar melhores decisões ou a poupar em impostos, considere apoiar a manutenção e o alojamento contínuo com um café ou um donativo direto!',
+    author: 'Desenvolvido por Nuno Bandarra',
+    bmacLabel: 'Pagar um Café',
+    revolutLabel: 'Apoiar no Revolut',
+  },
   footer: {
     tagline: 'Inteligência Financeira e Fiscal Imobiliária na Roménia',
     fiscalCompliance: 'Em conformidade com o Código Fiscal 2024–2026',

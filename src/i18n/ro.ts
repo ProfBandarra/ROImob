@@ -366,6 +366,13 @@ export const ro: TranslationDictionary = {
       totalNetEquity: 'Capital Net Total (Equity)',
     },
   },
+  creatorSupport: {
+    title: 'Susține Creatorul Proiectului',
+    description: 'ROImob este un proiect 100% gratuit și open-source creat de Nuno Bandarra pentru a oferi calcule imobiliare transparente și fără reclame. Dacă această aplicație te-a ajutat să economisești bani sau să iei o decizie imobiliară profitabilă, poți susține găzduirea și dezvoltarea continuă printr-o cafea sau o donație directă!',
+    author: 'Dezvoltat de Nuno Bandarra',
+    bmacLabel: 'Cumpără o Cafea',
+    revolutLabel: 'Susține pe Revolut',
+  },
   footer: {
     tagline: 'Platformă Open-Source de Decizie și Fiscalitate Imobiliară pentru România',
     fiscalCompliance: 'Conform Codului Fiscal (Legea 227/2015 & OUG 115/2023)',

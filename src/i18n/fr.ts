@@ -366,6 +366,13 @@ export const fr: TranslationDictionary = {
       totalNetEquity: 'Capitaux Propres Cumulés',
     },
   },
+  creatorSupport: {
+    title: 'Soutenir le Créateur',
+    description: 'ROImob est un outil 100% gratuit et open-source créé par Nuno Bandarra pour offrir une analyse immobilière claire et sans publicité. Si cet outil vous a aidé à optimiser vos investissements ou à économiser sur les impôts, soutenez son hébergement et son développement continu avec un café ou un don direct !',
+    author: 'Créé par Nuno Bandarra',
+    bmacLabel: 'Offrir un Café',
+    revolutLabel: 'Soutenir sur Revolut',
+  },
   footer: {
     tagline: 'Moteur de Décision Financière et Fiscale Immobilière pour la Roumanie',
     fiscalCompliance: 'Conforme au Code Fiscal Roumain (Loi 227/2015 & OUG 115/2023)',

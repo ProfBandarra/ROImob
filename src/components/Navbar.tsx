@@ -354,40 +354,53 @@ export const Navbar: React.FC<Props> = ({
                 </button>
 
                 {supportDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-slate-900 border-2 border-slate-700 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1.5">
-                    <div className="px-2 py-1 text-[10px] font-black text-slate-400 uppercase tracking-wider border-b border-slate-800 mb-1">
-                      {t.footer.donateBtn}
+                  <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-slate-900 border-2 border-slate-700 shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-2.5">
+                    <div>
+                      <div className="flex items-center justify-between gap-1 mb-1">
+                        <span className="text-xs font-black text-amber-300 flex items-center gap-1">
+                          <span>☕</span>
+                          <span>{t.creatorSupport.title}</span>
+                        </span>
+                        <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold border border-slate-700">
+                          Nuno Bandarra
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-300 leading-snug">
+                        ROImob is 100% free & open-source. Support ad-free hosting & updates:
+                      </p>
                     </div>
                     
-                    {/* Buy Me a Coffee */}
-                    <a
-                      href="https://buymeacoffee.com/nbandarra"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setSupportDropdownOpen(false)}
-                      className="flex items-center justify-between p-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 transition-colors text-xs font-bold"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>☕</span>
-                        <span>Buy Me a Coffee</span>
-                      </div>
-                      <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
-                    </a>
+                    <div className="space-y-1.5 pt-1 border-t border-slate-800">
+                      {/* Buy Me a Coffee */}
+                      <a
+                        href="https://buymeacoffee.com/nbandarra"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setSupportDropdownOpen(false)}
+                        className="flex items-center justify-between p-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors text-xs font-black shadow-sm"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span>☕</span>
+                          <span>{t.creatorSupport.bmacLabel}</span>
+                        </div>
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-950" />
+                      </a>
 
-                    {/* Revolut */}
-                    <a
-                      href="https://revolut.me/nbandarra"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setSupportDropdownOpen(false)}
-                      className="flex items-center justify-between p-2 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-300 transition-colors text-xs font-bold"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>💳</span>
-                        <span>Revolut Pay</span>
-                      </div>
-                      <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
-                    </a>
+                      {/* Revolut */}
+                      <a
+                        href="https://revolut.me/nbandarra"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setSupportDropdownOpen(false)}
+                        className="flex items-center justify-between p-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white transition-colors text-xs font-black shadow-sm"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span>💳</span>
+                          <span>{t.creatorSupport.revolutLabel}</span>
+                        </div>
+                        <ExternalLink className="w-3.5 h-3.5 text-blue-200" />
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
@@ -583,28 +596,37 @@ export const Navbar: React.FC<Props> = ({
             </div>
 
             {/* 5. Support / Donate Options on Mobile */}
-            <div className="pt-2 space-y-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-2 block">
-                {t.footer.donateBtn}
-              </span>
-              <div className="grid grid-cols-2 gap-2">
+            <div className="pt-2 space-y-2 p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-amber-300 flex items-center gap-1.5">
+                  <span>☕</span>
+                  <span>{t.creatorSupport.title}</span>
+                </span>
+                <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold border border-slate-700">
+                  Nuno Bandarra
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 leading-snug">
+                {t.creatorSupport.description}
+              </p>
+              <div className="grid grid-cols-2 gap-2 pt-1">
                 <a
                   href="https://buymeacoffee.com/nbandarra"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all"
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition-all shadow-md"
                 >
                   <span>☕</span>
-                  <span>Buy Me a Coffee</span>
+                  <span>{t.creatorSupport.bmacLabel}</span>
                 </a>
                 <a
                   href="https://revolut.me/nbandarra"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold transition-all"
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-black transition-all shadow-md"
                 >
                   <span>💳</span>
-                  <span>Revolut Pay</span>
+                  <span>{t.creatorSupport.revolutLabel}</span>
                 </a>
               </div>
             </div>

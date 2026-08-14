@@ -364,6 +364,13 @@ export interface TranslationDictionary {
       totalNetEquity: string;
     };
   };
+  creatorSupport: {
+    title: string;
+    description: string;
+    author: string;
+    bmacLabel: string;
+    revolutLabel: string;
+  };
   footer: {
     tagline: string;
     fiscalCompliance: string;
