@@ -5,6 +5,7 @@ export interface TranslationDictionary {
     home: string;
     sellVsRent: string;
     calculator: string;
+    supportBtn: string;
   };
   theme: {
     label: string;
@@ -370,5 +371,6 @@ export interface TranslationDictionary {
     builtWith: string;
     aiDisclaimer: string;
     reportIssueBtn: string;
+    donateBtn: string;
   };
 }

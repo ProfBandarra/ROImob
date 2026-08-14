@@ -4,9 +4,10 @@ export const ro: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Motor de Decizie Financiară și Fiscalitate Imobiliară pentru România',
   nav: {
-    home: 'Acasă',
-    sellVsRent: 'Vinde vs. Închiriază',
-    calculator: 'Calculator ROI & Fiscalitate',
+    home: 'Prezentare Generală',
+    sellVsRent: 'Vânzare vs. Închiriere',
+    calculator: 'Calculator ROI & Impozite',
+    supportBtn: 'Susține ROImob',
   },
   theme: {
     label: 'Temă',
@@ -366,11 +367,12 @@ export const ro: TranslationDictionary = {
     },
   },
   footer: {
-    tagline: 'Inteligență Financiară și Fiscalitate Imobiliară pentru România',
-    fiscalCompliance: 'Conform cu Codul Fiscal 2024–2026',
-    copyright: 'ROImob. Suită Decizională și Calculatoare ROI.',
-    builtWith: 'Dezvoltat cu precizie instituțională & suport multilingv (EN • RO • FR • DE • UK • PT)',
-    aiDisclaimer: 'Notă: Dezvoltarea platformei a fost asistată de IA. Calculele sunt modelate pentru suport decizional; consultați un consilier fiscal autorizat pentru operațiuni obligatorii.',
-    reportIssueBtn: 'Raportează o Problemă pe GitHub',
+    tagline: 'Platformă Open-Source de Decizie și Fiscalitate Imobiliară pentru România',
+    fiscalCompliance: 'Conform Codului Fiscal (Legea 227/2015 & OUG 115/2023)',
+    copyright: 'ROImob Inițiativă Open-Source. Gratuit pentru uz public.',
+    builtWith: 'Dezvoltat cu React, TypeScript și Modele Matematice Instituționale',
+    aiDisclaimer: 'Notă: ROImob oferă simulări matematice și fiscale pe baza Codului Fiscal Român (Legea nr. 227/2015 și OUG nr. 115/2023). Acest instrument are scop pur informativ și educațional și nu constituie consultanță fiscală sau juridică certificată. Consultați un consultant fiscal autorizat (CCF) sau un notar public înainte de tranzacționare.',
+    reportIssueBtn: 'Raportează Problemă / Sugestie',
+    donateBtn: 'Susține prin Revolut',
   },
 };

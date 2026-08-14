@@ -7,6 +7,7 @@ export const en: TranslationDictionary = {
     home: 'Home',
     sellVsRent: 'Sell vs. Rent',
     calculator: 'ROI & Tax Engine',
+    supportBtn: 'Support ROImob',
   },
   theme: {
     label: 'Theme',
@@ -366,11 +367,12 @@ export const en: TranslationDictionary = {
     },
   },
   footer: {
-    tagline: 'Institutional Romanian Real Estate Financial & Tax Intelligence',
-    fiscalCompliance: 'Romanian Fiscal Code 2024–2026 Compliant',
-    copyright: 'ROImob. Romanian Real Estate Decision & ROI Suite.',
-    builtWith: 'Built with institutional precision & multi-language support (EN • RO • FR • DE • UK • PT)',
-    aiDisclaimer: 'Note: Platform development was assisted by AI. Calculations are modeled for decision support; consult a certified advisor for binding fiscal operations.',
-    reportIssueBtn: 'Report an Issue on GitHub',
+    tagline: 'Open-Source Real Estate Decision & Tax Engine for Romania',
+    fiscalCompliance: 'Law 227/2015 & OUG 115/2023 Compliant',
+    copyright: 'ROImob Open Source Initiative. Free for public use.',
+    builtWith: 'Engineered with React, TypeScript & Institutional Financial Math',
+    aiDisclaimer: 'Disclaimer: ROImob provides institutional-grade mathematical and statutory simulations based on Romanian Fiscal Code (Law nr. 227/2015 & OUG nr. 115/2023). This tool is for informational and educational purposes only and does not constitute certified tax, legal, or investment advisory. Always consult an authorized fiscal advisor (CCF) or certified notary before executing real estate transactions.',
+    reportIssueBtn: 'Report Issue / Suggestion',
+    donateBtn: 'Support via Revolut',
   },
 };

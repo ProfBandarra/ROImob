@@ -4,9 +4,10 @@ export const de: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Institutioneller Immobilien-Entscheidungs- und Steuerrechner für Rumänien',
   nav: {
-    home: 'Startseite',
-    sellVsRent: 'Verkaufen vs. Vermieten',
+    home: 'Übersicht',
+    sellVsRent: 'Verkauf vs. Vermietung',
     calculator: 'ROI & Steuer-Rechner',
+    supportBtn: 'ROImob Unterstützen',
   },
   theme: {
     label: 'Design',
@@ -366,11 +367,12 @@ export const de: TranslationDictionary = {
     },
   },
   footer: {
-    tagline: 'Finanzielle und Steuerliche Immobilien-Intelligenz für Rumänien',
-    fiscalCompliance: 'Konform mit dem Steuergesetzbuch 2024–2026',
-    copyright: 'ROImob. Entscheidungs- und ROI-Rechnersuite.',
-    builtWith: 'Erstellt mit institutioneller Präzision & Mehrsprachen-Support (EN • RO • FR • DE • UK • PT)',
-    aiDisclaimer: 'Hinweis: Die Plattform-Entwicklung wurde durch KI unterstützt. Berechnungen dienen als Entscheidungshilfe; für verbindliche Vorgänge wenden Sie sich an einen Berater.',
-    reportIssueBtn: 'Problem auf GitHub Melden',
+    tagline: 'Open-Source Immobilien-Entscheidungs- und Steuerrechner für Rumänien',
+    fiscalCompliance: 'Konform mit rumänischem Steuerrecht (Gesetz 227/2015 & Eilverordnung 115/2023)',
+    copyright: 'ROImob Open-Source-Initiative. Kostenlos für die öffentliche Nutzung.',
+    builtWith: 'Entwickelt mit React, TypeScript & Institutionellen Finanzmodellen',
+    aiDisclaimer: 'Hinweis: ROImob bietet mathematische und steuerliche Simulationen auf Basis des rumänischen Steuergesetzes (Gesetz Nr. 227/2015 & OUG Nr. 115/2023). Dient ausschließlich zu Informationszwecken.',
+    reportIssueBtn: 'Problem / Vorschlag Melden',
+    donateBtn: 'Über Revolut Unterstützen',
   },
 };

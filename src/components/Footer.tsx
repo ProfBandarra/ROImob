@@ -4,6 +4,7 @@ import { useI18n } from '../i18n';
 import { useTheme } from '../theme';
 
 const ISSUES_URL = 'https://github.com/ProfBandarra/ROImob/issues/new';
+const REVOLUT_DONATE_URL = 'https://revolut.me/nbandarra';
 
 export const Footer: React.FC = () => {
   const { t } = useI18n();
@@ -28,11 +29,24 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-xs font-semibold">
-            <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
+            <div className="flex items-center gap-1.5 hidden sm:flex">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span className={themeConfig.textPrimary}>{t.footer.fiscalCompliance}</span>
             </div>
+
+            {/* Revolut Support / Donation Button */}
+            <a
+              href={REVOLUT_DONATE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md shadow-blue-500/20 transition-all cursor-pointer font-bold"
+              title="Support ROImob development via Revolut"
+            >
+              <span>☕</span>
+              <span>{t.footer.donateBtn}</span>
+              <ExternalLink className="w-3 h-3 text-blue-200" />
+            </a>
 
             {/* Direct GitHub Issue Reporting Button */}
             <a

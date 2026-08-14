@@ -4,9 +4,10 @@ export const fr: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Moteur de Décision Financière et Fiscale Immobilière pour la Roumanie',
   nav: {
-    home: 'Accueil',
+    home: 'Vue d\'ensemble',
     sellVsRent: 'Vendre vs Louer',
-    calculator: 'Moteur ROI & Fiscalité',
+    calculator: 'Moteur ROI & Fiscal',
+    supportBtn: 'Soutenir ROImob',
   },
   theme: {
     label: 'Thème',
@@ -366,11 +367,12 @@ export const fr: TranslationDictionary = {
     },
   },
   footer: {
-    tagline: 'Intelligence Financière et Fiscale Immobilière en Roumanie',
-    fiscalCompliance: 'Conforme au Code Fiscal 2024–2026',
-    copyright: 'ROImob. Suite Décisionnelle & Calculateur ROI.',
-    builtWith: 'Conçu avec rigueur institutionnelle & support multilingue (EN • RO • FR • DE • UK • PT)',
-    aiDisclaimer: 'Note: Le développement de cette plateforme a été assisté par l’IA. Les calculs sont modélisés pour l’aide à la décision; consultez un conseiller fiscal certifié pour des opérations officielles.',
-    reportIssueBtn: 'Signaler un Problème sur GitHub',
+    tagline: 'Moteur de Décision Financière et Fiscale Immobilière pour la Roumanie',
+    fiscalCompliance: 'Conforme au Code Fiscal Roumain (Loi 227/2015 & OUG 115/2023)',
+    copyright: 'ROImob Initiative Open Source. Gratuit pour un usage public.',
+    builtWith: 'Développé avec React, TypeScript et Modélisation Financière Institutionnelle',
+    aiDisclaimer: 'Avertissement: ROImob fournit des simulations basées sur le Code Fiscal Roumain (Loi n° 227/2015 et OUG n° 115/2023). Cet outil est uniquement informatif et ne constitue pas un conseil fiscal ou juridique agréé.',
+    reportIssueBtn: 'Signaler un Problème / Suggestion',
+    donateBtn: 'Soutenir via Revolut',
   },
 };

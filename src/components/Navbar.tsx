@@ -331,6 +331,18 @@ export const Navbar: React.FC<Props> = ({
                 )}
               </div>
 
+              {/* Revolut Support Donate Button */}
+              <a
+                href="https://revolut.me/nbandarra"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all cursor-pointer shrink-0"
+                title="Support ROImob development via Revolut (revolut.me/nbandarra)"
+              >
+                <span>☕</span>
+                <span className="hidden xl:inline">{t.nav.supportBtn}</span>
+              </a>
+
             </div>
 
             {/* Mobile Header Quick Actions: Currency + Hamburger */}
@@ -521,7 +533,21 @@ export const Navbar: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* 5. Report Issue Link */}
+            {/* 5. Support / Donate Button on Mobile */}
+            <div className="pt-2">
+              <a
+                href="https://revolut.me/nbandarra"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg transition-all cursor-pointer"
+              >
+                <span>☕</span>
+                <span>{t.nav.supportBtn} (Revolut)</span>
+                <ExternalLink className="w-3.5 h-3.5 text-blue-200" />
+              </a>
+            </div>
+
+            {/* 6. Report Issue Link */}
             <div className="pt-2 border-t border-slate-800 text-center">
               <a
                 href="https://github.com/ProfBandarra/ROImob/issues/new"

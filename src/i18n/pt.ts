@@ -7,6 +7,7 @@ export const pt: TranslationDictionary = {
     home: 'Início',
     sellVsRent: 'Vender vs. Arrendar',
     calculator: 'Motor ROI & Fiscal',
+    supportBtn: 'Apoiar o ROImob',
   },
   theme: {
     label: 'Tema',
@@ -372,5 +373,6 @@ export const pt: TranslationDictionary = {
     builtWith: 'Desenvolvido com rigor institucional & suporte multilingue (EN • RO • FR • DE • UK • PT)',
     aiDisclaimer: 'Nota: O desenvolvimento da plataforma foi assistido por IA. Os cálculos servem de apoio à decisão; consulte um contabilista ou notário para operações vinculativas.',
     reportIssueBtn: 'Reportar um Problema no GitHub',
+    donateBtn: 'Apoiar via Revolut',
   },
 };

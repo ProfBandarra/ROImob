@@ -4,9 +4,10 @@ export const uk: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Інституційний Калькулятор Інвестицій та Податків на Нерухомість у Румунії',
   nav: {
-    home: 'Головна',
+    home: 'Огляд',
     sellVsRent: 'Продаж чи Оренда',
-    calculator: 'ROI & Податки',
+    calculator: 'Калькулятор ROI та Податків',
+    supportBtn: 'Підтримати ROImob',
   },
   theme: {
     label: 'Тема',
@@ -372,5 +373,6 @@ export const uk: TranslationDictionary = {
     builtWith: 'Створено з інституційною точністю та підтримкою мов (EN • RO • FR • DE • UK • PT)',
     aiDisclaimer: 'Примітка: Розробка платформи здійснювалася за підтримки ШІ. Розрахунки носять консультаційний характер; для офіційних операцій звертайтеся до фахівця.',
     reportIssueBtn: 'Повідомити про Помилку на GitHub',
+    donateBtn: 'Підтримати через Revolut',
   },
 };

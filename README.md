@@ -3,6 +3,7 @@
 <div align="center">
 
 [![Live App](https://img.shields.io/badge/🌐%20Official%20Live%20App-www.roimob.eu-emerald?style=for-the-badge&logo=google-chrome)](https://www.roimob.eu/)
+[![Support on Revolut](https://img.shields.io/badge/☕%20Support%20on%20Revolut-revolut.me%2Fnbandarra-0075eb?style=for-the-badge&logo=revolut&logoColor=white)](https://revolut.me/nbandarra)
 [![Suggest Improvement](https://img.shields.io/badge/💡%20Suggest%20Improvement-Open%20Issue-brand?style=for-the-badge&color=6366f1)](https://github.com/ProfBandarra/ROImob/issues/new?template=feature_request.md)
 [![React](https://img.shields.io/badge/React-18.3-blue?style=for-the-badge&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -12,9 +13,9 @@
 
 **An open-source, customer-friendly and institutional-grade decision intelligence suite for Romanian real estate owners, buyers, and investors.**
 
-🌐 **Live Application:** [**https://www.roimob.eu/**](https://www.roimob.eu/)
+🌐 **Live Application:** [**https://www.roimob.eu/**](https://www.roimob.eu/) • ☕ **Support:** [**revolut.me/nbandarra**](https://revolut.me/nbandarra)
 
-[Overview](#-project-overview) • [Live App](https://www.roimob.eu/) • [Dual Modes](#-dual-mode-architecture-quick-⚡-vs-pro-🔬) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Audit Reports](#-institutional-audit-reports--printable-dossiers) • [Contributing](#-contributing--community-improvements) • [Legal Basis](#-statutory-romanian-legal-basis)
+[Overview](#-project-overview) • [Live App](https://www.roimob.eu/) • [Support via Revolut](https://revolut.me/nbandarra) • [Dual Modes](#-dual-mode-architecture-quick-⚡-vs-pro-🔬) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Audit Reports](#-institutional-audit-reports--printable-dossiers) • [Contributing](#-contributing--community-improvements) • [Legal Basis](#-statutory-romanian-legal-basis)
 
 <br />
 
@@ -189,6 +190,20 @@ Switching currency in the navigation bar dynamically updates all sliders, KPI sc
 | **Banca Națională (BNR)** | [Indicele IRCC](https://www.bnr.ro) | Consumer mortgage benchmark rate modeling |
 | **Ministerul Finanțelor** | [Titluri de Stat Tezaur & Fidelis](https://mfinante.gov.ro) | 100% Tax-free sovereign bonds reinvestment benchmark |
 | **ANPC** | [OUG nr. 52/2016](https://legislatie.just.ro) | 0% prepayment penalty on variable interest mortgages |
+
+---
+
+## ☕ Support ROImob Development
+
+ROImob is 100% free and open-source. If this platform helped you make a profitable real estate decision, save on transaction taxes, or underwrite an investment property, you can support future development directly:
+
+<div align="center">
+
+[![Donate via Revolut](https://img.shields.io/badge/☕%20Support%20via%20Revolut-revolut.me%2Fnbandarra-0075eb?style=for-the-badge&logo=revolut&logoColor=white)](https://revolut.me/nbandarra)
+
+👉 **[https://revolut.me/nbandarra](https://revolut.me/nbandarra)**
+
+</div>
 
 ---
 
