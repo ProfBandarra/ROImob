@@ -4,25 +4,18 @@ import {
   Scale, 
   Calculator, 
   ShieldCheck, 
-  TrendingUp, 
   Coins, 
   FileText, 
   ArrowRight, 
   ExternalLink, 
-  BookOpen, 
-  Award, 
-  Globe2, 
   Sparkles, 
   CheckCircle2,
-  Lock,
   Landmark,
-  FileSpreadsheet,
-  GitBranch,
   Github,
   Code2,
   Layers,
-  Terminal,
-  Cpu
+  Bot,
+  Info
 } from 'lucide-react';
 import { useI18n } from '../i18n';
 
@@ -35,14 +28,14 @@ const OFFICIAL_REFERENCES = [
   {
     title: 'Codul Fiscal al României (Legea nr. 227/2015)',
     authority: 'Ministerul Finanțelor / ANAF',
-    desc: 'Art. 111 (Impozitul pe transferul proprietăților imobiliare din patrimoniul personal: 1% peste 3 ani, 3% sub 3 ani) și Art. 120 (Impunerea veniturilor din cedarea folosinței bunurilor).',
+    desc: 'Art. 111 (Impozitul pe transferul proprietăților imobiliare: 1% peste 3 ani, 3% sub 3 ani) și Art. 120 (Impunerea veniturilor din cedarea folosinței bunurilor).',
     url: 'https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_2024.htm',
     tag: 'Legislație Fiscală'
   },
   {
     title: 'Ordonanța de Urgență OUG nr. 115/2023',
     authority: 'Guvernul României',
-    desc: 'Reintroducerea cotei forfetare de cheltuieli de 20% pentru veniturile din chirii (impozit efectiv 8%) și noile plafoane CASS (6, 12, 24 salarii minime).',
+    desc: 'Cota forfetară de cheltuieli de 20% pentru veniturile din chirii (impozit efectiv 8%) și noile plafoane CASS (6, 12, 24 salarii minime).',
     url: 'https://legislatie.just.ro/Public/DetaliiDocument/277271',
     tag: 'Reforma Fiscală'
   },
@@ -87,7 +80,7 @@ export const HomePage: React.FC<Props> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
       
-      {/* 1. Academic & Open-Source Project Manifesto Header */}
+      {/* 1. Main User Hero & Decision Hub */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/80 border border-slate-800 p-8 sm:p-14 shadow-2xl space-y-8">
         
         {/* Ambient Glow */}
@@ -95,16 +88,16 @@ export const HomePage: React.FC<Props> = ({
 
         <div className="space-y-4 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-semibold">
-            <Code2 className="w-3.5 h-3.5 text-brand-400" />
-            <span>ROImob Project • Open-Source Real Estate Decision Engine</span>
+            <Sparkles className="w-3.5 h-3.5 text-brand-400" />
+            <span>ROImob • Romanian Real Estate Financial & Tax Engine</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Institutional Financial & Tax Modeling for Romanian Real Estate
+            Clear Financial & Tax Calculations for Romanian Real Estate
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            ROImob is an open-source, non-commercial analytical suite created to deliver rigorous mathematical modeling and strict legal compliance for real estate transactions in Romania. Built on first-principles financial engineering and the latest provisions of Romanian Fiscal Code (Law 227/2015 & OUG 115/2023).
+            Whether you already own a property and want to compare selling vs. renting, or you are looking to purchase an investment home in Romania, ROImob gives you exact mathematical projections under the Romanian Fiscal Code (Law 227/2015 & OUG 115/2023).
           </p>
         </div>
 
@@ -117,7 +110,7 @@ export const HomePage: React.FC<Props> = ({
             className="px-6 py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-brand-500/25 transition-all hover:scale-[1.02] cursor-pointer"
           >
             <Scale className="w-5 h-5 text-emerald-300" />
-            <span>Launch Sell vs. Rent Optimizer</span>
+            <span>Open Sell vs. Rent Optimizer</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
@@ -127,24 +120,13 @@ export const HomePage: React.FC<Props> = ({
             className="px-6 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 border border-slate-700 transition-all hover:scale-[1.02] cursor-pointer"
           >
             <Calculator className="w-5 h-5 text-amber-400" />
-            <span>Launch ROI & Tax Engine</span>
+            <span>Open ROI & Tax Calculator</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
-          <a
-            href={REPO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 py-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 text-slate-300 hover:text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-slate-800 transition-colors"
-          >
-            <Github className="w-4 h-4" />
-            <span>GitHub Repository</span>
-            <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
-          </a>
-
         </div>
 
-        {/* Fundamental Pillars */}
+        {/* User Benefits Pillars */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 text-xs text-slate-300">
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -157,160 +139,115 @@ export const HomePage: React.FC<Props> = ({
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white block">15-Year Wealth Amortization</strong>
-              <span>Inflation adjustment, accelerated debt payoff, and Bear/Base/Bull sensitivity matrix.</span>
+              <strong className="text-white block">Multi-Year Wealth Horizon</strong>
+              <span>Inflation adjustment, accelerated debt payoff, and Bear/Base/Bull sensitivity testing.</span>
             </div>
           </div>
 
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white block">6 Native Languages & PDF Export</strong>
-              <span>English, Română, Français, Deutsch, Ukrainian, and Portuguese (PT) with formal audit reports.</span>
+              <strong className="text-white block">6 Languages & Formal PDF Export</strong>
+              <span>EN, RO, FR, DE, UK, PT with clean printable A4 audit reports for banks or personal planning.</span>
             </div>
           </div>
         </div>
 
       </div>
 
-      {/* 2. Open-Source Architecture & Engineering Details */}
-      <div className="bg-slate-900/80 rounded-3xl border border-slate-800 p-8 space-y-6 shadow-xl">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400">
-              <GitBranch className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-black text-white">
-                Open-Source Architecture & Engineering Principles
-              </h2>
-              <p className="text-xs text-slate-400">
-                Transparent codebase built for high performance, zero data-lockin, and reproducible math:
-              </p>
-            </div>
-          </div>
-
-          <span className="text-xs text-brand-300 font-mono font-bold bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">
-            MIT Open-Source License
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-          
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-brand-400 font-bold">
-              <Cpu className="w-4 h-4" />
-              <span>Core Stack</span>
-            </div>
-            <p className="text-slate-400 text-[11px] leading-relaxed">
-              React 18.3, TypeScript 5.7, Vite 6.4, and Tailwind CSS 3.4. Compiled to a lightweight 300 kB production bundle.
-            </p>
-          </div>
-
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold">
-              <Layers className="w-4 h-4" />
-              <span>Self-Contained Engine</span>
-            </div>
-            <p className="text-slate-400 text-[11px] leading-relaxed">
-              Zero telemetry, zero external tracking, and zero third-party dependencies. All math runs 100% client-side.
-            </p>
-          </div>
-
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold">
-              <Globe2 className="w-4 h-4" />
-              <span>Type-Safe i18n</span>
-            </div>
-            <p className="text-slate-400 text-[11px] leading-relaxed">
-              Strict TypeScript key parity across EN, RO, FR, DE, UK, and PT with real-time reactive locale switching.
-            </p>
-          </div>
-
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-amber-400 font-bold">
-              <FileSpreadsheet className="w-4 h-4" />
-              <span>Audit Export</span>
-            </div>
-            <p className="text-slate-400 text-[11px] leading-relaxed">
-              Print isolation subsystem generating formal A4 audit dossiers for banking, legal, and accounting reviews.
-            </p>
-          </div>
-
-        </div>
-      </div>
-
-      {/* 3. Mathematical Foundations of the Engines */}
+      {/* 2. The Decision Engines (User Focused) */}
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-black text-white tracking-tight mb-1">
-            Mathematical Foundations & Fiscal Modeling
+            Choose Your Decision Engine
           </h2>
           <p className="text-xs sm:text-sm text-slate-400">
-            How ROImob transforms Romanian fiscal legislation into reproducible financial formulas:
+            Select the tool that matches your current real estate situation:
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
-          {/* Card 1: Sell vs Rent Math */}
+          {/* Card 1: Sell vs Rent */}
           <div className="bg-slate-900/90 rounded-3xl border border-slate-800 p-8 flex flex-col justify-between space-y-6 shadow-xl relative overflow-hidden group hover:border-brand-500/50 transition-all">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                 <Scale className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-black text-white">
-                Engine 1: Owner Strategy — Sell vs. Rent Optimizer
+                Owner Strategy: Sell vs. Rent Optimizer
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Solves the homeowner's capital allocation dilemma: selling today and deploying liquid cash into benchmark assets vs. retaining the property under Romanian residential rental tax law.
+                If you already own an apartment or house (with or without a mortgage), this engine compares what is financially best over a 1, 3, 5, 10, or 15-year horizon: selling now and reinvesting into safe benchmark assets (bonds, deposits, ETFs) vs. holding and renting.
               </p>
               
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 font-mono text-[11px] text-slate-300">
-                <div className="text-emerald-400 font-bold font-sans">Key Formulations:</div>
-                <div>• Transfer Tax: <span className="text-slate-100">Art. 111 (1% if &gt;3 yrs, 3% if ≤3 yrs)</span></div>
-                <div>• Prepayment Cap: <span className="text-slate-100">OUG 52/2016 (max 1% fixed, 0% variable)</span></div>
-                <div>• Reinvestment: <span className="text-slate-100">Compound FV = Proceeds × (1 + r)^n</span></div>
-                <div>• Payoff Model: <span className="text-slate-100">Surplus rent amortizes mortgage principal</span></div>
-              </div>
+              <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Auto-estimates market prices & rents for Bucharest, Cluj, Timișoara, Brașov, etc.</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Calculates Romanian transfer tax (1% for &gt;3 yrs, 3% for ≤3 yrs)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Compares 4 tax regimes (PF forfetar, PF real, SRL micro, and informal 0%)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Accelerated mortgage prepayment debt-free year simulator</span>
+                </li>
+              </ul>
             </div>
 
             <button
               type="button"
               onClick={onNavigateToSellVsRent}
-              className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors cursor-pointer"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
             >
-              <span>Open Sell vs. Rent Calculator</span>
+              <span>Open Sell vs. Rent Optimizer</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Card 2: ROI & Fiscal Engine Math */}
+          {/* Card 2: ROI & Fiscal Engine */}
           <div className="bg-slate-900/90 rounded-3xl border border-slate-800 p-8 flex flex-col justify-between space-y-6 shadow-xl relative overflow-hidden group hover:border-brand-500/50 transition-all">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
                 <Calculator className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-black text-white">
-                Engine 2: Romanian Real Estate ROI & Fiscal Engine
+                Romanian Real Estate ROI & Fiscal Engine
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                An institutional underwriting tool for buy-to-let property investments. Models acquisition structuring, IRCC mortgage leverage, statutory CASS health tax tiers, and 10-year cash flow forecasts.
+                If you are planning to purchase a buy-to-let property, this engine evaluates leveraged financing, IRCC interest rate margins, statutory CASS health tax tiers, and 10-year cash flow and equity amortization.
               </p>
               
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 font-mono text-[11px] text-slate-300">
-                <div className="text-amber-400 font-bold font-sans">Key Formulations:</div>
-                <div>• Tax Base: <span className="text-slate-100">Gross Rent × 80% (20% flat expense)</span></div>
-                <div>• Income Tax: <span className="text-slate-100">10% on Net Base = 8% effective rate</span></div>
-                <div>• CASS Tiers: <span className="text-slate-100">6, 12, 24 minimum wages (2,220–8,880 RON)</span></div>
-                <div>• Annuity: <span className="text-slate-100">P = L × [r(1+r)^n] / [(1+r)^n - 1]</span></div>
-              </div>
+              <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>15% (1st home) vs 20% vs 25% (investment) down payment presets</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Gross Yield, Net Yield, Cash-on-Cash Return, and Net Monthly Cash Flow</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Exact 2024–2026 CASS health insurance tiers (6, 12, 24 minimum wages)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Short-term (Airbnb) tourism arbitrage comparison</span>
+                </li>
+              </ul>
             </div>
 
             <button
               type="button"
               onClick={onNavigateToRoiCalculator}
-              className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors cursor-pointer"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
             >
               <span>Open ROI & Tax Calculator</span>
               <ArrowRight className="w-4 h-4" />
@@ -320,7 +257,7 @@ export const HomePage: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* 4. Useful References & Romanian Legal Framework Hub */}
+      {/* 3. Official References & Romanian Legal Basis */}
       <div className="bg-slate-900/80 rounded-3xl border border-slate-800 p-8 space-y-6 shadow-xl">
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-3">
@@ -329,15 +266,15 @@ export const HomePage: React.FC<Props> = ({
             </div>
             <div>
               <h2 className="text-lg font-black text-white">
-                Official Statutory References & Regulatory Library
+                Official Statutory References & Romanian Legal Framework
               </h2>
               <p className="text-xs text-slate-400">
-                Statutory legislation, gazettes, and benchmark indices governing the ROImob calculation models:
+                Official laws, gazettes, and benchmark indices governing the ROImob calculation models:
               </p>
             </div>
           </div>
           <span className="text-xs text-emerald-400 font-mono font-bold bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-            Verified Legal Basis
+            Verified Romanian Law
           </span>
         </div>
 
@@ -374,6 +311,40 @@ export const HomePage: React.FC<Props> = ({
             </div>
           ))}
         </div>
+      </div>
+
+      {/* 4. Open-Source & Developer Details (Subtle, at the bottom) */}
+      <div className="bg-slate-900/60 rounded-3xl border border-slate-800/80 p-6 sm:p-8 space-y-4 shadow-lg text-xs text-slate-400">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <Code2 className="w-5 h-5 text-brand-400" />
+            <h3 className="text-sm font-bold text-white">
+              Open-Source Project & Developer Community
+            </h3>
+          </div>
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1.5 border border-slate-700 transition-colors"
+          >
+            <Github className="w-3.5 h-3.5" />
+            <span>GitHub Repository</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+        </div>
+
+        <p className="text-slate-400 leading-relaxed">
+          ROImob is an open-source project released under the MIT License. It is built using <strong>React 18</strong>, <strong>TypeScript</strong>, <strong>Tailwind CSS</strong>, and <strong>Vite</strong>. Developers, researchers, and contributors are welcome to audit calculations, submit pull requests, or adapt the formulas for other jurisdictions on GitHub.
+        </p>
+      </div>
+
+      {/* 5. AI Assistance Footnote (Casual & Professional) */}
+      <div className="p-4 bg-slate-900/40 rounded-2xl border border-slate-800/60 text-[11px] text-slate-400 flex items-start gap-2.5">
+        <Bot className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+        <p className="leading-relaxed">
+          <strong>Note:</strong> The development of this platform was assisted by AI and, while carefully audited against Romanian fiscal laws, small discrepancies or changes in local tax interpretations can happen. Always double-check with your notary or certified tax advisor for official transactions.
+        </p>
       </div>
 
     </div>

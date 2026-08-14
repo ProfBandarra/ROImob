@@ -41,6 +41,10 @@ export const Footer: React.FC = () => {
           </p>
         </div>
 
+        <div className="text-[10px] text-slate-400 text-center pt-4 border-t border-slate-900">
+          Note: Platform development was assisted by AI. Calculations are modeled for decision support; consult a certified advisor for binding fiscal operations.
+        </div>
+
       </div>
     </footer>
   );

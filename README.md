@@ -165,6 +165,8 @@ ROImob is pre-configured for instant zero-configuration deployment on **Vercel**
 
 ---
 
-## 📜 License
+## 📜 License & Disclaimers
 
 Distributed under the **MIT License**. Free and open-source for educational and individual research use.
+
+> **Note**: The development of this platform was assisted by AI. While calculations have been audited against the Romanian Fiscal Code, users should consult a certified notary or tax advisor for definitive operations.
