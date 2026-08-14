@@ -3,6 +3,9 @@ import { SellVsRentInputs, RentalTaxRegime } from '../../types';
 import { calculateSellVsRent } from '../../utils/calculations';
 import { formatEur, formatPercent } from '../../utils/formatters';
 import { useI18n } from '../../i18n';
+import { useCurrency } from '../../currency';
+import { useTheme } from '../../theme';
+import { WealthTrajectoryChart } from '../Charts/WealthTrajectoryChart';
 import { 
   Scale, 
   BadgePercent, 
@@ -41,6 +44,8 @@ const CITY_PRICE_PER_SQM: Record<string, { base: number; rentRatio: number }> = 
 
 export const SellVsRentCalculator: React.FC = () => {
   const { t } = useI18n();
+  const { formatMoney } = useCurrency();
+  const { themeConfig, theme } = useTheme();
 
   // Core Inputs
   const [propertyValueEur, setPropertyValueEur] = useState<number>(135000);
@@ -280,7 +285,7 @@ export const SellVsRentCalculator: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">{t.sellVsRent.propertyValuation}:</span>
-                <strong className="text-white font-mono text-sm">{formatEur(propertyValueEur)}</strong>
+                <strong className="text-white font-mono text-sm">{formatMoney(propertyValueEur)}</strong>
               </div>
               <input
                 type="range"
@@ -362,7 +367,7 @@ export const SellVsRentCalculator: React.FC = () => {
                 <div>
                   <div className="flex justify-between text-xs mb-1">
                     <span className="text-slate-400">{t.sellVsRent.remainingLoanBalance}:</span>
-                    <strong className="text-rose-300 font-mono">{formatEur(remainingMortgageBalanceEur)}</strong>
+                    <strong className="text-rose-300 font-mono">{formatMoney(remainingMortgageBalanceEur)}</strong>
                   </div>
                   <input
                     type="range"
@@ -379,7 +384,7 @@ export const SellVsRentCalculator: React.FC = () => {
                   <div>
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-slate-400">{t.sellVsRent.monthlyInstallment}:</span>
-                      <strong className="text-white font-mono">{formatEur(monthlyMortgagePaymentEur)}/mo</strong>
+                      <strong className="text-white font-mono">{formatMoney(monthlyMortgagePaymentEur)}/mo</strong>
                     </div>
                     <input
                       type="range"
@@ -445,7 +450,7 @@ export const SellVsRentCalculator: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">{t.sellVsRent.rentalExpectation}:</span>
-                <strong className="text-white font-mono text-sm">{formatEur(monthlyRentEur)}/mo</strong>
+                <strong className="text-white font-mono text-sm">{formatMoney(monthlyRentEur)}/mo</strong>
               </div>
               <input
                 type="range"
@@ -497,7 +502,7 @@ export const SellVsRentCalculator: React.FC = () => {
                 <div className="mt-3 p-3 bg-slate-950 rounded-xl border border-indigo-500/30 space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">{t.sellVsRent.airbnbMonthlyNet}:</span>
-                    <strong className="text-indigo-300 font-mono">{formatEur(shortTermMonthlyNetEur)}/mo</strong>
+                    <strong className="text-indigo-300 font-mono">{formatMoney(shortTermMonthlyNetEur)}/mo</strong>
                   </div>
                   <input
                     type="range"
@@ -826,7 +831,7 @@ export const SellVsRentCalculator: React.FC = () => {
                   {t.sellVsRent.sellScenario.title}
                 </span>
                 <span className="text-xl font-black text-white font-mono block">
-                  {formatEur(result.netCashProceedsFromSaleEur)}
+                  {formatMoney(result.netCashProceedsFromSaleEur)}
                 </span>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
                   {t.sellVsRent.sellScenario.netProceeds}
@@ -836,17 +841,17 @@ export const SellVsRentCalculator: React.FC = () => {
               <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
                 <div className="flex justify-between text-[11px]">
                   <span className="text-slate-400">{t.sellVsRent.sellScenario.transferTax} ({result.transferTaxRatePercent}%):</span>
-                  <span className="text-rose-300 font-mono">-{formatEur(result.transferTaxEur)}</span>
+                  <span className="text-rose-300 font-mono">-{formatMoney(result.transferTaxEur)}</span>
                 </div>
                 {hasMortgage && (
                   <div className="flex justify-between text-[11px]">
                     <span className="text-slate-400">{t.sellVsRent.sellScenario.mortgagePayoff}</span>
-                    <span className="text-rose-300 font-mono">-{formatEur(result.mortgagePayoffEur)}</span>
+                    <span className="text-rose-300 font-mono">-{formatMoney(result.mortgagePayoffEur)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
                   <span className="text-slate-300">{horizonYears}-{t.sellVsRent.sellScenario.horizonWealth}</span>
-                  <span className="text-brand-400 font-mono">+{formatEur(result.selectedHorizonReinvestmentWealthEur)}</span>
+                  <span className="text-brand-400 font-mono">+{formatMoney(result.selectedHorizonReinvestmentWealthEur)}</span>
                 </div>
               </div>
             </div>
@@ -865,7 +870,7 @@ export const SellVsRentCalculator: React.FC = () => {
                 </span>
                 <span className="text-xl font-black text-emerald-400 font-mono block">
                   {result.monthlyNetRentalCashFlowEur >= 0 ? '+' : ''}
-                  {formatEur(result.monthlyNetRentalCashFlowEur)} / mo
+                  {formatMoney(result.monthlyNetRentalCashFlowEur)} / mo
                 </span>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
                   {t.sellVsRent.rentScenario.monthlyCashFlow}
@@ -875,17 +880,17 @@ export const SellVsRentCalculator: React.FC = () => {
               <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
                 <div className="flex justify-between text-[11px]">
                   <span className="text-slate-400">{t.sellVsRent.rentScenario.grossRent}</span>
-                  <span className="text-slate-200 font-mono">{formatEur(monthlyRentEur)}/mo</span>
+                  <span className="text-slate-200 font-mono">{formatMoney(monthlyRentEur)}/mo</span>
                 </div>
                 {hasMortgage && (
                   <div className="flex justify-between text-[11px]">
                     <span className="text-slate-400">{t.sellVsRent.rentScenario.bankRate}</span>
-                    <span className="text-rose-300 font-mono">-{formatEur(monthlyMortgagePaymentEur)}/mo</span>
+                    <span className="text-rose-300 font-mono">-{formatMoney(monthlyMortgagePaymentEur)}/mo</span>
                   </div>
                 )}
                 <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
                   <span className="text-slate-300">{horizonYears}-{t.sellVsRent.rentScenario.horizonWealth}</span>
-                  <span className="text-emerald-400 font-mono">+{formatEur(result.selectedHorizonRentalWealthEur)}</span>
+                  <span className="text-emerald-400 font-mono">+{formatMoney(result.selectedHorizonRentalWealthEur)}</span>
                 </div>
               </div>
             </div>
@@ -904,7 +909,7 @@ export const SellVsRentCalculator: React.FC = () => {
                     {t.sellVsRent.shortTermScenario.title}
                   </span>
                   <span className="text-xl font-black text-indigo-400 font-mono block">
-                    +{formatEur(result.annualShortTermNetCashFlowEur / 12)} / mo
+                    +{formatMoney(result.annualShortTermNetCashFlowEur / 12)} / mo
                   </span>
                   <span className="text-[10px] text-slate-400 block mt-0.5">
                     {t.sellVsRent.shortTermScenario.monthlyCashFlow}
@@ -914,11 +919,11 @@ export const SellVsRentCalculator: React.FC = () => {
                 <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
                   <div className="flex justify-between text-[11px]">
                     <span className="text-slate-400">{t.sellVsRent.shortTermScenario.annualNet}</span>
-                    <span className="text-slate-200 font-mono">+{formatEur(result.annualShortTermNetCashFlowEur)}/yr</span>
+                    <span className="text-slate-200 font-mono">+{formatMoney(result.annualShortTermNetCashFlowEur)}/yr</span>
                   </div>
                   <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
                     <span className="text-slate-300">{horizonYears}-{t.sellVsRent.shortTermScenario.horizonWealth}</span>
-                    <span className="text-indigo-400 font-mono">+{formatEur(result.selectedHorizonShortTermWealthEur)}</span>
+                    <span className="text-indigo-400 font-mono">+{formatMoney(result.selectedHorizonShortTermWealthEur)}</span>
                   </div>
                 </div>
               </div>
@@ -955,7 +960,7 @@ export const SellVsRentCalculator: React.FC = () => {
                     )}
                   </div>
                   <div className="mt-1 flex items-baseline justify-between">
-                    <span className="text-sm font-black text-white font-mono">{formatEur(r.annualNetIncomeEur)}/yr</span>
+                    <span className="text-sm font-black text-white font-mono">{formatMoney(r.annualNetIncomeEur)}/yr</span>
                     <span className="text-[11px] text-brand-300 font-mono">{r.effectiveTaxRatePercent}% {t.sellVsRent.taxTag}</span>
                   </div>
                 </div>
@@ -985,12 +990,20 @@ export const SellVsRentCalculator: React.FC = () => {
                   </div>
                   <div className="text-[11px] text-slate-400 space-y-0.5">
                     <div>Appreciation: <strong className="text-slate-200">{sc.appreciationRate}% p.a.</strong></div>
-                    <div>Renting Wealth: <strong className="text-emerald-400 font-mono">{formatEur(sc.rentingWealthHorizon)}</strong></div>
+                    <div>Renting Wealth: <strong className="text-emerald-400 font-mono">{formatMoney(sc.rentingWealthHorizon)}</strong></div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Interactive Visual Wealth Trajectory Chart */}
+          <WealthTrajectoryChart
+            data={result.yearlyBreakdown}
+            selectedHorizonYears={horizonYears}
+            mortgageDebtFreeYear={result.mortgageDebtFreeYear ?? null}
+            hasExistingMortgage={hasMortgage}
+          />
 
           {/* Year-by-Year Multi-Year Comparison Schedule Table */}
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-4">
@@ -1035,22 +1048,22 @@ export const SellVsRentCalculator: React.FC = () => {
                           {t.sellVsRent.yearSingle} {pt.year} {isSelected && <span className="text-brand-400 font-sans text-[10px]">{t.sellVsRent.activeLabel}</span>}
                         </td>
                         <td className="py-2.5 text-brand-300">
-                          {formatEur(sellVal)}
+                          {formatMoney(sellVal)}
                         </td>
                         <td className="py-2.5 text-emerald-400">
-                          {formatEur(rentVal)}
+                          {formatMoney(rentVal)}
                         </td>
                         {includeShortTerm && (
                           <td className="py-2.5 text-indigo-300">
-                            {formatEur(pt.shortTermWealth || 0)}
+                            {formatMoney(pt.shortTermWealth || 0)}
                           </td>
                         )}
                         <td className="py-2.5 text-slate-400">
-                          {formatEur(pt.propertyValue)}
+                          {formatMoney(pt.propertyValue)}
                         </td>
                         {hasMortgage && (
                           <td className="py-2.5 text-rose-300">
-                            {formatEur(pt.remainingMortgage)}
+                            {formatMoney(pt.remainingMortgage)}
                           </td>
                         )}
                       </tr>

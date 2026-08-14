@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { I18nProvider } from './i18n';
 import { ThemeProvider, useTheme } from './theme';
+import { CurrencyProvider } from './currency';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
 import { SellVsRentCalculator } from './components/SellVsRent/SellVsRentCalculator';
@@ -54,9 +55,11 @@ const MainAppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <I18nProvider>
-        <MainAppContent />
-      </I18nProvider>
+      <CurrencyProvider>
+        <I18nProvider>
+          <MainAppContent />
+        </I18nProvider>
+      </CurrencyProvider>
     </ThemeProvider>
   );
 };

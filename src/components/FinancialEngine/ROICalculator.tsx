@@ -3,6 +3,9 @@ import { ROITaxSettings } from '../../types';
 import { calculateRealEstateFinancials, DEFAULT_TAX_SETTINGS } from '../../utils/calculations';
 import { formatEur, formatRon, formatPercent } from '../../utils/formatters';
 import { useI18n } from '../../i18n';
+import { useCurrency } from '../../currency';
+import { useTheme } from '../../theme';
+import { ROIEquityCashflowChart } from '../Charts/ROIEquityCashflowChart';
 import { 
   Calculator, 
   Receipt, 
@@ -17,6 +20,8 @@ import { FormalReportModal } from '../ReportExport/FormalReportModal';
 
 export const ROICalculator: React.FC = () => {
   const { t } = useI18n();
+  const { formatMoney } = useCurrency();
+  const { themeConfig, theme } = useTheme();
 
   // Financial Input States
   const [purchasePrice, setPurchasePrice] = useState<number>(125000);
@@ -74,6 +79,7 @@ export const ROICalculator: React.FC = () => {
       annualCashFlow,
       cumulativeCash: cumulativeCashFlow,
       totalEquity: equityBuilt,
+      totalNetEquity: equityBuilt,
     };
   });
 
@@ -155,7 +161,7 @@ export const ROICalculator: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">{t.roiCalculator.purchasePrice}</span>
-                <strong className="text-white font-mono text-sm">{formatEur(purchasePrice)}</strong>
+                <strong className="text-white font-mono text-sm">{formatMoney(purchasePrice)}</strong>
               </div>
               <input
                 type="range"
@@ -173,7 +179,7 @@ export const ROICalculator: React.FC = () => {
               <div className="flex justify-between text-xs mb-1.5">
                 <span className="text-slate-400">{t.roiCalculator.downPayment}</span>
                 <strong className="text-brand-300 font-mono font-bold">
-                  {downPaymentPercent}% ({formatEur(calc.downPaymentEur)})
+                  {downPaymentPercent}% ({formatMoney(calc.downPaymentEur)})
                 </strong>
               </div>
               <div className="grid grid-cols-3 gap-2 mb-2">
@@ -244,7 +250,7 @@ export const ROICalculator: React.FC = () => {
             <div className="pt-2 border-t border-slate-800">
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">{t.roiCalculator.renovationBudget}</span>
-                <strong className="text-white font-mono">{formatEur(renovationEur)}</strong>
+                <strong className="text-white font-mono">{formatMoney(renovationEur)}</strong>
               </div>
               <input
                 type="range"
@@ -269,7 +275,7 @@ export const ROICalculator: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">{t.roiCalculator.monthlyRent}</span>
-                <strong className="text-emerald-400 font-mono text-sm">{formatEur(monthlyRentEur)}/mo</strong>
+                <strong className="text-emerald-400 font-mono text-sm">{formatMoney(monthlyRentEur)}/mo</strong>
               </div>
               <input
                 type="range"
@@ -399,7 +405,7 @@ export const ROICalculator: React.FC = () => {
               <span className="text-[10px] text-amber-300 uppercase font-bold block">{t.roiCalculator.kpi.monthlyCashFlow}</span>
               <strong className="text-xl font-black text-amber-300 font-mono">
                 {calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}
-                {formatEur(calc.monthlyCashFlowAfterDebtEur)}
+                {formatMoney(calc.monthlyCashFlowAfterDebtEur)}
               </strong>
             </div>
           </div>
@@ -453,7 +459,7 @@ export const ROICalculator: React.FC = () => {
             <div className="flex justify-between items-center pt-2 border-t border-slate-800 text-xs">
               <span className="text-slate-400 font-bold">{t.roiCalculator.totalAnnualTaxes}</span>
               <strong className="text-rose-300 font-mono text-sm">
-                {formatEur(calc.annualTaxesEur)} / yr ({formatRon(calc.annualTaxesEur * taxSettings.eurToRonRate)})
+                {formatMoney(calc.annualTaxesEur)} / yr
               </strong>
             </div>
           </div>
@@ -476,16 +482,25 @@ export const ROICalculator: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
                   <span className="text-[10px] text-slate-400 block">{t.roiCalculator.grossAnnualRevenue}</span>
-                  <strong className="text-white font-mono text-sm">{formatEur(calc.shortTermGrossAnnualEur)}/yr</strong>
+                  <strong className="text-white font-mono text-sm">{formatMoney(calc.shortTermGrossAnnualEur)}/yr</strong>
                 </div>
 
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
                   <span className="text-[10px] text-slate-400 block">{t.roiCalculator.netAnnualCashFlow}</span>
-                  <strong className="text-indigo-300 font-mono text-sm">+{formatEur(calc.shortTermNetAnnualEur)}/yr</strong>
+                  <strong className="text-indigo-300 font-mono text-sm">+{formatMoney(calc.shortTermNetAnnualEur)}/yr</strong>
                 </div>
               </div>
             </div>
           )}
+
+          {/* Interactive ROI Equity & Cashflow Chart */}
+          <ROIEquityCashflowChart
+            tenYearProjection={projectionTable}
+            totalAcquisitionCost={calc.totalAcquisitionCost}
+            annualTaxesEur={calc.annualTaxesEur}
+            annualOperatingExpenses={calc.annualOperatingExpenses}
+            annualDebtServiceEur={calc.annualDebtServiceEur}
+          />
 
           {/* 10-Year Cumulative Cash Flow & Equity Schedule Table */}
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-4 shadow-xl">
@@ -519,16 +534,16 @@ export const ROICalculator: React.FC = () => {
                         {t.sellVsRent.yearSingle} {pt.year}
                       </td>
                       <td className="py-2.5 text-slate-300">
-                        {formatEur(pt.propertyValue)}
+                        {formatMoney(pt.propertyValue)}
                       </td>
                       <td className={`py-2.5 ${pt.annualCashFlow >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {pt.annualCashFlow >= 0 ? '+' : ''}{formatEur(pt.annualCashFlow)}
+                        {pt.annualCashFlow >= 0 ? '+' : ''}{formatMoney(pt.annualCashFlow)}
                       </td>
                       <td className="py-2.5 text-brand-300">
-                        {formatEur(pt.cumulativeCash)}
+                        {formatMoney(pt.cumulativeCash)}
                       </td>
                       <td className="py-2.5 text-emerald-300 font-bold">
-                        {formatEur(pt.totalEquity)}
+                        {formatMoney(pt.totalEquity)}
                       </td>
                     </tr>
                   ))}

@@ -8,11 +8,13 @@
 [![Romanian Fiscal Code](https://img.shields.io/badge/Fiscal%20Code-2024--2026-emerald?style=for-the-badge)](https://static.anaf.ro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Themes](https://img.shields.io/badge/Themes-4%20Modes%20(incl.%20AAA)-purple?style=for-the-badge)](#-multi-theme-system)
+[![Currency](https://img.shields.io/badge/Currency-EUR%20%7C%20RON%20(BNR)-emerald?style=for-the-badge)](#-global-currency-toggle-eur--ron)
+[![Charts](https://img.shields.io/badge/Charts-Interactive%20Visual%20SVG-blue?style=for-the-badge)](#-interactive-visual-charts)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 
 **An open-source, institutional-grade decision intelligence and tax optimization suite for Romanian real estate owners, buyers, and investors.**
 
-[Overview & Manifesto](#-project-overview) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Themes](#-multi-theme-system) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization & Reports](#-6-language-localization--translated-audit-reports) • [Deployment](#-deployment-to-vercel)
+[Overview](#-project-overview) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Currency & Charts](#-global-currency-toggle-eur--ron) • [Themes](#-multi-theme-system) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization](#-6-language-localization--translated-audit-reports)
 
 </div>
 
@@ -47,6 +49,25 @@ ROImob includes 4 custom-crafted visual themes with responsive tokens and access
 - ☀️ **Corporate Light**: Crisp daylight executive theme with high legibility.
 - 🌲 **Emerald Wealth**: Deep forest and golden accents for financial wealth planning.
 - 👁️ **High Contrast (AAA)**: WCAG AAA compliant accessibility mode with high-vis yellow focus rings, maximum contrast ratios, and bold typography.
+
+---
+
+## 💱 Global Currency Toggle (EUR ↔ RON)
+
+Users can seamlessly toggle between **EUR (€)** and **Romanian Leu (RON lei)** across the entire suite directly in the navigation bar:
+- Converted using the official BNR benchmark exchange rate ($1\text{ EUR} = 4.975\text{ RON}$).
+- Instantly updates all slider metrics, KPIs, data tables, stress-test matrices, and visual charts.
+
+---
+
+## 📈 Interactive Visual Charts
+
+1. **15-Year Wealth Trajectory Chart** (`WealthTrajectoryChart`):
+   - Multi-curve area and line chart comparing **Hold & Rent** vs. **Sell & Reinvest** vs. **Airbnb Short-Term**.
+   - Includes milestone indicators for **Accelerated Mortgage Debt-Free Year** and interactive hover tooltips.
+2. **10-Year Capital & Outflow Chart** (`ROIEquityCashflowChart`):
+   - Interactive bar columns for annual **Net Equity Building** and cumulative net cash flows.
+   - Proportional outflow distribution between **Debt Service**, **Romanian Taxes (Income, CASS, Property)**, and **Operating Reserves**.
 
 ---
 

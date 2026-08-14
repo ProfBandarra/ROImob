@@ -10,10 +10,12 @@ import {
   Sun,
   Moon,
   Eye,
-  TreePine
+  TreePine,
+  Coins
 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { useTheme } from '../theme';
+import { useCurrency } from '../currency';
 import { Language, Theme } from '../types';
 
 interface Props {
@@ -33,6 +35,7 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
 export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   const { language, setLanguage, t } = useI18n();
   const { theme, setTheme, themeConfig } = useTheme();
+  const { currency, setCurrency } = useCurrency();
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
 
@@ -122,9 +125,37 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
             </button>
           </nav>
 
-          {/* Right Actions: PROMINENT Theme Selector & 6-Language Switcher */}
+          {/* Right Actions: Currency Toggle, Theme Selector & 6-Language Switcher */}
           <div className="flex items-center gap-2">
             
+            {/* Global Currency Toggle (EUR ↔ RON) */}
+            <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-sm text-xs font-mono font-bold">
+              <button
+                type="button"
+                onClick={() => setCurrency('EUR')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  currency === 'EUR'
+                    ? 'bg-brand-600 text-white shadow-sm font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="European Euro (€)"
+              >
+                EUR €
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrency('RON')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  currency === 'RON'
+                    ? 'bg-brand-600 text-white shadow-sm font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Romanian Leu (lei) • BNR 4.975"
+              >
+                RON lei
+              </button>
+            </div>
+
             {/* Theme Selector Dropdown */}
             <div className="relative">
               <button
@@ -218,7 +249,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
                         <span>{lang.flag}</span>
                         <span>{lang.label}</span>
                       </div>
-                      {language === lang.code && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                      {language === lang.code && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
                     </button>
                   ))}
                 </div>
