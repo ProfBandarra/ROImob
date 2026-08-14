@@ -4,9 +4,9 @@ export const pt: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Motor de Decisão Financeira e Fiscalidade Imobiliária para a Roménia',
   nav: {
-    home: 'Início / Visão Geral',
-    sellVsRent: 'Estratégia do Proprietário: Vender vs. Arrendar',
-    calculator: 'Simulador ROI & Fiscalidade Roménia',
+    home: 'Início',
+    sellVsRent: 'Vender vs. Arrendar',
+    calculator: 'Motor ROI & Fiscal',
   },
   theme: {
     label: 'Tema',

@@ -57,17 +57,9 @@ export const Footer: React.FC = () => {
           </p>
         </div>
 
-        {/* AI Disclaimer Footnote & Direct GitHub Reporting */}
-        <div className="text-[10px] text-center pt-4 border-t border-slate-800/40 flex flex-col sm:flex-row items-center justify-center gap-2">
+        {/* AI Disclaimer Footnote */}
+        <div className="text-[10px] text-center pt-4 border-t border-slate-800/40 text-slate-500">
           <span>{t.footer.aiDisclaimer}</span>
-          <a
-            href={ISSUES_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-brand-400 hover:underline font-bold inline-flex items-center gap-1"
-          >
-            <span>{t.footer.reportIssueBtn} →</span>
-          </a>
         </div>
 
       </div>

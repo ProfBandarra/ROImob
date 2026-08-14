@@ -4,9 +4,9 @@ export const de: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Institutioneller Immobilien-Entscheidungs- und Steuerrechner für Rumänien',
   nav: {
-    home: 'Startseite / Übersicht',
-    sellVsRent: 'Eigentümer-Strategie: Verkaufen vs. Vermieten',
-    calculator: 'ROI- & Steuerrechner Rumänien',
+    home: 'Startseite',
+    sellVsRent: 'Verkaufen vs. Vermieten',
+    calculator: 'ROI & Steuer-Rechner',
   },
   theme: {
     label: 'Design',

@@ -105,13 +105,13 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('home')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
                   activeTab === 'home'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/30 ring-1 ring-white/20'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                <Home className="w-4 h-4 text-brand-300" />
+                <Home className="w-4 h-4 text-brand-300 shrink-0" />
                 <span>{t.nav.home}</span>
               </button>
 
@@ -119,13 +119,13 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('sellVsRent')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
                   activeTab === 'sellVsRent'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/30 ring-1 ring-white/20'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                <Scale className="w-4 h-4 text-emerald-400" />
+                <Scale className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{t.nav.sellVsRent}</span>
               </button>
 
@@ -133,13 +133,13 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('calculator')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
                   activeTab === 'calculator'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/30 ring-1 ring-white/20'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                <Calculator className="w-4 h-4 text-amber-400" />
+                <Calculator className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>{t.nav.calculator}</span>
               </button>
             </nav>
@@ -522,53 +522,53 @@ export const Navbar: React.FC<Props> = ({
         <button
           type="button"
           onClick={() => handleNavClick('home')}
-          className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all ${
+          className={`flex-1 flex flex-col items-center gap-1 py-1.5 rounded-xl text-[10.5px] font-bold transition-all ${
             activeTab === 'home'
-              ? 'text-brand-400 font-black'
+              ? 'text-brand-400 font-black scale-105'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <Home className="w-4 h-4" />
-          <span>Home</span>
+          <span className="truncate max-w-[72px]">{t.nav.home}</span>
         </button>
 
         <button
           type="button"
           onClick={() => handleNavClick('sellVsRent')}
-          className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all ${
+          className={`flex-1 flex flex-col items-center gap-1 py-1.5 rounded-xl text-[10.5px] font-bold transition-all ${
             activeTab === 'sellVsRent'
-              ? 'text-emerald-400 font-black'
+              ? 'text-emerald-400 font-black scale-105'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <Scale className="w-4 h-4" />
-          <span>Sell vs Rent</span>
+          <span className="truncate max-w-[85px]">{t.nav.sellVsRent}</span>
         </button>
 
         <button
           type="button"
           onClick={() => handleNavClick('calculator')}
-          className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all ${
+          className={`flex-1 flex flex-col items-center gap-1 py-1.5 rounded-xl text-[10.5px] font-bold transition-all ${
             activeTab === 'calculator'
-              ? 'text-amber-400 font-black'
+              ? 'text-amber-400 font-black scale-105'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <Calculator className="w-4 h-4" />
-          <span>ROI & Tax</span>
+          <span className="truncate max-w-[85px]">{t.nav.calculator}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all ${
+          className={`flex-1 flex flex-col items-center gap-1 py-1.5 rounded-xl text-[10.5px] font-bold transition-all ${
             mobileMenuOpen
-              ? 'text-brand-400 font-black'
+              ? 'text-brand-400 font-black scale-105'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <Palette className="w-4 h-4" />
-          <span>Settings</span>
+          <span className="truncate max-w-[72px]">{t.theme.label}</span>
         </button>
       </div>
     </>

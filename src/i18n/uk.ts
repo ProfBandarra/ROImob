@@ -4,9 +4,9 @@ export const uk: TranslationDictionary = {
   appName: 'ROImob',
   appTagline: 'Інституційний Калькулятор Інвестицій та Податків на Нерухомість у Румунії',
   nav: {
-    home: 'Головна / Огляд',
-    sellVsRent: 'Стратегія Власника: Продати чи Здавати',
-    calculator: 'Калькулятор ROI та Податків у Румунії',
+    home: 'Головна',
+    sellVsRent: 'Продаж чи Оренда',
+    calculator: 'ROI & Податки',
   },
   theme: {
     label: 'Тема',
