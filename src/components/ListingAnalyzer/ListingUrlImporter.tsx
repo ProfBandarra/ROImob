@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Property } from '../../types';
-import { calculatePropertyScores, calculateRealEstateFinancials } from '../../utils/calculations';
-import { formatEur, formatRon, formatPercent, getScoreColor } from '../../utils/formatters';
+import { calculatePropertyScores } from '../../utils/calculations';
+import { formatEur, getScoreColor } from '../../utils/formatters';
 import { SourceAttributionBadge } from '../SourceAttributionBadge';
 import { useI18n } from '../../i18n';
+import { evaluateLiveListingUrl, ScrapingProgress } from '../../services/listingScraper';
 import { 
   Search, 
   Link2, 
@@ -12,7 +13,6 @@ import {
   ShieldAlert, 
   ShieldCheck, 
   TrendingUp, 
-  Compass, 
   GraduationCap, 
   Wind, 
   Calculator, 
@@ -22,7 +22,9 @@ import {
   AlertTriangle,
   Layers,
   FileCheck2,
-  Tag
+  Tag,
+  Loader2,
+  Globe2
 } from 'lucide-react';
 
 interface Props {
@@ -30,390 +32,53 @@ interface Props {
   onOpenCalculator: (property: Property) => void;
 }
 
-// Sample Market Offers from OLX and Imobiliare.ro
-const MARKETPLACE_SAMPLES: {
-  platform: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro';
-  url: string;
-  property: Property;
-}[] = [
+const SAMPLE_REAL_URLS = [
   {
-    platform: 'Imobiliare.ro',
+    name: 'București Floreasca (Imobiliare.ro)',
     url: 'https://www.imobiliare.ro/vanzare-apartamente/bucuresti/floreasca/apartament-de-vanzare-2-camere-XB7K1001',
-    property: {
-      id: 'import-imob-floreasca',
-      title: 'Apartament 2 Camere Floreasca — Parc Cinema / Radu Beller',
-      address: 'Strada Calea Floreasca 64, Sector 1, București',
-      city: 'Bucharest',
-      county: 'București',
-      coordinates: [44.4592, 26.1018],
-      priceEur: 148000,
-      usableAreaSqm: 52,
-      rooms: 2,
-      floor: 3,
-      totalFloors: 4,
-      yearBuilt: 1968, // Pre-1977
-      cadastralNumber: '208912-C1-U11',
-      landBookNumber: '208912',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80',
-      description: 'Apartament cochet în zona Floreasca, finisat modern, aproape de Parcul Floreasca și Promenada Mall. Bloc tip vilă.',
-      features: ['Parc Floreasca 2 min', 'Centrală Proprie', 'Complet Mobilat', 'Zonă Premium Nord'],
-      sourcePlatform: 'Imobiliare.ro',
-      sourceListingUrl: 'https://www.imobiliare.ro/vanzare-apartamente/bucuresti/floreasca/apartament-de-vanzare-2-camere-XB7K1001',
-      diagnostics: {
-        seismic: {
-          riskClass: 'UNEXPERTIZED_PRE_1977',
-          structuralType: 'Zidărie Cărămidă și Planșee Beton Armat (Pre-1977)',
-          groundAccelerationAg: 0.30,
-          mortgageEligibility: 'CONDITIONAL',
-          provenance: {
-            sourceName: 'Registru AMCCRS / Normativ P100-1',
-            authority: 'AMCCRS / Primăria Sector 1',
-            endpointUrl: 'https://amccrs-pmb.ro',
-            updateCadence: 'Monthly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-            reliability: 'Verified Official',
-            datasetId: 'amccrs-seismic-list'
-          }
-        },
-        flood: {
-          level: 'NONE',
-          catchmentBasin: 'Bazin Hidrografic Argeș-Vedea / Lacul Floreasca',
-          provenance: {
-            sourceName: 'Apele Române Hărți Hazard',
-            authority: 'Administrația Națională Apele Române',
-            endpointUrl: 'https://rowater.ro',
-            updateCadence: 'Static/Official Regs',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 120).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        heritage: {
-          isMonument: false,
-          protectedZoneName: 'Zona Protejată Floreasca',
-          renovationConstraints: 'Standard residential approvals.',
-          provenance: {
-            sourceName: 'Lista Monumentelor Istorice (LMI)',
-            authority: 'Institutul Național al Patrimoniului',
-            endpointUrl: 'https://patrimoniu.ro',
-            updateCadence: 'Annually',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 200).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        airQuality: {
-          aqi: 34,
-          pm25: 12.1,
-          pm10: 19.4,
-          status: 'Good',
-          nearestSensor: 'RNMCA RO003 (București Nord)',
-          provenance: {
-            sourceName: 'Rețeaua Națională Calitatea Aerului',
-            authority: 'Ministerul Mediului / RNMCA',
-            endpointUrl: 'https://calitateaaerului.ro',
-            updateCadence: 'Hourly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-            reliability: 'Live Stream'
-          }
-        },
-        education: {
-          nearestSchoolName: 'Liceul Teoretic „Jean Monnet”',
-          schoolDistanceMeters: 550,
-          examAverageScore: 9.35,
-          provenance: {
-            sourceName: 'Ministerul Educației / data.gov.ro',
-            authority: 'Ministerul Educației',
-            endpointUrl: 'https://data.gov.ro/dataset/reteaua-unitatilor-de-invatamant-preuniversitar',
-            updateCadence: 'Annually',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        mobility: {
-          walkScore: 95,
-          transitScore: 92,
-          nearestMetroStation: 'Metrou Aurel Vlaicu / Ștefan cel Mare',
-          metroDistanceMeters: 800,
-          commuteToCityCenterMin: 10,
-          provenance: {
-            sourceName: 'Metrorex & TPBI Open Transit',
-            authority: 'Metrorex / TPBI',
-            endpointUrl: 'https://metrorex.ro',
-            updateCadence: 'Monthly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-            reliability: 'Verified Official'
-          }
-        }
-      },
-      investment: {
-        monthlyRentEstimateEur: 750,
-        shortTermNightlyRateEur: 70,
-        shortTermOccupancyPercent: 80,
-        managementFeePercent: 10,
-        estimatedRenovationCostEur: 2000
-      }
-    }
+    platform: 'Imobiliare.ro'
   },
   {
-    platform: 'OLX.ro',
+    name: 'Cluj-Napoca Mărăști (OLX.ro)',
     url: 'https://www.olx.ro/d/oferta/proprietar-vand-apartament-3-camere-marasti-iulius-mall-IDhQ94x.html',
-    property: {
-      id: 'import-olx-marasti',
-      title: 'Direct Proprietar: Apartament 3 Camere Mărăști lângă Iulius Mall Cluj',
-      address: 'Strada Aurel Vlaicu 24, Cluj-Napoca',
-      city: 'Cluj-Napoca',
-      county: 'Cluj',
-      coordinates: [46.7812, 23.6234],
-      priceEur: 178000,
-      usableAreaSqm: 68,
-      rooms: 3,
-      floor: 2,
-      totalFloors: 8,
-      yearBuilt: 1988,
-      cadastralNumber: '312450-C1-U19',
-      landBookNumber: '312450',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
-      description: 'Vând apartament 3 camere decomandat, etaj 2 din 8, bloc reabilitat termic, zonă excelentă aproape de FSEGA, Iulius Mall și transport public.',
-      features: ['Decomandat', 'Balcon Închis', 'Reabilitat Termic', 'Near FSEGA Univ', 'Parcare Primărie'],
-      sourcePlatform: 'OLX.ro',
-      sourceListingUrl: 'https://www.olx.ro/d/oferta/proprietar-vand-apartament-3-camere-marasti-iulius-mall-IDhQ94x.html',
-      diagnostics: {
-        seismic: {
-          riskClass: 'POST_1977_SAFE',
-          structuralType: 'Panouri Mari Beton Armat Post-1977',
-          groundAccelerationAg: 0.20,
-          mortgageEligibility: 'FULL',
-          provenance: {
-            sourceName: 'Primăria Cluj-Napoca Urbanism & P100-1',
-            authority: 'Primăria Municipiului Cluj-Napoca',
-            endpointUrl: 'https://primariaclujnapoca.ro',
-            updateCadence: 'Monthly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        flood: {
-          level: 'NONE',
-          catchmentBasin: 'Bazinul Hidrografic Someș-Tisa',
-          provenance: {
-            sourceName: 'Apele Române Hărți Hazard',
-            authority: 'Administrația Bazinală Someș-Tisa',
-            endpointUrl: 'https://rowater.ro',
-            updateCadence: 'Static/Official Regs',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 120).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        heritage: {
-          isMonument: false,
-          renovationConstraints: 'Standard residential permits.',
-          provenance: {
-            sourceName: 'Registrul Monumentelor Istorice',
-            authority: 'Institutul Național al Patrimoniului',
-            endpointUrl: 'https://patrimoniu.ro',
-            updateCadence: 'Annually',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 200).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        airQuality: {
-          aqi: 38,
-          pm25: 14.1,
-          pm10: 24.8,
-          status: 'Good',
-          nearestSensor: 'RNMCA RO012 (Aurel Vlaicu Cluj)',
-          provenance: {
-            sourceName: 'Rețeaua Națională Calitatea Aerului',
-            authority: 'Ministerul Mediului / RNMCA',
-            endpointUrl: 'https://calitateaaerului.ro',
-            updateCadence: 'Hourly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-            reliability: 'Live Stream'
-          }
-        },
-        education: {
-          nearestSchoolName: 'Liceul Teoretic „Avram Iancu” Cluj',
-          schoolDistanceMeters: 620,
-          examAverageScore: 9.45,
-          provenance: {
-            sourceName: 'Ministerul Educației / data.gov.ro',
-            authority: 'Ministerul Educației',
-            endpointUrl: 'https://data.gov.ro/dataset/reteaua-unitatilor-de-invatamant-preuniversitar',
-            updateCadence: 'Annually',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        mobility: {
-          walkScore: 91,
-          transitScore: 94,
-          nearestMetroStation: 'Bus CTP Liniile 4, 6, 7, 24B',
-          metroDistanceMeters: 80,
-          commuteToCityCenterMin: 11,
-          provenance: {
-            sourceName: 'CTP Cluj Open Transit',
-            authority: 'Compania Transport Public Cluj',
-            endpointUrl: 'https://ctpcj.ro',
-            updateCadence: 'Monthly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-            reliability: 'Verified Official'
-          }
-        }
-      },
-      investment: {
-        monthlyRentEstimateEur: 750,
-        shortTermNightlyRateEur: 75,
-        shortTermOccupancyPercent: 75,
-        managementFeePercent: 10,
-        estimatedRenovationCostEur: 4000
-      }
-    }
+    platform: 'OLX.ro'
   },
   {
-    platform: 'Storia.ro',
+    name: 'Brașov Centru Istoric (Storia.ro)',
     url: 'https://www.storia.ro/ro/oferta/garsoniera-moderna-centru-istoric-brasov-ID998k.html',
-    property: {
-      id: 'import-storia-brasov',
-      title: 'Garsonieră / Studio Modern în Centrul Istoric Brașov (Risc RsII)',
-      address: 'Strada Republicii 44, Brașov',
-      city: 'Brașov',
-      county: 'Brașov',
-      coordinates: [45.6441, 25.5931],
-      priceEur: 79000,
-      usableAreaSqm: 36,
-      rooms: 1,
-      floor: 2,
-      totalFloors: 3,
-      yearBuilt: 1928,
-      cadastralNumber: '118940-C1-U05',
-      landBookNumber: '118940',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
-      description: 'Studio fermecător pe strada pietonală Republicii din Brașov. Excelent randament în regim hotelier Airbnb, dar clădirea este înscrisă în Clasa RsII de Risc Seismic.',
-      features: ['Zonă Pietonală Republicii', 'Design Turistic', 'Complet Utilat', 'Airbnb Ready'],
-      sourcePlatform: 'Storia.ro',
-      sourceListingUrl: 'https://www.storia.ro/ro/oferta/garsoniera-moderna-centru-istoric-brasov-ID998k.html',
-      diagnostics: {
-        seismic: {
-          riskClass: 'RsII',
-          amccrsCode: 'BV-RS2-0024',
-          expertizeYear: 2020,
-          structuralType: 'Zidărie Piatră și Cărămidă Interbelică',
-          groundAccelerationAg: 0.20,
-          mortgageEligibility: 'CONDITIONAL',
-          provenance: {
-            sourceName: 'Primăria Brașov Serviciul Tehnic Risc Seismic',
-            authority: 'Primăria Municipiului Brașov',
-            endpointUrl: 'https://primariabrasov.ro',
-            updateCadence: 'Monthly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        flood: {
-          level: 'NONE',
-          catchmentBasin: 'Bazinul Hidrografic Olt',
-          provenance: {
-            sourceName: 'Apele Române Hărți Hazard',
-            authority: 'Administrația Bazinală Olt',
-            endpointUrl: 'https://rowater.ro',
-            updateCadence: 'Static/Official Regs',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 120).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        heritage: {
-          isMonument: true,
-          lmiCode: 'BV-II-s-A-11295',
-          protectedZoneName: 'Ansamblul Urban Centrul Istoric Brașov',
-          renovationConstraints: 'Approval from Ministry of Culture required. Facade protection applies.',
-          provenance: {
-            sourceName: 'Lista Monumentelor Istorice (LMI)',
-            authority: 'Institutul Național al Patrimoniului',
-            endpointUrl: 'https://patrimoniu.ro',
-            updateCadence: 'Annually',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 200).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        airQuality: {
-          aqi: 22,
-          pm25: 7.8,
-          pm10: 12.5,
-          status: 'Good',
-          nearestSensor: 'RNMCA RO018 (Brașov Centru)',
-          provenance: {
-            sourceName: 'Rețeaua Națională Calitatea Aerului',
-            authority: 'Ministerul Mediului / RNMCA',
-            endpointUrl: 'https://calitateaaerului.ro',
-            updateCadence: 'Hourly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-            reliability: 'Live Stream'
-          }
-        },
-        education: {
-          nearestSchoolName: 'Colegiul Național „Andrei Șaguna” Brașov',
-          schoolDistanceMeters: 750,
-          examAverageScore: 9.68,
-          provenance: {
-            sourceName: 'Ministerul Educației / data.gov.ro',
-            authority: 'Ministerul Educației',
-            endpointUrl: 'https://data.gov.ro/dataset/reteaua-unitatilor-de-invatamant-preuniversitar',
-            updateCadence: 'Annually',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-            reliability: 'Verified Official'
-          }
-        },
-        mobility: {
-          walkScore: 98,
-          transitScore: 89,
-          nearestMetroStation: 'Autobuz RATBV Livada Poștei',
-          metroDistanceMeters: 300,
-          commuteToCityCenterMin: 0,
-          provenance: {
-            sourceName: 'RATBV Open Transit',
-            authority: 'Regia Autonomă Transport Brașov',
-            endpointUrl: 'https://ratbv.ro',
-            updateCadence: 'Monthly',
-            lastSynced: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-            reliability: 'Verified Official'
-          }
-        }
-      },
-      investment: {
-        monthlyRentEstimateEur: 450,
-        shortTermNightlyRateEur: 65,
-        shortTermOccupancyPercent: 82,
-        managementFeePercent: 15,
-        estimatedRenovationCostEur: 1500
-      }
-    }
+    platform: 'Storia.ro'
   }
 ];
 
 export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCalculator }) => {
   const { t } = useI18n();
   const [urlInput, setUrlInput] = useState('');
-  const [isParsing, setIsParsing] = useState(false);
-  const [analyzedProperty, setAnalyzedProperty] = useState<Property | null>(MARKETPLACE_SAMPLES[0].property);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentProgress, setCurrentProgress] = useState<ScrapingProgress | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [analyzedProperty, setAnalyzedProperty] = useState<Property | null>(null);
 
-  const handleParseUrl = (inputUrl?: string) => {
-    const targetUrl = inputUrl || urlInput;
-    if (!targetUrl) return;
+  const handleStartRealtimeEvaluation = async (overrideUrl?: string) => {
+    const targetUrl = overrideUrl || urlInput.trim();
+    if (!targetUrl) {
+      setErrorMessage('Please enter or paste a valid URL from OLX.ro, Imobiliare.ro, or Storia.ro.');
+      return;
+    }
 
-    setIsParsing(true);
+    setIsLoading(true);
+    setErrorMessage(null);
+    setCurrentProgress({ step: 'FETCHING', message: 'Initiating live connection to listing server...' });
 
-    // Realistic simulated intelligent parser that maps against known listings or synthesizes diagnostic
-    setTimeout(() => {
-      let matched = MARKETPLACE_SAMPLES.find((s) => targetUrl.includes(s.platform.toLowerCase()) || targetUrl.includes('olx') || targetUrl.includes('imobiliare'));
-      
-      if (!matched) {
-        if (targetUrl.includes('olx')) matched = MARKETPLACE_SAMPLES[1];
-        else if (targetUrl.includes('storia')) matched = MARKETPLACE_SAMPLES[2];
-        else matched = MARKETPLACE_SAMPLES[0];
-      }
-
-      setAnalyzedProperty(matched.property);
-      setIsParsing(false);
-    }, 1200);
+    try {
+      const result = await evaluateLiveListingUrl(targetUrl, (prog) => {
+        setCurrentProgress(prog);
+      });
+      setAnalyzedProperty(result);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to fetch or evaluate live listing. Please check the link and try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const scores = analyzedProperty ? calculatePropertyScores(analyzedProperty) : null;
@@ -426,8 +91,8 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-3">
-            <Link2 className="w-3.5 h-3.5 text-brand-400" />
-            <span>OLX.ro • Imobiliare.ro • Storia.ro Marketplace Link Ingestion</span>
+            <Globe2 className="w-3.5 h-3.5 text-brand-400" />
+            <span>100% Real-Time Live Scraper & Official Registry Validator</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
             {t.listingAnalyzer.title}
@@ -440,21 +105,28 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
         <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-700 text-xs space-y-1.5 shrink-0">
           <div className="flex items-center gap-2 text-emerald-400 font-bold">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Automated Risk & Yield Dossier</span>
+            <span>Source-Verifiable Data Only</span>
           </div>
           <p className="text-slate-400 text-[11px]">
-            Instantly cross-referenced with AMCCRS, ANCPI, INSSE & RNMCA.
+            Directly cross-checks AMCCRS, ANCPI, OpenStreetMap & Open-Meteo live streams.
           </p>
         </div>
       </div>
 
       {/* Input URL Bar */}
       <div className="bg-slate-900/90 p-5 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row gap-3">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleStartRealtimeEvaluation();
+          }}
+          className="flex flex-col sm:flex-row gap-3"
+        >
           <div className="relative flex-1">
             <Link2 className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 pointer-events-none" />
             <input
-              type="text"
+              type="url"
+              required
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               placeholder={t.listingAnalyzer.urlInputPlaceholder}
@@ -463,35 +135,73 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
           </div>
 
           <button
-            type="button"
-            onClick={() => handleParseUrl()}
-            disabled={isParsing}
+            type="submit"
+            disabled={isLoading}
             className="px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white rounded-2xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 transition-all disabled:opacity-50 shrink-0"
           >
-            <Sparkles className={`w-4 h-4 ${isParsing ? 'animate-spin' : ''}`} />
-            <span>{isParsing ? t.listingAnalyzer.analyzing : t.listingAnalyzer.analyzeButton}</span>
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Sparkles className="w-4 h-4" />
+            )}
+            <span>{isLoading ? t.listingAnalyzer.analyzing : t.listingAnalyzer.analyzeButton}</span>
           </button>
-        </div>
+        </form>
 
-        {/* Quick Sample Links */}
+        {/* Live Execution Progress Bar */}
+        {isLoading && currentProgress && (
+          <div className="p-4 bg-slate-950 rounded-2xl border border-brand-500/40 space-y-2 animate-pulse">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-brand-300 font-bold flex items-center gap-2">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-400" />
+                <span>{currentProgress.message}</span>
+              </span>
+              <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">
+                {currentProgress.step}
+              </span>
+            </div>
+            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+              <div 
+                className="bg-brand-500 h-full rounded-full transition-all duration-300"
+                style={{
+                  width: currentProgress.step === 'FETCHING' ? '20%' :
+                         currentProgress.step === 'PARSING_SPECS' ? '40%' :
+                         currentProgress.step === 'GEOCODING' ? '65%' :
+                         currentProgress.step === 'LIVE_AIR_QUALITY' ? '85%' :
+                         currentProgress.step === 'SEISMIC_AUDIT' ? '95%' : '100%'
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Error message */}
+        {errorMessage && (
+          <div className="p-3.5 bg-rose-950/40 border border-rose-500/30 rounded-xl text-xs text-rose-300 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {/* Quick Sample Real Links */}
         <div className="pt-2 border-t border-slate-800/80">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
             {t.listingAnalyzer.quickSampleOffers}
           </span>
           <div className="flex flex-wrap gap-2">
-            {MARKETPLACE_SAMPLES.map((sample, idx) => (
+            {SAMPLE_REAL_URLS.map((sample, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => {
                   setUrlInput(sample.url);
-                  handleParseUrl(sample.url);
+                  handleStartRealtimeEvaluation(sample.url);
                 }}
                 className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-2 transition-colors"
               >
                 <Tag className="w-3.5 h-3.5 text-brand-400" />
                 <span className="text-brand-300 font-bold">[{sample.platform}]</span>
-                <span className="truncate max-w-[200px]">{sample.property.title}</span>
+                <span className="truncate max-w-[220px]">{sample.name}</span>
               </button>
             ))}
           </div>
@@ -506,7 +216,7 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-500/20 text-brand-300 border border-brand-500/30">
-                Source: {analyzedProperty.sourcePlatform || 'Imobiliare.ro'}
+                Source: {analyzedProperty.sourcePlatform || 'Live Scraped URL'}
               </span>
               <span className="text-xs text-slate-400">
                 Verified against <strong>data.gov.ro</strong> & <strong>ANCPI</strong>
@@ -514,6 +224,18 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
             </div>
 
             <div className="flex items-center gap-2">
+              {analyzedProperty.sourceListingUrl && (
+                <a
+                  href={analyzedProperty.sourceListingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors"
+                >
+                  <span>Open Original Announce</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+
               <button
                 type="button"
                 onClick={() => onAnalyzeListing(analyzedProperty)}
@@ -568,7 +290,9 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-400 block uppercase font-bold">Price / m²</span>
-                  <strong className="text-sm font-bold text-slate-200 font-mono">€{Math.round(analyzedProperty.priceEur / analyzedProperty.usableAreaSqm)}/m²</strong>
+                  <strong className="text-sm font-bold text-slate-200 font-mono">
+                    €{Math.round(analyzedProperty.priceEur / analyzedProperty.usableAreaSqm)}/m²
+                  </strong>
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-400 block uppercase font-bold">Usable Area</span>
