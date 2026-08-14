@@ -98,20 +98,20 @@ export const Navbar: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* Desktop Navigation Tabs (Hidden on mobile/tablet, accessible on desktop) */}
-            <nav className="hidden md:flex items-center gap-1.5 p-1.5 rounded-2xl border border-slate-800/60 bg-slate-900/60 shadow-inner">
+            {/* Desktop Navigation Tabs */}
+            <nav className="hidden xl:flex items-center gap-1.5 p-1.5 rounded-2xl border border-slate-800/60 bg-slate-900/60 shadow-inner shrink-0">
               
               {/* Tab 0: Home / Overview */}
               <button
                 type="button"
                 onClick={() => handleNavClick('home')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
                   activeTab === 'home'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/30 ring-1 ring-white/20'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                <Home className="w-4 h-4 text-brand-300 shrink-0" />
+                <Home className="w-3.5 h-3.5 text-brand-300 shrink-0" />
                 <span>{t.nav.home}</span>
               </button>
 
@@ -119,13 +119,13 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('sellVsRent')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
                   activeTab === 'sellVsRent'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/30 ring-1 ring-white/20'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                <Scale className="w-4 h-4 text-emerald-400 shrink-0" />
+                <Scale className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>{t.nav.sellVsRent}</span>
               </button>
 
@@ -133,26 +133,26 @@ export const Navbar: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('calculator')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
                   activeTab === 'calculator'
                     ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/30 ring-1 ring-white/20'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                <Calculator className="w-4 h-4 text-amber-400 shrink-0" />
+                <Calculator className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span>{t.nav.calculator}</span>
               </button>
             </nav>
 
-            {/* Desktop Actions: Mode Switcher, Currency, Theme & Language (Hidden on mobile) */}
-            <div className="hidden sm:flex items-center gap-2">
+            {/* Desktop Actions: Mode Switcher, Currency, Theme & Language */}
+            <div className="hidden lg:flex items-center gap-1.5 xl:gap-2 shrink-0">
               
               {/* Mode Toggle (Quick ⚡ vs Pro 🔬) */}
-              <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-sm text-xs font-bold">
+              <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-sm text-xs font-bold shrink-0">
                 <button
                   type="button"
                   onClick={() => setCalculatorMode('simple')}
-                  className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
                     calculatorMode === 'simple'
                       ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm font-black'
                       : 'text-slate-400 hover:text-white'
@@ -160,13 +160,12 @@ export const Navbar: React.FC<Props> = ({
                   title={t.mode.quickDesc}
                 >
                   <span>⚡</span>
-                  <span className="hidden xl:inline">{t.mode.quick}</span>
-                  <span className="xl:hidden">Quick</span>
+                  <span>{t.mode.quick}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setCalculatorMode('pro')}
-                  className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
                     calculatorMode === 'pro'
                       ? 'bg-brand-600 text-white shadow-sm font-black'
                       : 'text-slate-400 hover:text-white'
@@ -174,8 +173,7 @@ export const Navbar: React.FC<Props> = ({
                   title={t.mode.proDesc}
                 >
                   <span>🔬</span>
-                  <span className="hidden xl:inline">{t.mode.pro}</span>
-                  <span className="xl:hidden">Pro</span>
+                  <span>{t.mode.pro}</span>
                 </button>
               </div>
 
