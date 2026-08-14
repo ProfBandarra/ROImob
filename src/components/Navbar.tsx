@@ -22,6 +22,7 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'uk', label: 'Українська', flag: '🇺🇦' },
+  { code: 'pt', label: 'Português', flag: '🇵🇹' },
 ];
 
 export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {

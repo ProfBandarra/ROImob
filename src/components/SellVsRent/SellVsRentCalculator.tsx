@@ -16,7 +16,6 @@ import {
   ChevronUp, 
   Table as TableIcon, 
   Percent, 
-  Printer, 
   Compass, 
   Activity, 
   AlertOctagon, 
@@ -91,6 +90,9 @@ export const SellVsRentCalculator: React.FC = () => {
   const [valZoneMultiplier, setValZoneMultiplier] = useState<number>(1.0);
   const [valConditionMultiplier, setValConditionMultiplier] = useState<number>(1.0);
 
+  // Report Modal State
+  const [showReportModal, setShowReportModal] = useState<boolean>(false);
+
   const handleApplyAutoValuation = () => {
     const cityData = CITY_PRICE_PER_SQM[valCity] || CITY_PRICE_PER_SQM['Bucharest'];
     const estimatedPricePerSqm = cityData.base * valZoneMultiplier * valConditionMultiplier;
@@ -137,8 +139,6 @@ export const SellVsRentCalculator: React.FC = () => {
     { key: 'globalEtf', rate: 8.5, ...t.sellVsRent.presets.globalEtf },
     { key: 'betIndex', rate: 10.5, ...t.sellVsRent.presets.betIndex },
   ];
-
-  const [showReportModal, setShowReportModal] = useState<boolean>(false);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">

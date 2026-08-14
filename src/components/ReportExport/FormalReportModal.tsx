@@ -54,7 +54,7 @@ export const FormalReportModal: React.FC<Props> = ({
   };
 
   const currentDate = new Date().toLocaleDateString(
-    language === 'ro' ? 'ro-RO' : language === 'fr' ? 'fr-FR' : language === 'de' ? 'de-DE' : language === 'uk' ? 'uk-UA' : 'en-US',
+    language === 'ro' ? 'ro-RO' : language === 'fr' ? 'fr-FR' : language === 'de' ? 'de-DE' : language === 'uk' ? 'uk-UA' : language === 'pt' ? 'pt-PT' : 'en-US',
     {
       year: 'numeric',
       month: 'long',
