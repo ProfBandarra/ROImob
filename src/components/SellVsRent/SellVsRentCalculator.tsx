@@ -724,13 +724,21 @@ export const SellVsRentCalculator: React.FC = () => {
 
         </div>
 
-        {/* Right Column: Comparison Matrix, Horizon Selector & Verdict (7 cols) */}
+        {/* Right Column: Interactive Wealth Chart, Horizon Selector, Summary Cards & Data (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           
-          {/* Horizon Selector Bar */}
+          {/* 1. Interactive Visual Wealth Trajectory Chart (Prominent Top Focus) */}
+          <WealthTrajectoryChart
+            data={result.yearlyBreakdown}
+            selectedHorizonYears={horizonYears}
+            mortgageDebtFreeYear={result.mortgageDebtFreeYear ?? null}
+            hasExistingMortgage={hasMortgage}
+          />
+
+          {/* 2. Horizon Selector Bar */}
           <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-200 block">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-200 block">
                 {t.sellVsRent.projectionHorizon}
               </span>
               <span className="text-[11px] text-slate-400">
@@ -744,7 +752,7 @@ export const SellVsRentCalculator: React.FC = () => {
                   key={yr}
                   type="button"
                   onClick={() => setHorizonYears(yr)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     horizonYears === yr
                       ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
                       : 'text-slate-400 hover:text-white'
@@ -790,7 +798,7 @@ export const SellVsRentCalculator: React.FC = () => {
                     ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                     : result.recommendedStrategy === 'RENT_SHORT_TERM'
                     ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
-                    : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                    : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
                 }`}
               >
                 {result.recommendedStrategy === 'RENT_LONG_TERM'
@@ -815,48 +823,10 @@ export const SellVsRentCalculator: React.FC = () => {
             </div>
           </div>
 
-          {/* Side-by-Side Strategy Cards */}
+          {/* 3. COMPARATIVE FINANCIAL SUMMARY (3 Highlight Cards) */}
           <div className={`grid grid-cols-1 ${includeShortTerm ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4`}>
             
-            {/* Strategy 1: Sell Now */}
-            <div
-              className={`p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition-all ${
-                result.recommendedStrategy === 'SELL'
-                  ? 'bg-slate-900 border-brand-500 ring-2 ring-brand-500/30'
-                  : 'bg-slate-900/60 border-slate-800'
-              }`}
-            >
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block mb-1">
-                  {t.sellVsRent.sellScenario.title}
-                </span>
-                <span className="text-xl font-black text-white font-mono block">
-                  {formatMoney(result.netCashProceedsFromSaleEur)}
-                </span>
-                <span className="text-[10px] text-slate-400 block mt-0.5">
-                  {t.sellVsRent.sellScenario.netProceeds}
-                </span>
-              </div>
-
-              <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-400">{t.sellVsRent.sellScenario.transferTax} ({result.transferTaxRatePercent}%):</span>
-                  <span className="text-rose-300 font-mono">-{formatMoney(result.transferTaxEur)}</span>
-                </div>
-                {hasMortgage && (
-                  <div className="flex justify-between text-[11px]">
-                    <span className="text-slate-400">{t.sellVsRent.sellScenario.mortgagePayoff}</span>
-                    <span className="text-rose-300 font-mono">-{formatMoney(result.mortgagePayoffEur)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
-                  <span className="text-slate-300">{horizonYears}-{t.sellVsRent.sellScenario.horizonWealth}</span>
-                  <span className="text-brand-400 font-mono">+{formatMoney(result.selectedHorizonReinvestmentWealthEur)}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Strategy 2: Rent Long-Term */}
+            {/* Hold & Rent (Emerald Highlight) */}
             <div
               className={`p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition-all ${
                 result.recommendedStrategy === 'RENT_LONG_TERM'
@@ -864,146 +834,122 @@ export const SellVsRentCalculator: React.FC = () => {
                   : 'bg-slate-900/60 border-slate-800'
               }`}
             >
-              <div>
-                <span className="text-[10px] font-bold uppercase text-emerald-400 block mb-1">
-                  {t.sellVsRent.rentScenario.title}
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase text-white">Hold & Rent</span>
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-md font-bold">
+                  Emerald Highlight
                 </span>
-                <span className="text-xl font-black text-emerald-400 font-mono block">
+              </div>
+
+              <div>
+                <span className="text-2xl font-black text-emerald-400 font-mono block">
                   {result.monthlyNetRentalCashFlowEur >= 0 ? '+' : ''}
                   {formatMoney(result.monthlyNetRentalCashFlowEur)} / mo
                 </span>
-                <span className="text-[10px] text-slate-400 block mt-0.5">
-                  {t.sellVsRent.rentScenario.monthlyCashFlow}
+                <span className="text-[10px] text-slate-400 block mt-0.5 font-bold">
+                  Net Operating Cash Flow
                 </span>
               </div>
 
               <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-400">{t.sellVsRent.rentScenario.grossRent}</span>
+                  <span className="text-slate-400">Gross Rent:</span>
                   <span className="text-slate-200 font-mono">{formatMoney(monthlyRentEur)}/mo</span>
                 </div>
                 {hasMortgage && (
                   <div className="flex justify-between text-[11px]">
-                    <span className="text-slate-400">{t.sellVsRent.rentScenario.bankRate}</span>
+                    <span className="text-slate-400">Bank Debt:</span>
                     <span className="text-rose-300 font-mono">-{formatMoney(monthlyMortgagePaymentEur)}/mo</span>
                   </div>
                 )}
                 <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
-                  <span className="text-slate-300">{horizonYears}-{t.sellVsRent.rentScenario.horizonWealth}</span>
+                  <span className="text-slate-300">{horizonYears}-Yr Wealth:</span>
                   <span className="text-emerald-400 font-mono">+{formatMoney(result.selectedHorizonRentalWealthEur)}</span>
                 </div>
               </div>
             </div>
 
-            {/* Strategy 3: Airbnb / Short Term */}
+            {/* Sell & Reinvest (Purple Highlight) */}
+            <div
+              className={`p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition-all ${
+                result.recommendedStrategy === 'SELL'
+                  ? 'bg-slate-900 border-purple-500 ring-2 ring-purple-500/30'
+                  : 'bg-slate-900/60 border-slate-800'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase text-white">Sell & Reinvest</span>
+                <span className="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2 py-0.5 rounded-md font-bold">
+                  Purple Highlight
+                </span>
+              </div>
+
+              <div>
+                <span className="text-2xl font-black text-purple-300 font-mono block">
+                  {formatMoney(result.netCashProceedsFromSaleEur)}
+                </span>
+                <span className="text-[10px] text-slate-400 block mt-0.5 font-bold">
+                  Net Liquid Exit Today
+                </span>
+              </div>
+
+              <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
+                <div className="flex justify-between text-[11px]">
+                  <span className="text-slate-400">Art. 111 Tax ({result.transferTaxRatePercent}%):</span>
+                  <span className="text-rose-300 font-mono">-{formatMoney(result.transferTaxEur)}</span>
+                </div>
+                {hasMortgage && (
+                  <div className="flex justify-between text-[11px]">
+                    <span className="text-slate-400">Mortgage Payoff:</span>
+                    <span className="text-rose-300 font-mono">-{formatMoney(result.mortgagePayoffEur)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
+                  <span className="text-slate-300">{horizonYears}-Yr Reinvest Wealth:</span>
+                  <span className="text-purple-300 font-mono">+{formatMoney(result.selectedHorizonReinvestmentWealthEur)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Airbnb / Short Term (Amber Highlight) */}
             {includeShortTerm && (
               <div
                 className={`p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition-all ${
                   result.recommendedStrategy === 'RENT_SHORT_TERM'
-                    ? 'bg-slate-900 border-indigo-500 ring-2 ring-indigo-500/30'
+                    ? 'bg-slate-900 border-amber-500 ring-2 ring-amber-500/30'
                     : 'bg-slate-900/60 border-slate-800'
                 }`}
               >
-                <div>
-                  <span className="text-[10px] font-bold uppercase text-indigo-400 block mb-1">
-                    {t.sellVsRent.shortTermScenario.title}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black uppercase text-white">Airbnb</span>
+                  <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-md font-bold">
+                    Amber Highlight
                   </span>
-                  <span className="text-xl font-black text-indigo-400 font-mono block">
+                </div>
+
+                <div>
+                  <span className="text-2xl font-black text-amber-300 font-mono block">
                     +{formatMoney(result.annualShortTermNetCashFlowEur / 12)} / mo
                   </span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">
-                    {t.sellVsRent.shortTermScenario.monthlyCashFlow}
+                  <span className="text-[10px] text-slate-400 block mt-0.5 font-bold">
+                    Net Tourism Cash Flow
                   </span>
                 </div>
 
                 <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
                   <div className="flex justify-between text-[11px]">
-                    <span className="text-slate-400">{t.sellVsRent.shortTermScenario.annualNet}</span>
+                    <span className="text-slate-400">Estimated Annual Net:</span>
                     <span className="text-slate-200 font-mono">+{formatMoney(result.annualShortTermNetCashFlowEur)}/yr</span>
                   </div>
                   <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
-                    <span className="text-slate-300">{horizonYears}-{t.sellVsRent.shortTermScenario.horizonWealth}</span>
-                    <span className="text-indigo-400 font-mono">+{formatMoney(result.selectedHorizonShortTermWealthEur)}</span>
+                    <span className="text-slate-300">{horizonYears}-Yr Wealth:</span>
+                    <span className="text-amber-300 font-mono">+{formatMoney(result.selectedHorizonShortTermWealthEur)}</span>
                   </div>
                 </div>
               </div>
             )}
 
           </div>
-
-          {/* Romanian Tax Regimes Comparison Card */}
-          <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-3">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 pb-2 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <BadgePercent className="w-4 h-4 text-emerald-400" />
-                <span>{t.sellVsRent.taxComparisonTitle}</span>
-              </div>
-              <span className="text-[10px] text-slate-400 font-mono">{t.sellVsRent.taxComparisonSubtitle}</span>
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-              {result.taxRegimesComparison.map((r) => (
-                <div 
-                  key={r.regime}
-                  className={`p-3 rounded-xl border ${
-                    r.legalRiskLevel === 'HIGH_LEGAL_RISK_ANAF'
-                      ? 'bg-rose-950/20 border-rose-500/40 text-rose-200'
-                      : taxRegime === r.regime
-                      ? 'bg-slate-950 border-brand-500'
-                      : 'bg-slate-950/60 border-slate-800'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-slate-400 block font-bold truncate">{r.label}</span>
-                    {r.legalRiskLevel === 'HIGH_LEGAL_RISK_ANAF' && (
-                      <span className="px-1.5 py-0.5 text-[9px] bg-rose-500/20 text-rose-300 font-black rounded border border-rose-500/40">{t.sellVsRent.riskTag}</span>
-                    )}
-                  </div>
-                  <div className="mt-1 flex items-baseline justify-between">
-                    <span className="text-sm font-black text-white font-mono">{formatMoney(r.annualNetIncomeEur)}/yr</span>
-                    <span className="text-[11px] text-brand-300 font-mono">{r.effectiveTaxRatePercent}% {t.sellVsRent.taxTag}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Stress-Test Scenarios Card */}
-          <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-3">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 pb-2 border-b border-slate-800 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-amber-400" />
-              <span>{t.sellVsRent.stressMatrixTitle} ({horizonYears} {horizonYears === 1 ? t.sellVsRent.yearSingle : t.sellVsRent.yearsPlural})</span>
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              {result.stressScenarios.map((sc, i) => (
-                <div key={i} className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <strong className="text-slate-200 text-xs">
-                      {i === 0 ? t.sellVsRent.scenarioBear : i === 1 ? t.sellVsRent.scenarioBase : t.sellVsRent.scenarioBull}
-                    </strong>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      sc.recommendation === 'RENT_LONG_TERM' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
-                    }`}>
-                      {sc.recommendation === 'RENT_LONG_TERM' ? t.sellVsRent.rentTag : t.sellVsRent.sellTag}
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-400 space-y-0.5">
-                    <div>Appreciation: <strong className="text-slate-200">{sc.appreciationRate}% p.a.</strong></div>
-                    <div>Renting Wealth: <strong className="text-emerald-400 font-mono">{formatMoney(sc.rentingWealthHorizon)}</strong></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Interactive Visual Wealth Trajectory Chart */}
-          <WealthTrajectoryChart
-            data={result.yearlyBreakdown}
-            selectedHorizonYears={horizonYears}
-            mortgageDebtFreeYear={result.mortgageDebtFreeYear ?? null}
-            hasExistingMortgage={hasMortgage}
-          />
 
           {/* Year-by-Year Multi-Year Comparison Schedule Table */}
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-4">

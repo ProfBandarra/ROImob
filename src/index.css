@@ -8,13 +8,42 @@
   }
 }
 
+/* Custom Range Slider Styling to match Cyber-Fintech visual reference */
+input[type="range"] {
+  @apply appearance-none bg-slate-800/90 h-2 rounded-lg cursor-pointer transition-all;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-4 h-4 rounded-full bg-brand-500 border-2 border-white shadow-lg cursor-pointer transition-transform hover:scale-125;
+}
+
+input[type="range"]::-moz-range-thumb {
+  @apply w-4 h-4 rounded-full bg-brand-500 border-2 border-white shadow-lg cursor-pointer transition-transform hover:scale-125;
+}
+
+/* Custom Range Color Variations */
+input[type="range"].accent-emerald-500::-webkit-slider-thumb {
+  background-color: #10b981 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6) !important;
+}
+
+input[type="range"].accent-purple-500::-webkit-slider-thumb {
+  background-color: #8b5cf6 !important;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6) !important;
+}
+
+input[type="range"].accent-brand-500::-webkit-slider-thumb {
+  background-color: #6366f1 !important;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.6) !important;
+}
+
 /* ==========================================================================
    THEME 1: MIDNIGHT DARK (Cyber-Fintech Institutional Slate)
    ========================================================================== */
 [data-theme="midnight"] {
-  --bg-app: #030712;
-  --bg-card: #0f172a;
-  --bg-card-subtle: #090d16;
+  --bg-app: #080d1a;
+  --bg-card: #0e172a;
+  --bg-card-subtle: #090e1c;
   --border-card: #1e293b;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
@@ -22,7 +51,7 @@
 }
 
 [data-theme="midnight"] body {
-  background-color: #030712 !important;
+  background-color: #080d1a !important;
   color: #f8fafc !important;
 }
 
