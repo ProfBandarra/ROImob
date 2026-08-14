@@ -29,7 +29,11 @@ import {
   Printer,
   Compass,
   Activity,
-  Flame
+  Flame,
+  AlertOctagon,
+  ShieldAlert,
+  Gavel,
+  FileWarning
 } from 'lucide-react';
 
 const REINVESTMENT_PRESETS = [
@@ -90,6 +94,11 @@ export const SellVsRentCalculator: React.FC = () => {
   const [inflationRate, setInflationRate] = useState<number>(3.0);
   const [acceleratedPrepayment, setAcceleratedPrepayment] = useState<boolean>(false);
   
+  // Dark Pattern / Informal Market Simulation
+  const [showInformalToggles, setShowInformalToggles] = useState<boolean>(false);
+  const [simulateUnderdeclaredSale, setSimulateUnderdeclaredSale] = useState<boolean>(false);
+  const [unreportedDeclaredPriceEur, setUnreportedDeclaredPriceEur] = useState<number>(90000);
+
   // Projection Horizon
   const [horizonYears, setHorizonYears] = useState<number>(5);
 
@@ -97,8 +106,8 @@ export const SellVsRentCalculator: React.FC = () => {
   const [showAutoValuator, setShowAutoValuator] = useState<boolean>(false);
   const [valCity, setValCity] = useState<string>('Bucharest');
   const [valAreaSqm, setValAreaSqm] = useState<number>(65);
-  const [valZoneMultiplier, setValZoneMultiplier] = useState<number>(1.0); // 1.25 Premium, 1.0 Established, 0.85 Suburban
-  const [valConditionMultiplier, setValConditionMultiplier] = useState<number>(1.0); // 1.15 Luxury, 1.0 Standard, 0.85 Needs Reno
+  const [valZoneMultiplier, setValZoneMultiplier] = useState<number>(1.0);
+  const [valConditionMultiplier, setValConditionMultiplier] = useState<number>(1.0);
 
   const handleApplyAutoValuation = () => {
     const cityData = CITY_PRICE_PER_SQM[valCity] || CITY_PRICE_PER_SQM['Bucharest'];
@@ -122,6 +131,8 @@ export const SellVsRentCalculator: React.FC = () => {
     earlyMortgagePrepaymentFeePercent: prepaymentPenaltyPercent,
     realEstateAgentCommissionPercent: agentCommissionPercent,
     sellingPreparationCostEur: prepCostEur,
+    simulateInformalSellingPriceUnderdeclaration: simulateUnderdeclaredSale,
+    unreportedDeclaredPriceEur: unreportedDeclaredPriceEur,
     estimatedMonthlyRentEur: monthlyRentEur,
     monthlyOperatingExpensesEur,
     propertyAppreciationRatePercent: propertyAppreciationPercent,
@@ -431,7 +442,7 @@ export const SellVsRentCalculator: React.FC = () => {
             )}
           </div>
 
-          {/* 3. Rental Expectations & Tax Regime */}
+          {/* 3. Rental Expectations & Romanian Tax Regimes */}
           <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-5 space-y-4 shadow-lg">
             <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 pb-2 border-b border-slate-800 flex items-center gap-2">
               <Coins className="w-4 h-4 text-emerald-400" />
@@ -455,19 +466,20 @@ export const SellVsRentCalculator: React.FC = () => {
               />
             </div>
 
-            {/* Tax Regime Selector */}
+            {/* Tax Regime Selector (Including Informal Black Market Comparison) */}
             <div>
               <label className="text-xs text-slate-400 block mb-1 font-medium">
-                Romanian Rental Tax Regime (OUG 115/2023):
+                Rental Declaration & Tax Regime (Fiscal Code 2024–2026):
               </label>
               <select
                 value={taxRegime}
                 onChange={(e) => setTaxRegime(e.target.value as RentalTaxRegime)}
                 className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-bold"
               >
-                <option value="INDIVIDUAL_FLAT">Persoană Fizică — 20% Deducere Forfetară (Effective 8% + CASS)</option>
-                <option value="INDIVIDUAL_REAL">Persoană Fizică — Sistem Real pe Bază de Facturi</option>
-                <option value="SRL_MICRO">Microîntreprindere SRL — 1% Micro + 8% Dividende</option>
+                <option value="INDIVIDUAL_FLAT">✅ Persoană Fizică — 20% Deducere Forfetară (Effective 8% + CASS)</option>
+                <option value="INDIVIDUAL_REAL">✅ Persoană Fizică — Sistem Real pe Bază de Facturi & Cheltuieli</option>
+                <option value="SRL_MICRO">✅ Microîntreprindere SRL — 1% Impozit Micro + 8% Dividende</option>
+                <option value="INFORMAL_ZERO_TAX">⚠️ Informal / Nedeclarat ANAF (0% Tax - High Risk Evaziune Fiscală)</option>
               </select>
             </div>
 
@@ -509,7 +521,7 @@ export const SellVsRentCalculator: React.FC = () => {
             </div>
           </div>
 
-          {/* 4. Alternative Reinvestment Rate (Supports 0% to 15%) */}
+          {/* 4. Alternative Reinvestment Rate */}
           <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-5 space-y-4 shadow-lg">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 flex items-center gap-2">
@@ -564,7 +576,69 @@ export const SellVsRentCalculator: React.FC = () => {
             </div>
           </div>
 
-          {/* 5. Advanced Market & Inflation Parameters Toggle */}
+          {/* 5. Informal Market Friction & Legal Dark Patterns Toggle */}
+          <div className="bg-slate-900/60 rounded-2xl border border-rose-500/20 p-4 space-y-3">
+            <button
+              type="button"
+              onClick={() => setShowInformalToggles(!showInformalToggles)}
+              className="w-full flex items-center justify-between text-xs font-bold text-rose-300 hover:text-rose-200"
+            >
+              <div className="flex items-center gap-2">
+                <AlertOctagon className="w-4 h-4 text-rose-400" />
+                <span>Simulate Informal / Unreported Selling Practices (ANAF Audit Friction)</span>
+              </div>
+              {showInformalToggles ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+
+            {showInformalToggles && (
+              <div className="pt-3 border-t border-slate-800 space-y-3 text-xs">
+                <div className="p-3 bg-rose-950/30 rounded-xl border border-rose-500/30 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-bold text-rose-200 block">Under-Declared Sale Price (Notary Deed)</span>
+                      <span className="text-[10px] text-slate-400">Simulate paying transfer tax on lower declared sum</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSimulateUnderdeclaredSale(!simulateUnderdeclaredSale)}
+                      className={`w-10 h-5 flex items-center rounded-full p-0.5 transition-colors ${
+                        simulateUnderdeclaredSale ? 'bg-rose-600 justify-end' : 'bg-slate-800 justify-start'
+                      }`}
+                    >
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow" />
+                    </button>
+                  </div>
+
+                  {simulateUnderdeclaredSale && (
+                    <div className="pt-2">
+                      <div className="flex justify-between mb-1">
+                        <span className="text-slate-400">Declared Price in Contract (€):</span>
+                        <strong className="text-rose-300 font-mono">{formatEur(unreportedDeclaredPriceEur)}</strong>
+                      </div>
+                      <input
+                        type="range"
+                        min="30000"
+                        max={propertyValueEur}
+                        step="5000"
+                        value={unreportedDeclaredPriceEur}
+                        onChange={(e) => setUnreportedDeclaredPriceEur(Number(e.target.value))}
+                        className="w-full h-1.5 bg-slate-800 rounded appearance-none accent-rose-500"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="text-[11px] text-rose-300/80 leading-relaxed italic bg-slate-950 p-2.5 rounded-xl border border-rose-500/20 flex items-start gap-2">
+                  <Gavel className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>Footnote / Compliance Warning:</strong> Sub-evaluating the transaction price in authentic notary deeds or receiving untaxed rental cash violates Romanian Criminal Law 241/2005 (Evaziune Fiscală). ROImob computes this solely for theoretical friction comparison and strongly advises full legal declaration.
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 6. Advanced Market & Inflation Settings */}
           <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-4 space-y-3">
             <button
               type="button"
@@ -573,7 +647,7 @@ export const SellVsRentCalculator: React.FC = () => {
             >
               <div className="flex items-center gap-2">
                 <Sliders className="w-4 h-4 text-brand-400" />
-                <span>Advanced Market, Inflation & Friction Settings</span>
+                <span>Advanced Appreciation & Inflation Settings</span>
               </div>
               {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
@@ -632,23 +706,6 @@ export const SellVsRentCalculator: React.FC = () => {
                     className="w-full h-1.5 bg-slate-800 rounded appearance-none accent-brand-500"
                   />
                 </div>
-
-                {/* Real Estate Agent Commission */}
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-slate-400">Real Estate Agent Commission:</span>
-                    <strong className="text-white font-mono">{agentCommissionPercent.toFixed(1)}%</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="0.0"
-                    max="3.0"
-                    step="0.5"
-                    value={agentCommissionPercent}
-                    onChange={(e) => setAgentCommissionPercent(Number(e.target.value))}
-                    className="w-full h-1.5 bg-slate-800 rounded appearance-none accent-brand-500"
-                  />
-                </div>
               </div>
             )}
           </div>
@@ -686,6 +743,25 @@ export const SellVsRentCalculator: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Legal Risk Alert (Rendered if informal pattern selected) */}
+          {(result.legalRisk.hasInformalRenting || result.legalRisk.hasInformalSelling) && (
+            <div className="p-5 bg-rose-950/70 rounded-3xl border-2 border-rose-500 shadow-2xl space-y-3">
+              <div className="flex items-center gap-2 text-rose-300 font-extrabold text-sm uppercase tracking-wider">
+                <ShieldAlert className="w-5 h-5 text-rose-400" />
+                <span>Fiscal Non-Compliance & ANAF Audit Warning</span>
+              </div>
+              <p className="text-xs text-rose-100 font-semibold leading-relaxed">
+                {result.legalRisk.disclaimerNotice}
+              </p>
+              <div className="p-3 bg-slate-950/80 rounded-xl border border-rose-500/30 text-xs text-rose-200 space-y-1">
+                <div>{result.legalRisk.penaltiesDescription}</div>
+                <div className="pt-1 text-rose-400 font-bold font-mono">
+                  Estimated Financial Surcharge / Retroactive Penalty: €{result.legalRisk.anfePenaltiesEstimateEur.toLocaleString()}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Algorithmic Verdict Card */}
           <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950/60 p-6 rounded-3xl border border-brand-500/40 shadow-2xl space-y-4">
@@ -853,15 +929,24 @@ export const SellVsRentCalculator: React.FC = () => {
               <span className="text-[10px] text-slate-400 font-mono">Fiscal Code 2024–2026</span>
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
               {result.taxRegimesComparison.map((r) => (
                 <div 
                   key={r.regime}
                   className={`p-3 rounded-xl border ${
-                    taxRegime === r.regime ? 'bg-slate-950 border-brand-500' : 'bg-slate-950/60 border-slate-800'
+                    r.legalRiskLevel === 'HIGH_LEGAL_RISK_ANAF'
+                      ? 'bg-rose-950/20 border-rose-500/40 text-rose-200'
+                      : taxRegime === r.regime
+                      ? 'bg-slate-950 border-brand-500'
+                      : 'bg-slate-950/60 border-slate-800'
                   }`}
                 >
-                  <span className="text-[10px] text-slate-400 block font-bold truncate">{r.label}</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-slate-400 block font-bold truncate">{r.label}</span>
+                    {r.legalRiskLevel === 'HIGH_LEGAL_RISK_ANAF' && (
+                      <span className="px-1.5 py-0.5 text-[9px] bg-rose-500/20 text-rose-300 font-black rounded border border-rose-500/40">RISK</span>
+                    )}
+                  </div>
                   <div className="mt-1 flex items-baseline justify-between">
                     <span className="text-sm font-black text-white font-mono">{formatEur(r.annualNetIncomeEur)}/yr</span>
                     <span className="text-[11px] text-brand-300 font-mono">{r.effectiveTaxRatePercent}% Tax</span>

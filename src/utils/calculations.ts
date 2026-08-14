@@ -6,7 +6,8 @@ import {
   SellVsRentResult,
   YearlyWealthPoint,
   TaxRegimeComparison,
-  StressScenarioResult
+  StressScenarioResult,
+  LegalRiskAnalysis
 } from '../types';
 import { COUNTY_MACRO_STATS } from '../data/insseCountyStats';
 
@@ -272,15 +273,20 @@ export function calculateSellVsRent(
   inputs: SellVsRentInputs,
   taxSettings: ROITaxSettings = DEFAULT_TAX_SETTINGS
 ): SellVsRentResult {
-  const salePrice = inputs.currentPropertyMarketValueEur;
+  const actualSalePrice = inputs.currentPropertyMarketValueEur;
   
+  // Selling Transfer Tax Base (Accounts for potential under-declaration simulation)
+  const taxableDeclaredSalePrice = inputs.simulateInformalSellingPriceUnderdeclaration && inputs.unreportedDeclaredPriceEur > 0
+    ? inputs.unreportedDeclaredPriceEur
+    : actualSalePrice;
+
   // 1. Romanian Real Estate Transfer Tax (Cod Fiscal Art. 111)
   const transferTaxRatePercent = inputs.ownershipDurationYears > 3 ? 1.0 : 3.0;
-  const transferTaxEur = salePrice * (transferTaxRatePercent / 100);
+  const transferTaxEur = taxableDeclaredSalePrice * (transferTaxRatePercent / 100);
   
   // Agency / Marketing commission + Notary seller fee
   const agentCommissionRate = (inputs.realEstateAgentCommissionPercent ?? 0) / 100;
-  const notaryAndAgentFeesEur = (salePrice * agentCommissionRate) + (salePrice * 0.005);
+  const notaryAndAgentFeesEur = (taxableDeclaredSalePrice * agentCommissionRate) + (taxableDeclaredSalePrice * 0.005);
   const sellingPreparationCostEur = inputs.sellingPreparationCostEur ?? 0;
 
   // Early Prepayment Penalty on Mortgage
@@ -289,10 +295,10 @@ export function calculateSellVsRent(
   const prepaymentPenaltyEur = remainingMortgage * prepaymentPenaltyRate;
   const mortgagePayoffEur = remainingMortgage + prepaymentPenaltyEur;
   
-  // Net cash proceeds from immediate sale
+  // Net cash proceeds from immediate sale (Seller receives actualSalePrice minus fees)
   const netCashProceedsFromSaleEur = Math.max(
     0,
-    salePrice - transferTaxEur - notaryAndAgentFeesEur - sellingPreparationCostEur - mortgagePayoffEur
+    actualSalePrice - transferTaxEur - notaryAndAgentFeesEur - sellingPreparationCostEur - mortgagePayoffEur
   );
 
   // 2. Reinvestment of Sale Proceeds (Handles 0% up to 15%+)
@@ -331,27 +337,41 @@ export function calculateSellVsRent(
   const srlDividendTaxEur = srlNetProfitEur * 0.08;
   const annualTaxEurSRL = (microTurnoverTaxRon / taxSettings.eurToRonRate) + srlDividendTaxEur + srlAccountingCostEur;
 
+  // D. Informal 0% Tax (Unreported Rental / Contract Neînregistrat ANAF)
+  const annualTaxEurInformal = 0;
+
   const taxRegimesComparison: TaxRegimeComparison[] = [
     {
       regime: 'INDIVIDUAL_FLAT',
       label: 'Persoană Fizică (Normă Forfetară 20% Deducere)',
       annualTaxEur: Math.round(annualTaxEurFlat),
       effectiveTaxRatePercent: parseFloat(((annualTaxEurFlat / annualGrossRentEur) * 100).toFixed(1)),
-      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurFlat - annualMaintenanceAndInsuranceEur)
+      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurFlat - annualMaintenanceAndInsuranceEur),
+      legalRiskLevel: 'LEGAL_COMPLIANT'
     },
     {
       regime: 'INDIVIDUAL_REAL',
       label: 'Persoană Fizică (Sistem Real pe Bază de Facturi)',
       annualTaxEur: Math.round(annualTaxEurReal),
       effectiveTaxRatePercent: parseFloat(((annualTaxEurReal / annualGrossRentEur) * 100).toFixed(1)),
-      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurReal - annualMaintenanceAndInsuranceEur)
+      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurReal - annualMaintenanceAndInsuranceEur),
+      legalRiskLevel: 'LEGAL_COMPLIANT'
     },
     {
       regime: 'SRL_MICRO',
       label: 'Microîntreprindere SRL (1% Cifră Afaceri + 8% Dividende)',
       annualTaxEur: Math.round(annualTaxEurSRL),
       effectiveTaxRatePercent: parseFloat(((annualTaxEurSRL / annualGrossRentEur) * 100).toFixed(1)),
-      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurSRL - annualMaintenanceAndInsuranceEur)
+      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurSRL - annualMaintenanceAndInsuranceEur),
+      legalRiskLevel: 'LEGAL_COMPLIANT'
+    },
+    {
+      regime: 'INFORMAL_ZERO_TAX',
+      label: 'Nedeclarat ANAF (Chirie „la negru” / Fără Contract)',
+      annualTaxEur: 0,
+      effectiveTaxRatePercent: 0.0,
+      annualNetIncomeEur: Math.round(annualGrossRentEur - annualMaintenanceAndInsuranceEur),
+      legalRiskLevel: 'HIGH_LEGAL_RISK_ANAF'
     }
   ];
 
@@ -359,6 +379,7 @@ export function calculateSellVsRent(
   let selectedAnnualTaxEur = annualTaxEurFlat;
   if (inputs.taxRegime === 'INDIVIDUAL_REAL') selectedAnnualTaxEur = annualTaxEurReal;
   else if (inputs.taxRegime === 'SRL_MICRO') selectedAnnualTaxEur = annualTaxEurSRL;
+  else if (inputs.taxRegime === 'INFORMAL_ZERO_TAX') selectedAnnualTaxEur = annualTaxEurInformal;
 
   const annualTaxesAndExpensesEur = selectedAnnualTaxEur + annualMaintenanceAndInsuranceEur;
   const annualMortgagePaymentsEur = inputs.hasExistingMortgage ? inputs.monthlyMortgagePaymentEur * 12 : 0;
@@ -388,12 +409,11 @@ export function calculateSellVsRent(
       : netCashProceedsFromSaleEur;
 
     // Property Value
-    const propertyValue = salePrice * Math.pow(1 + appreciationRate, yr);
+    const propertyValue = actualSalePrice * Math.pow(1 + appreciationRate, yr);
 
     // Mortgage Amortization (Standard vs Accelerated Prepayment)
     if (inputs.hasExistingMortgage && remainingMortgageTracker > 0) {
       if (inputs.reinvestCashFlowToPrepayMortgage && annualNetRentalCashFlowEur > 0) {
-        // Apply surplus cash to accelerate principal payoff
         const regularPrincipalPayment = inputs.remainingMortgageBalanceEur / Math.max(1, inputs.remainingMortgageYears);
         const totalPrincipalPaidThisYear = regularPrincipalPayment + annualNetRentalCashFlowEur;
         remainingMortgageTracker = Math.max(0, remainingMortgageTracker - totalPrincipalPaidThisYear);
@@ -468,8 +488,8 @@ export function calculateSellVsRent(
       appreciationRate: 0.0,
       vacancyMonths: 2,
       sellingWealthHorizon: Math.round(selectedHorizonReinvestmentWealthEur),
-      rentingWealthHorizon: Math.round((salePrice * 1.0) - (inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur * 0.7 : 0) + (annualNetRentalCashFlowEur * 0.7 * horizon)),
-      recommendation: (salePrice * 1.0 + annualNetRentalCashFlowEur * 0.7 * horizon) > selectedHorizonReinvestmentWealthEur ? 'RENT_LONG_TERM' : 'SELL'
+      rentingWealthHorizon: Math.round((actualSalePrice * 1.0) - (inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur * 0.7 : 0) + (annualNetRentalCashFlowEur * 0.7 * horizon)),
+      recommendation: (actualSalePrice * 1.0 + annualNetRentalCashFlowEur * 0.7 * horizon) > selectedHorizonReinvestmentWealthEur ? 'RENT_LONG_TERM' : 'SELL'
     },
     {
       scenarioName: 'Base (Realistic)',
@@ -484,12 +504,28 @@ export function calculateSellVsRent(
       appreciationRate: inputs.propertyAppreciationRatePercent + 2.5,
       vacancyMonths: 0.0,
       sellingWealthHorizon: Math.round(selectedHorizonReinvestmentWealthEur),
-      rentingWealthHorizon: Math.round((salePrice * Math.pow(1 + (appreciationRate + 0.025), horizon)) - (inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur * 0.6 : 0) + (annualNetRentalCashFlowEur * 1.15 * horizon)),
+      rentingWealthHorizon: Math.round((actualSalePrice * Math.pow(1 + (appreciationRate + 0.025), horizon)) - (inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur * 0.6 : 0) + (annualNetRentalCashFlowEur * 1.15 * horizon)),
       recommendation: 'RENT_LONG_TERM'
     }
   ];
 
-  // 6. Strategic Verdict
+  // 6. Legal Risk & Compliance Analysis
+  const hasInformalRenting = inputs.taxRegime === 'INFORMAL_ZERO_TAX';
+  const hasInformalSelling = inputs.simulateInformalSellingPriceUnderdeclaration;
+  
+  const estimatedUnpaidTaxes5Y = hasInformalRenting ? annualTaxEurFlat * 5 : 0;
+  const estimatedUnderdeclaredTransferTax = hasInformalSelling ? (actualSalePrice - taxableDeclaredSalePrice) * (transferTaxRatePercent / 100) : 0;
+  const anfePenaltiesEstimateEur = Math.round((estimatedUnpaidTaxes5Y + estimatedUnderdeclaredTransferTax) * 1.70); // unpaid taxes + 0.08%/day delay penalty + ANAF non-declaration surcharge (0.08%/day)
+
+  const legalRisk: LegalRiskAnalysis = {
+    hasInformalRenting,
+    hasInformalSelling,
+    anfePenaltiesEstimateEur,
+    disclaimerNotice: 'AVERTISMENT LEGAL ȘI DE CONFORMITATE: Nedeclararea veniturilor din chirii sau subevaluarea prețului de vânzare în actul notarial constituie evaziune fiscală conform Legii nr. 241/2005 și Codului de Procedură Fiscală (Legea 207/2015). ROImob descurajează ferm aceste practici.',
+    penaltiesDescription: 'Consecințe legale: Dobânzi și penalități de întârziere ANAF (0.02% dobândă/zi + 0.01% penalitate/zi + 0.08% penalitate de nedeclarare), executare silită pe conturi bancare, pierderea dreptului de a evacua legal chiriașii rău-platnici prin titlu executoriu și răspundere penală pentru fapte de evaziune fiscală.'
+  };
+
+  // 7. Strategic Verdict
   let recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM' = 'RENT_LONG_TERM';
   const verdictHighlights: string[] = [];
 
@@ -520,6 +556,10 @@ export function calculateSellVsRent(
     }
   }
 
+  if (hasInformalRenting || hasInformalSelling) {
+    verdictHighlights.push(`⚠️ WARNING: Unregistered / Informal tax evasion exposes you to an estimated €${anfePenaltiesEstimateEur.toLocaleString()} in ANAF back-taxes, interest surcharges, and legal nullity.`);
+  }
+
   let breakEvenHorizonYears = 3;
   for (const pt of yearlyBreakdown) {
     if (pt.rentingWealth >= pt.sellingWealth) {
@@ -540,7 +580,7 @@ export function calculateSellVsRent(
   }
 
   return {
-    grossSalePriceEur: salePrice,
+    grossSalePriceEur: actualSalePrice,
     transferTaxRatePercent,
     transferTaxEur,
     notaryAndAgentFeesEur,
@@ -567,6 +607,7 @@ export function calculateSellVsRent(
     yearlyBreakdown,
     taxRegimesComparison,
     stressScenarios,
+    legalRisk,
     mortgageDebtFreeYear,
     recommendedStrategy,
     wealthDifferenceAtHorizonEur,

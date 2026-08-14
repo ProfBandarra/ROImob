@@ -166,7 +166,7 @@ export interface FinancialCalculationResult {
 // -------------------------------------------------------------
 // ADVANCED SELL VS RENT OWNER OPTIMIZER TYPES
 // -------------------------------------------------------------
-export type RentalTaxRegime = 'INDIVIDUAL_FLAT' | 'INDIVIDUAL_REAL' | 'SRL_MICRO';
+export type RentalTaxRegime = 'INDIVIDUAL_FLAT' | 'INDIVIDUAL_REAL' | 'SRL_MICRO' | 'INFORMAL_ZERO_TAX';
 
 export interface SellVsRentInputs {
   currentPropertyMarketValueEur: number;
@@ -182,12 +182,16 @@ export interface SellVsRentInputs {
   realEstateAgentCommissionPercent: number;
   sellingPreparationCostEur: number;
 
+  // Informal / Unreported sale under-declaration option (Market friction comparison)
+  simulateInformalSellingPriceUnderdeclaration: boolean;
+  unreportedDeclaredPriceEur: number; // e.g. lower value in notary deed
+
   // Renting Assumptions
   estimatedMonthlyRentEur: number;
   monthlyOperatingExpensesEur: number;
   propertyAppreciationRatePercent: number;
   
-  // Tax Regime
+  // Tax Regime (including informal/unregistered lease option)
   taxRegime: RentalTaxRegime;
 
   // Short-Term Rental Toggle & Assumptions
@@ -199,7 +203,7 @@ export interface SellVsRentInputs {
 
   // Inflation & Real vs Nominal
   adjustForInflation: boolean;
-  annualInflationRatePercent: number; // e.g. 3.0%
+  annualInflationRatePercent: number;
 
   // Accelerated Prepayment Toggle
   reinvestCashFlowToPrepayMortgage: boolean;
@@ -235,6 +239,15 @@ export interface TaxRegimeComparison {
   annualTaxEur: number;
   effectiveTaxRatePercent: number;
   annualNetIncomeEur: number;
+  legalRiskLevel: 'LEGAL_COMPLIANT' | 'HIGH_LEGAL_RISK_ANAF';
+}
+
+export interface LegalRiskAnalysis {
+  hasInformalRenting: boolean;
+  hasInformalSelling: boolean;
+  anfePenaltiesEstimateEur: number;
+  disclaimerNotice: string;
+  penaltiesDescription: string;
 }
 
 export interface SellVsRentResult {
@@ -266,20 +279,14 @@ export interface SellVsRentResult {
   selectedHorizonShortTermWealthEur: number;
   fiveYearShortTermWealthEur: number;
 
-  // Multi-Year Amortization Schedule
   yearlyBreakdown: YearlyWealthPoint[];
-
-  // Tax Regimes Comparison (PF Flat vs PF Real vs SRL)
   taxRegimesComparison: TaxRegimeComparison[];
-
-  // Stress-Test Scenarios
   stressScenarios: StressScenarioResult[];
+  legalRisk: LegalRiskAnalysis;
 
-  // Mortgage Accelerated Payoff stats
   mortgageDebtFreeYear?: number;
   totalMortgageInterestSavedEur?: number;
 
-  // Final Verdict & Recommendation
   recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM';
   wealthDifferenceAtHorizonEur: number;
   breakEvenHorizonYears: number;
