@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.roimob.eu/</loc>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://www.roimob.eu/?lang=ro" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.roimob.eu/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.roimob.eu/?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.roimob.eu/?lang=de" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://www.roimob.eu/?lang=uk" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.roimob.eu/?lang=pt" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.roimob.eu/" />
+  </url>
+</urlset>

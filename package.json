@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "screenshots": "node scripts/generate_readme_screenshots.js"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -25,6 +26,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.2",
+    "puppeteer": "^25.7.0",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.7.2",
     "vite": "^6.1.0"

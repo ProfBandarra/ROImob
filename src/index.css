@@ -4,30 +4,280 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 antialiased font-sans;
+    @apply antialiased font-sans transition-colors duration-200;
   }
 }
 
-/* Custom Leaflet Map Pin Styles */
-.leaflet-popup-content-wrapper {
-  background: #ffffff !important;
+/* Custom Range Slider Styling to match Cyber-Fintech visual reference */
+input[type="range"] {
+  @apply appearance-none bg-slate-800/90 h-2 rounded-lg cursor-pointer transition-all;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-4 h-4 rounded-full bg-brand-500 border-2 border-white shadow-lg cursor-pointer transition-transform hover:scale-125;
+}
+
+input[type="range"]::-moz-range-thumb {
+  @apply w-4 h-4 rounded-full bg-brand-500 border-2 border-white shadow-lg cursor-pointer transition-transform hover:scale-125;
+}
+
+/* Custom Range Color Variations */
+input[type="range"].accent-emerald-500::-webkit-slider-thumb {
+  background-color: #10b981 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6) !important;
+}
+
+input[type="range"].accent-purple-500::-webkit-slider-thumb {
+  background-color: #8b5cf6 !important;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6) !important;
+}
+
+input[type="range"].accent-brand-500::-webkit-slider-thumb {
+  background-color: #6366f1 !important;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.6) !important;
+}
+
+/* ==========================================================================
+   THEME 1: MIDNIGHT DARK (Cyber-Fintech Institutional Slate)
+   ========================================================================== */
+[data-theme="midnight"] {
+  --bg-app: #080d1a;
+  --bg-card: #0e172a;
+  --bg-card-subtle: #090e1c;
+  --border-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-color: #6366f1;
+}
+
+[data-theme="midnight"] body {
+  background-color: #080d1a !important;
+  color: #f8fafc !important;
+}
+
+/* ==========================================================================
+   THEME 2: CORPORATE LIGHT (Clean Executive Daylight & Swiss Precision)
+   ========================================================================== */
+[data-theme="corporate"] {
+  --bg-app: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-subtle: #f8fafc;
+  --border-card: #cbd5e1;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --accent-color: #2563eb;
+}
+
+[data-theme="corporate"] body {
+  background-color: #f1f5f9 !important;
   color: #0f172a !important;
-  border-radius: 1rem !important;
-  padding: 0.25rem !important;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5) !important;
 }
 
-.leaflet-popup-tip {
-  background: #ffffff !important;
+[data-theme="corporate"] .bg-slate-900,
+[data-theme="corporate"] .bg-slate-900\/90,
+[data-theme="corporate"] .bg-slate-900\/80,
+[data-theme="corporate"] .bg-slate-900\/60,
+[data-theme="corporate"] .bg-slate-900\/40,
+[data-theme="corporate"] .bg-slate-800,
+[data-theme="corporate"] .bg-slate-800\/90,
+[data-theme="corporate"] .bg-slate-800\/80,
+[data-theme="corporate"] .bg-slate-800\/60,
+[data-theme="corporate"] .bg-slate-800\/40 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-.custom-property-pin,
-.custom-seismic-pin,
-.custom-school-pin,
-.custom-hospital-pin,
-.custom-air-pin {
-  background: transparent !important;
-  border: none !important;
+[data-theme="corporate"] .bg-slate-950,
+[data-theme="corporate"] .bg-slate-950\/90,
+[data-theme="corporate"] .bg-slate-950\/80,
+[data-theme="corporate"] .bg-slate-950\/60,
+[data-theme="corporate"] .bg-slate-950\/40 {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+[data-theme="corporate"] .bg-gradient-to-r.from-slate-900 {
+  background-image: linear-gradient(to right, #ffffff, #f8fafc, #ffffff) !important;
+  border-color: #cbd5e1 !important;
+}
+
+[data-theme="corporate"] .text-white {
+  color: #0f172a !important;
+}
+
+[data-theme="corporate"] .text-slate-100,
+[data-theme="corporate"] .text-slate-200,
+[data-theme="corporate"] .text-slate-300 {
+  color: #1e293b !important;
+}
+
+[data-theme="corporate"] .text-slate-400 {
+  color: #475569 !important;
+}
+
+[data-theme="corporate"] .border-slate-800,
+[data-theme="corporate"] .border-slate-800\/80,
+[data-theme="corporate"] .border-slate-800\/60,
+[data-theme="corporate"] .border-slate-700,
+[data-theme="corporate"] .border-slate-700\/80 {
+  border-color: #cbd5e1 !important;
+}
+
+[data-theme="corporate"] input,
+[data-theme="corporate"] select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+[data-theme="corporate"] input[type="range"] {
+  background-color: #e2e8f0 !important;
+}
+
+/* ==========================================================================
+   THEME 3: EMERALD WEALTH (Private Wealth / Golden Accents & Deep Forest)
+   ========================================================================== */
+[data-theme="emerald"] {
+  --bg-app: #022c22;
+  --bg-card: #064e3b;
+  --bg-card-subtle: #022c22;
+  --border-card: #047857;
+  --text-main: #ecfdf5;
+  --text-muted: #a7f3d0;
+  --accent-color: #10b981;
+}
+
+[data-theme="emerald"] body {
+  background-color: #021e17 !important;
+  color: #ecfdf5 !important;
+}
+
+[data-theme="emerald"] .bg-slate-900,
+[data-theme="emerald"] .bg-slate-900\/90,
+[data-theme="emerald"] .bg-slate-900\/80,
+[data-theme="emerald"] .bg-slate-900\/60,
+[data-theme="emerald"] .bg-slate-800,
+[data-theme="emerald"] .bg-slate-800\/80 {
+  background-color: #042f24 !important;
+  color: #ecfdf5 !important;
+  border-color: #065f46 !important;
+}
+
+[data-theme="emerald"] .bg-slate-950,
+[data-theme="emerald"] .bg-slate-950\/90,
+[data-theme="emerald"] .bg-slate-950\/80,
+[data-theme="emerald"] .bg-slate-950\/40 {
+  background-color: #021a14 !important;
+  color: #ecfdf5 !important;
+  border-color: #065f46 !important;
+}
+
+[data-theme="emerald"] .bg-gradient-to-r.from-slate-900 {
+  background-image: linear-gradient(to right, #042f24, #064e3b, #042f24) !important;
+  border-color: #047857 !important;
+}
+
+[data-theme="emerald"] .border-slate-800,
+[data-theme="emerald"] .border-slate-800\/80,
+[data-theme="emerald"] .border-slate-800\/60,
+[data-theme="emerald"] .border-slate-700,
+[data-theme="emerald"] .border-slate-700\/80 {
+  border-color: #065f46 !important;
+}
+
+[data-theme="emerald"] .text-slate-300,
+[data-theme="emerald"] .text-slate-400 {
+  color: #a7f3d0 !important;
+}
+
+[data-theme="emerald"] input,
+[data-theme="emerald"] select {
+  background-color: #021a14 !important;
+  color: #ecfdf5 !important;
+  border-color: #047857 !important;
+}
+
+/* ==========================================================================
+   THEME 4: ACCESSIBILITY (WCAG AAA High-Contrast Bold Terminal)
+   ========================================================================== */
+[data-theme="accessibility"] {
+  --bg-app: #000000;
+  --bg-card: #000000;
+  --bg-card-subtle: #000000;
+  --border-card: #facc15;
+  --text-main: #ffffff;
+  --text-muted: #fef08a;
+  --accent-color: #facc15;
+}
+
+[data-theme="accessibility"] body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="accessibility"] .bg-slate-900,
+[data-theme="accessibility"] .bg-slate-900\/90,
+[data-theme="accessibility"] .bg-slate-900\/80,
+[data-theme="accessibility"] .bg-slate-900\/60,
+[data-theme="accessibility"] .bg-slate-800,
+[data-theme="accessibility"] .bg-slate-800\/80,
+[data-theme="accessibility"] .bg-slate-950,
+[data-theme="accessibility"] .bg-slate-950\/90,
+[data-theme="accessibility"] .bg-slate-950\/80,
+[data-theme="accessibility"] .bg-slate-950\/40 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #facc15 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+[data-theme="accessibility"] .bg-gradient-to-r.from-slate-900 {
+  background-image: none !important;
+  background-color: #000000 !important;
+  border: 2px solid #facc15 !important;
+}
+
+[data-theme="accessibility"] .border-slate-800,
+[data-theme="accessibility"] .border-slate-800\/80,
+[data-theme="accessibility"] .border-slate-800\/60,
+[data-theme="accessibility"] .border-slate-700,
+[data-theme="accessibility"] .border-slate-700\/80 {
+  border-color: #facc15 !important;
+  border-width: 2px !important;
+}
+
+[data-theme="accessibility"] .text-slate-400,
+[data-theme="accessibility"] .text-slate-500 {
+  color: #fef08a !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="accessibility"] .text-slate-300 {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="accessibility"] button:focus-visible,
+[data-theme="accessibility"] input:focus-visible,
+[data-theme="accessibility"] select:focus-visible {
+  outline: 3px solid #facc15 !important;
+  outline-offset: 3px !important;
+}
+
+[data-theme="accessibility"] input[type="range"] {
+  accent-color: #facc15 !important;
+}
+
+[data-theme="accessibility"] input,
+[data-theme="accessibility"] select {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #facc15 !important;
 }
 
 /* Custom Scrollbars */
@@ -37,14 +287,46 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: rgba(15, 23, 42, 0.6);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #334155;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #475569;
+}
+
+/* ==========================================================================
+   FORMAL REPORT PRINT STYLES (PDF & PRINT ISOLATION)
+   ========================================================================== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #formal-report-print-sheet,
+  #formal-report-print-sheet * {
+    visibility: visible;
+  }
+
+  #formal-report-print-sheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 24px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
 }

@@ -1,4 +1,8 @@
-export type Language = 'en' | 'ro' | 'fr' | 'de' | 'uk';
+export type Language = 'en' | 'ro' | 'fr' | 'de' | 'uk' | 'pt';
+
+export type Theme = 'midnight' | 'corporate' | 'emerald' | 'accessibility';
+
+export type CalculatorMode = 'simple' | 'pro';
 
 export type RentalTaxRegime = 'INDIVIDUAL_FLAT' | 'INDIVIDUAL_REAL' | 'SRL_MICRO' | 'INFORMAL_ZERO_TAX';
 

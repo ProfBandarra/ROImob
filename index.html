@@ -1,17 +1,136 @@
 <!doctype html>
-<html lang="en">
+<html lang="ro">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230271c5'><path d='M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z'/></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ROImob — Real Estate & Urban Intelligence Platform</title>
-    <meta name="description" content="Comprehensive real estate intelligence, seismic risk diagnostics, and ROI investment portal for Romania powered by data.gov.ro, ANCPI, INSSE, and AMCCRS." />
+    
+    <!-- Primary Meta Tags -->
+    <title>ROImob — Romanian Real Estate Financial & Tax Intelligence | Calculatoare Imobiliare</title>
+    <meta name="title" content="ROImob — Romanian Real Estate Financial & Tax Intelligence | Calculatoare Imobiliare" />
+    <meta name="description" content="Platformă gratuită de analiză decizională și optimizare fiscală imobiliară pentru România. Calculează Strategia Proprietarului (Vânzare vs. Închiriere) și Randamentul ROI conform Codului Fiscal (Legea 227/2015 & OUG 115/2023)." />
+    <meta name="keywords" content="calculator randament chirie, calculator roi imobiliar, vanzare vs inchiriere apartament, impozit chirie 2026, oug 115 2023 chirii, art 111 cod fiscal, calculator credite bnr ircc, romania real estate calculator, bucharest rental yield" />
+    <meta name="author" content="ROImob Open Source Community" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#080d1a" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.roimob.eu/" />
+
+    <!-- Multilingual Alternate Links (hreflang) -->
+    <link rel="alternate" hreflang="ro" href="https://www.roimob.eu/?lang=ro" />
+    <link rel="alternate" hreflang="en" href="https://www.roimob.eu/?lang=en" />
+    <link rel="alternate" hreflang="fr" href="https://www.roimob.eu/?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://www.roimob.eu/?lang=de" />
+    <link rel="alternate" hreflang="uk" href="https://www.roimob.eu/?lang=uk" />
+    <link rel="alternate" hreflang="pt" href="https://www.roimob.eu/?lang=pt" />
+    <link rel="alternate" hreflang="x-default" href="https://www.roimob.eu/" />
+
+    <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.roimob.eu/" />
+    <meta property="og:site_name" content="ROImob" />
+    <meta property="og:title" content="ROImob — Romanian Real Estate Financial & Tax Intelligence" />
+    <meta property="og:description" content="Platformă decizională imobiliară: Vânzare vs. Închiriere, Traiectorie pe 15 Ani și Calculator ROI conform Codului Fiscal (Legea 227/2015 & OUG 115/2023)." />
+    <meta property="og:image" content="https://www.roimob.eu/screenshots/roimob_homepage_preview.png" />
+    <meta property="og:image:secure_url" content="https://www.roimob.eu/screenshots/roimob_homepage_preview.png" />
+    <meta property="og:image:width" content="1440" />
+    <meta property="og:image:height" content="950" />
+    <meta property="og:image:alt" content="ROImob Real Estate Decision Hub Preview" />
+    <meta property="og:locale" content="ro_RO" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+    <meta property="og:locale:alternate" content="de_DE" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.roimob.eu/" />
+    <meta name="twitter:title" content="ROImob — Romanian Real Estate Financial & Tax Engine" />
+    <meta name="twitter:description" content="Institutional decision intelligence for Romanian real estate. Model Sell vs. Rent & Buy-to-Let ROI under Law 227/2015 & OUG 115/2023." />
+    <meta name="twitter:image" content="https://www.roimob.eu/screenshots/roimob_homepage_preview.png" />
+
+    <!-- Favicon & PWA Manifest -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230271c5'><path d='M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z'/></svg>" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Google Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://www.roimob.eu/#app",
+          "name": "ROImob",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "url": "https://www.roimob.eu/",
+          "description": "Institutional Real Estate Decision & Tax Engine for Romania. Model Owner Strategy (Sell vs. Rent) and Buy-to-Let ROI under Romanian Fiscal Code Law 227/2015 & OUG 115/2023.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR"
+          },
+          "featureList": [
+            "Quick & Pro Sell vs. Rent Decision Optimizers",
+            "15-Year Projected Capital Trajectory Simulator",
+            "Romanian Fiscal Code (Law 227/2015 Art. 111) Transfer Tax Schedules",
+            "OUG 115/2023 20% Deductible Flat Rental Tax & CASS Health Brackets",
+            "Dual Currency Reporting (EUR, RON, USD, GBP, CHF)",
+            "Formal 2-Page Verified A4 Institutional Dossier Export"
+          ]
+        },
+        {
+          "@type": "FinancialService",
+          "@id": "https://www.roimob.eu/#service",
+          "name": "ROImob Real Estate Intelligence",
+          "url": "https://www.roimob.eu/",
+          "areaServed": {
+            "@type": "Country",
+            "name": "Romania"
+          },
+          "serviceType": "Real Estate Investment Analysis & Tax Optimization"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://www.roimob.eu/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Cum se calculează impozitul pe chirii în România în 2026 conform OUG 115/2023?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Venitul brut din chirii beneficiază de o cotă forfetară de cheltuieli deductibile de 20%, rezultând o cotă efectivă de impozitare de 8%. La depășirea plafoanelor de 6, 12 sau 24 de salarii minime brute pe economie, se datorează suplimentar contribuția CASS (10%)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Care este impozitul la vânzarea unui imobil conform Art. 111 din Codul Fiscal?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Impozitul pe venitul din transferul proprietăților imobiliare este de 1% pentru proprietăți deținute o perioadă mai mare de 3 ani și de 3% pentru proprietăți deținute o perioadă de până la 3 ani inclusiv."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Este ROImob gratuit pentru uz public?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Da, ROImob este o platformă 100% gratuită și open-source, creată pentru a oferi claritate decizională și transparență fiscală proprietarilor și investitorilor imobiliari din România."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
-  <body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased selection:bg-brand-500 selection:text-white">
+  <body class="min-h-screen font-sans antialiased selection:bg-brand-500 selection:text-white">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
