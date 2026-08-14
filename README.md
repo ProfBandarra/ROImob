@@ -7,11 +7,12 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
 [![Romanian Fiscal Code](https://img.shields.io/badge/Fiscal%20Code-2024--2026-emerald?style=for-the-badge)](https://static.anaf.ro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Themes](https://img.shields.io/badge/Themes-4%20Modes%20(incl.%20AAA)-purple?style=for-the-badge)](#-multi-theme-system)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 
 **An open-source, institutional-grade decision intelligence and tax optimization suite for Romanian real estate owners, buyers, and investors.**
 
-[Overview & Manifesto](#-project-overview) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization](#-6-language-localization) • [Deployment](#-deployment-to-vercel)
+[Overview & Manifesto](#-project-overview) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Themes](#-multi-theme-system) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization & Reports](#-6-language-localization--translated-audit-reports) • [Deployment](#-deployment-to-vercel)
 
 </div>
 
@@ -36,6 +37,16 @@ Unlike commercial portals or simplified rule-of-thumb estimators, ROImob models 
               │     Sell vs. Rent Optimizer         │                       │           & Fiscal Engine           │
               └─────────────────────────────────────┘                       └─────────────────────────────────────┘
 ```
+
+---
+
+## 🎨 Multi-Theme System
+
+ROImob includes 4 custom-crafted visual themes with responsive tokens and accessibility standards:
+- 🌙 **Midnight Dark** (Default): High-end institutional navy slate with indigo accents.
+- ☀️ **Corporate Light**: Crisp daylight executive theme with high legibility.
+- 🌲 **Emerald Wealth**: Deep forest and golden accents for financial wealth planning.
+- 👁️ **High Contrast (AAA)**: WCAG AAA compliant accessibility mode with high-vis yellow focus rings, maximum contrast ratios, and bold typography.
 
 ---
 
@@ -103,10 +114,6 @@ An institutional underwriting calculator for buy-to-let acquisitions:
 - **Local Municipal Building Tax**: 0.1% residential quota.
 - **Mandatory PAD Insurance & Facultative Property Insurance**.
 
-### 4. 10-Year Cumulative Cash Flow & Equity Schedule
-- Year-by-year schedule tracking property appreciation (3.5% p.a.), rent growth (2.5% p.a.), annual cash flow, cumulative cash, and total net equity.
-- **PDF & Printable Audit Export**: Dedicated isolated print engine generating formal A4 audit dossiers for banking applications or personal records.
-
 ---
 
 ## 🏛️ Statutory Romanian Legal Basis
@@ -122,9 +129,9 @@ The calculations in ROImob directly reflect Romanian statutory legislation and o
 
 ---
 
-## 🌐 6-Language Localization
+## 🌐 6-Language Localization & Translated Audit Reports
 
-Native multi-language interface with 100% complete key coverage:
+The entire web application and the formal printable PDF audit dossiers render 100% in the selected language:
 - 🇬🇧 **English** (`en`)
 - 🇷🇴 **Română** (`ro`)
 - 🇫🇷 **Français** (`fr`)

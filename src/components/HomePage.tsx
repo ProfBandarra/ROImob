@@ -13,11 +13,10 @@ import {
   Landmark,
   Github,
   Code2,
-  Layers,
-  Bot,
-  Info
+  Bot
 } from 'lucide-react';
 import { useI18n } from '../i18n';
+import { useTheme } from '../theme';
 
 interface Props {
   onNavigateToSellVsRent: () => void;
@@ -76,28 +75,29 @@ export const HomePage: React.FC<Props> = ({
   onNavigateToRoiCalculator
 }) => {
   const { t } = useI18n();
+  const { themeConfig, theme } = useTheme();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
       
       {/* 1. Main User Hero & Decision Hub */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/80 border border-slate-800 p-8 sm:p-14 shadow-2xl space-y-8">
+      <div className={`relative overflow-hidden rounded-3xl ${themeConfig.cardBg} border ${themeConfig.cardBorder} p-8 sm:p-14 shadow-2xl space-y-8 transition-colors duration-200`}>
         
         {/* Ambient Glow */}
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-brand-400" />
-            <span>ROImob • Romanian Real Estate Financial & Tax Engine</span>
+            <span>{t.home.heroBadge}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Clear Financial & Tax Calculations for Romanian Real Estate
+          <h1 className={`text-3xl sm:text-5xl font-black ${themeConfig.textPrimary} tracking-tight leading-tight`}>
+            {t.home.heroTitle}
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Whether you already own a property and want to compare selling vs. renting, or you are looking to purchase an investment home in Romania, ROImob gives you exact mathematical projections under the Romanian Fiscal Code (Law 227/2015 & OUG 115/2023).
+          <p className={`text-sm sm:text-base ${themeConfig.textSecondary} leading-relaxed`}>
+            {t.home.heroDesc}
           </p>
         </div>
 
@@ -110,7 +110,7 @@ export const HomePage: React.FC<Props> = ({
             className="px-6 py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-brand-500/25 transition-all hover:scale-[1.02] cursor-pointer"
           >
             <Scale className="w-5 h-5 text-emerald-300" />
-            <span>Open Sell vs. Rent Optimizer</span>
+            <span>{t.home.launchSvrBtn}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
@@ -120,83 +120,83 @@ export const HomePage: React.FC<Props> = ({
             className="px-6 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 border border-slate-700 transition-all hover:scale-[1.02] cursor-pointer"
           >
             <Calculator className="w-5 h-5 text-amber-400" />
-            <span>Open ROI & Tax Calculator</span>
+            <span>{t.home.launchRoiBtn}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
         </div>
 
         {/* User Benefits Pillars */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 text-xs text-slate-300">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 text-xs">
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white block">Romanian Fiscal Code 2024–2026</strong>
-              <span>Art. 111 (1% vs 3% transfer tax), 20% deductible flat expense & CASS health brackets.</span>
+              <strong className={`${themeConfig.textPrimary} block`}>{t.home.pillar1Title}</strong>
+              <span className={themeConfig.textSecondary}>{t.home.pillar1Desc}</span>
             </div>
           </div>
 
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white block">Multi-Year Wealth Horizon</strong>
-              <span>Inflation adjustment, accelerated debt payoff, and Bear/Base/Bull sensitivity testing.</span>
+              <strong className={`${themeConfig.textPrimary} block`}>{t.home.pillar2Title}</strong>
+              <span className={themeConfig.textSecondary}>{t.home.pillar2Desc}</span>
             </div>
           </div>
 
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white block">6 Languages & Formal PDF Export</strong>
-              <span>EN, RO, FR, DE, UK, PT with clean printable A4 audit reports for banks or personal planning.</span>
+              <strong className={`${themeConfig.textPrimary} block`}>{t.home.pillar3Title}</strong>
+              <span className={themeConfig.textSecondary}>{t.home.pillar3Desc}</span>
             </div>
           </div>
         </div>
 
       </div>
 
-      {/* 2. The Decision Engines (User Focused) */}
+      {/* 2. The Decision Engines */}
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-black text-white tracking-tight mb-1">
-            Choose Your Decision Engine
+          <h2 className={`text-2xl font-black ${themeConfig.textPrimary} tracking-tight mb-1`}>
+            {t.home.enginesTitle}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
-            Select the tool that matches your current real estate situation:
+          <p className={`text-xs sm:text-sm ${themeConfig.textSecondary}`}>
+            {t.home.enginesSubtitle}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
           {/* Card 1: Sell vs Rent */}
-          <div className="bg-slate-900/90 rounded-3xl border border-slate-800 p-8 flex flex-col justify-between space-y-6 shadow-xl relative overflow-hidden group hover:border-brand-500/50 transition-all">
+          <div className={`${themeConfig.cardBg} rounded-3xl border ${themeConfig.cardBorder} p-8 flex flex-col justify-between space-y-6 shadow-xl relative overflow-hidden group hover:border-brand-500/50 transition-all`}>
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                 <Scale className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-black text-white">
-                Owner Strategy: Sell vs. Rent Optimizer
+              <h3 className={`text-xl font-black ${themeConfig.textPrimary}`}>
+                {t.home.svrCardTitle}
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                If you already own an apartment or house (with or without a mortgage), this engine compares what is financially best over a 1, 3, 5, 10, or 15-year horizon: selling now and reinvesting into safe benchmark assets (bonds, deposits, ETFs) vs. holding and renting.
+              <p className={`text-xs ${themeConfig.textSecondary} leading-relaxed`}>
+                {t.home.svrCardDesc}
               </p>
               
-              <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Auto-estimates market prices & rents for Bucharest, Cluj, Timișoara, Brașov, etc.</span>
+              <ul className="space-y-2 text-xs pt-2 border-t border-slate-800/80">
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{t.home.svrFeature1}</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Calculates Romanian transfer tax (1% for &gt;3 yrs, 3% for ≤3 yrs)</span>
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{t.home.svrFeature2}</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Compares 4 tax regimes (PF forfetar, PF real, SRL micro, and informal 0%)</span>
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{t.home.svrFeature3}</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Accelerated mortgage prepayment debt-free year simulator</span>
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{t.home.svrFeature4}</span>
                 </li>
               </ul>
             </div>
@@ -206,40 +206,40 @@ export const HomePage: React.FC<Props> = ({
               onClick={onNavigateToSellVsRent}
               className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
             >
-              <span>Open Sell vs. Rent Optimizer</span>
+              <span>{t.home.svrOpenBtn}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
 
           {/* Card 2: ROI & Fiscal Engine */}
-          <div className="bg-slate-900/90 rounded-3xl border border-slate-800 p-8 flex flex-col justify-between space-y-6 shadow-xl relative overflow-hidden group hover:border-brand-500/50 transition-all">
+          <div className={`${themeConfig.cardBg} rounded-3xl border ${themeConfig.cardBorder} p-8 flex flex-col justify-between space-y-6 shadow-xl relative overflow-hidden group hover:border-brand-500/50 transition-all`}>
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
                 <Calculator className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-black text-white">
-                Romanian Real Estate ROI & Fiscal Engine
+              <h3 className={`text-xl font-black ${themeConfig.textPrimary}`}>
+                {t.home.roiCardTitle}
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                If you are planning to purchase a buy-to-let property, this engine evaluates leveraged financing, IRCC interest rate margins, statutory CASS health tax tiers, and 10-year cash flow and equity amortization.
+              <p className={`text-xs ${themeConfig.textSecondary} leading-relaxed`}>
+                {t.home.roiCardDesc}
               </p>
               
-              <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-                  <span>15% (1st home) vs 20% vs 25% (investment) down payment presets</span>
+              <ul className="space-y-2 text-xs pt-2 border-t border-slate-800/80">
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>{t.home.roiFeature1}</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Gross Yield, Net Yield, Cash-on-Cash Return, and Net Monthly Cash Flow</span>
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>{t.home.roiFeature2}</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Exact 2024–2026 CASS health insurance tiers (6, 12, 24 minimum wages)</span>
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>{t.home.roiFeature3}</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Short-term (Airbnb) tourism arbitrage comparison</span>
+                <li className={`flex items-center gap-2 ${themeConfig.textSecondary}`}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>{t.home.roiFeature4}</span>
                 </li>
               </ul>
             </div>
@@ -249,7 +249,7 @@ export const HomePage: React.FC<Props> = ({
               onClick={onNavigateToRoiCalculator}
               className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
             >
-              <span>Open ROI & Tax Calculator</span>
+              <span>{t.home.roiOpenBtn}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -258,23 +258,23 @@ export const HomePage: React.FC<Props> = ({
       </div>
 
       {/* 3. Official References & Romanian Legal Basis */}
-      <div className="bg-slate-900/80 rounded-3xl border border-slate-800 p-8 space-y-6 shadow-xl">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+      <div className={`${themeConfig.cardBg} rounded-3xl border ${themeConfig.cardBorder} p-8 space-y-6 shadow-xl`}>
+        <div className="flex items-center justify-between pb-4 border-b border-slate-800/80">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
               <Landmark className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-white">
-                Official Statutory References & Romanian Legal Framework
+              <h2 className={`text-lg font-black ${themeConfig.textPrimary}`}>
+                {t.home.referencesTitle}
               </h2>
-              <p className="text-xs text-slate-400">
-                Official laws, gazettes, and benchmark indices governing the ROImob calculation models:
+              <p className={`text-xs ${themeConfig.textSecondary}`}>
+                {t.home.referencesSubtitle}
               </p>
             </div>
           </div>
           <span className="text-xs text-emerald-400 font-mono font-bold bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-            Verified Romanian Law
+            {t.home.verifiedLawBadge}
           </span>
         </div>
 
@@ -282,7 +282,7 @@ export const HomePage: React.FC<Props> = ({
           {OFFICIAL_REFERENCES.map((ref, idx) => (
             <div 
               key={idx}
-              className="bg-slate-950 p-5 rounded-2xl border border-slate-800/80 space-y-3 flex flex-col justify-between hover:border-slate-700 transition-colors"
+              className={`p-5 rounded-2xl border ${themeConfig.cardBorder} space-y-3 flex flex-col justify-between hover:border-slate-700 transition-colors bg-slate-950/40`}
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -291,10 +291,10 @@ export const HomePage: React.FC<Props> = ({
                   </span>
                   <span className="text-[11px] text-slate-400 truncate max-w-[140px]">{ref.authority}</span>
                 </div>
-                <h3 className="text-xs font-bold text-white leading-snug">
+                <h3 className={`text-xs font-bold ${themeConfig.textPrimary} leading-snug`}>
                   {ref.title}
                 </h3>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className={`text-[11px] ${themeConfig.textSecondary} leading-relaxed`}>
                   {ref.desc}
                 </p>
               </div>
@@ -305,7 +305,7 @@ export const HomePage: React.FC<Props> = ({
                 rel="noopener noreferrer"
                 className="text-xs font-bold text-brand-400 hover:text-brand-300 inline-flex items-center gap-1.5 pt-2 border-t border-slate-900"
               >
-                <span>Consulter la Source Officielle</span>
+                <span>{t.home.viewOfficialSource}</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
@@ -313,13 +313,13 @@ export const HomePage: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* 4. Open-Source & Developer Details (Subtle, at the bottom) */}
-      <div className="bg-slate-900/60 rounded-3xl border border-slate-800/80 p-6 sm:p-8 space-y-4 shadow-lg text-xs text-slate-400">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+      {/* 4. Open-Source & Developer Details */}
+      <div className={`${themeConfig.cardBg} rounded-3xl border ${themeConfig.cardBorder} p-6 sm:p-8 space-y-4 shadow-lg text-xs`}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
           <div className="flex items-center gap-2.5">
             <Code2 className="w-5 h-5 text-brand-400" />
-            <h3 className="text-sm font-bold text-white">
-              Open-Source Project & Developer Community
+            <h3 className={`text-sm font-bold ${themeConfig.textPrimary}`}>
+              {t.home.devTitle}
             </h3>
           </div>
           <a
@@ -329,21 +329,21 @@ export const HomePage: React.FC<Props> = ({
             className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1.5 border border-slate-700 transition-colors"
           >
             <Github className="w-3.5 h-3.5" />
-            <span>GitHub Repository</span>
+            <span>{t.home.githubRepoBtn}</span>
             <ExternalLink className="w-3 h-3 text-slate-400" />
           </a>
         </div>
 
-        <p className="text-slate-400 leading-relaxed">
-          ROImob is an open-source project released under the MIT License. It is built using <strong>React 18</strong>, <strong>TypeScript</strong>, <strong>Tailwind CSS</strong>, and <strong>Vite</strong>. Developers, researchers, and contributors are welcome to audit calculations, submit pull requests, or adapt the formulas for other jurisdictions on GitHub.
+        <p className={`${themeConfig.textSecondary} leading-relaxed`}>
+          {t.home.devDesc}
         </p>
       </div>
 
-      {/* 5. AI Assistance Footnote (Casual & Professional) */}
-      <div className="p-4 bg-slate-900/40 rounded-2xl border border-slate-800/60 text-[11px] text-slate-400 flex items-start gap-2.5">
+      {/* 5. AI Assistance Footnote */}
+      <div className={`p-4 ${themeConfig.cardBg} rounded-2xl border ${themeConfig.cardBorder} text-[11px] ${themeConfig.textSecondary} flex items-start gap-2.5`}>
         <Bot className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
         <p className="leading-relaxed">
-          <strong>Note:</strong> The development of this platform was assisted by AI and, while carefully audited against Romanian fiscal laws, small discrepancies or changes in local tax interpretations can happen. Always double-check with your notary or certified tax advisor for official transactions.
+          {t.home.aiFootnote}
         </p>
       </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { I18nProvider } from './i18n';
+import { ThemeProvider, useTheme } from './theme';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
 import { SellVsRentCalculator } from './components/SellVsRent/SellVsRentCalculator';
@@ -9,9 +10,10 @@ import { Footer } from './components/Footer';
 const MainAppContent: React.FC = () => {
   // Navigation State: 'home' | 'sellVsRent' | 'calculator'
   const [activeTab, setActiveTab] = useState<'home' | 'sellVsRent' | 'calculator'>('home');
+  const { themeConfig } = useTheme();
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-brand-500 selection:text-white">
+    <div className={`min-h-screen flex flex-col transition-colors duration-200 ${themeConfig.appBg} selection:bg-brand-500 selection:text-white`}>
       
       {/* Top Navigation */}
       <Navbar
@@ -51,9 +53,12 @@ const MainAppContent: React.FC = () => {
 
 export const App: React.FC = () => {
   return (
-    <I18nProvider>
-      <MainAppContent />
-    </I18nProvider>
+    <ThemeProvider>
+      <I18nProvider>
+        <MainAppContent />
+      </I18nProvider>
+    </ThemeProvider>
   );
 };
+
 export default App;

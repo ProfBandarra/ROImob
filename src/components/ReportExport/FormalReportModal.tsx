@@ -47,7 +47,7 @@ export const FormalReportModal: React.FC<Props> = ({
   roiData,
   onClose
 }) => {
-  const { language } = useI18n();
+  const { t, language } = useI18n();
 
   const currentDate = new Date().toLocaleDateString(
     language === 'ro' ? 'ro-RO' : language === 'fr' ? 'fr-FR' : language === 'de' ? 'de-DE' : language === 'uk' ? 'uk-UA' : language === 'pt' ? 'pt-PT' : 'en-US',
@@ -91,7 +91,7 @@ export const FormalReportModal: React.FC<Props> = ({
       <!DOCTYPE html>
       <html>
         <head>
-          <title>${type === 'sellVsRent' ? 'ROImob - Owner Strategy Dossier' : 'ROImob - ROI & Fiscal Audit'}</title>
+          <title>${type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi} - ROImob</title>
           <meta charset="utf-8" />
           <style>
             * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -226,7 +226,7 @@ export const FormalReportModal: React.FC<Props> = ({
           <div className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-400" />
             <span className="text-sm font-bold text-white uppercase tracking-wider">
-              {type === 'sellVsRent' ? 'Owner Strategy Dossier' : 'Institutional ROI & Fiscal Audit'}
+              {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi}
             </span>
           </div>
 
@@ -237,7 +237,7 @@ export const FormalReportModal: React.FC<Props> = ({
               className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-brand-600/30 transition-all cursor-pointer"
             >
               <Printer className="w-4 h-4" />
-              <span>Print / Save as PDF</span>
+              <span>{t.report.printBtn}</span>
             </button>
 
             <button
@@ -264,18 +264,18 @@ export const FormalReportModal: React.FC<Props> = ({
                   ROI<span className="text-indigo-600">mob</span>
                 </span>
                 <span className="text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-300 ml-2">
-                  Official Audit Dossier
+                  {t.report.officialDossier}
                 </span>
               </div>
               <p className="text-xs text-slate-500 font-medium">
-                Romanian Real Estate Financial Evaluation & Fiscal Compliance Audit
+                {t.report.subtitle}
               </p>
             </div>
 
             <div className="text-right text-xs text-slate-600 space-y-1">
-              <div><strong>Audit Ref:</strong> <span className="font-mono">{reportId}</span></div>
-              <div><strong>Date of Issue:</strong> {currentDate}</div>
-              <div><strong>Fiscal Framework:</strong> Law 227/2015 & OUG 115/2023</div>
+              <div><strong>{t.report.auditRef}</strong> <span className="font-mono">{reportId}</span></div>
+              <div><strong>{t.report.dateOfIssue}</strong> {currentDate}</div>
+              <div><strong>{t.report.fiscalFramework}</strong> Law 227/2015 & OUG 115/2023</div>
             </div>
           </div>
 
@@ -288,14 +288,14 @@ export const FormalReportModal: React.FC<Props> = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-slate-900 font-black text-sm uppercase tracking-wider">
                     <BadgeCheck className="w-5 h-5 text-indigo-600" />
-                    <span>Executive Strategic Recommendation</span>
+                    <span>{t.report.executiveRecommendation}</span>
                   </div>
                   <span className="px-3 py-1 bg-slate-900 text-white rounded-lg text-xs font-black uppercase tracking-wider">
                     {sellVsRentData.result.recommendedStrategy === 'RENT_LONG_TERM' 
-                      ? 'KEEP & RENT LONG-TERM' 
+                      ? t.sellVsRent.keepAndRentLongTerm
                       : sellVsRentData.result.recommendedStrategy === 'RENT_SHORT_TERM' 
-                      ? 'SHORT-TERM (AIRBNB)' 
-                      : 'SELL NOW & REINVEST'}
+                      ? t.sellVsRent.shortTermAirbnb
+                      : t.sellVsRent.sellAndReinvest}
                   </span>
                 </div>
                 <p className="text-sm font-bold text-slate-800 leading-relaxed">
@@ -314,27 +314,27 @@ export const FormalReportModal: React.FC<Props> = ({
               {/* Property & Ownership Parameters Table */}
               <div>
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  1. Property Identity & Baseline Parameters
+                  {t.report.section1Identity}
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Estimated Valuation</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.estimatedValuation}</span>
                     <strong className="text-sm font-bold text-slate-900 font-mono">{formatEur(sellVsRentData.inputs.currentPropertyMarketValueEur)}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Ownership Duration</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.ownershipDuration}</span>
                     <strong className="text-sm font-bold text-slate-900">
-                      {sellVsRentData.inputs.ownershipDurationYears > 3 ? '> 3 Years (1% Tax)' : '≤ 3 Years (3% Tax)'}
+                      {sellVsRentData.inputs.ownershipDurationYears > 3 ? `${t.sellVsRent.over3Years} (1%)` : `${t.sellVsRent.under3Years} (3%)`}
                     </strong>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Mortgage Status</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.mortgageStatus}</span>
                     <strong className="text-sm font-bold text-slate-900">
-                      {sellVsRentData.inputs.hasExistingMortgage ? `Active Debt (${formatEur(sellVsRentData.inputs.remainingMortgageBalanceEur)})` : 'Debt-Free (100% Owned)'}
+                      {sellVsRentData.inputs.hasExistingMortgage ? `${t.sellVsRent.withDebt} (${formatEur(sellVsRentData.inputs.remainingMortgageBalanceEur)})` : t.sellVsRent.debtFree}
                     </strong>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Expected Monthly Rent</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.expectedMonthlyRent}</span>
                     <strong className="text-sm font-bold text-slate-900 font-mono">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur)}/mo</strong>
                   </div>
                 </div>
@@ -343,30 +343,30 @@ export const FormalReportModal: React.FC<Props> = ({
               {/* Core Financial Comparison Breakdown */}
               <div>
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  2. Side-by-Side Financial Comparison ({sellVsRentData.inputs.projectionHorizonYears}-Year Horizon)
+                  {t.report.section2Comparison} ({sellVsRentData.inputs.projectionHorizonYears} {t.sellVsRent.yearsPlural})
                 </h3>
                 
                 <div className="grid grid-cols-2 gap-4">
                   
                   {/* Sell Path */}
                   <div className="border border-slate-300 rounded-xl p-4 space-y-2 bg-slate-50">
-                    <div className="font-bold text-xs text-slate-900 uppercase">Option A: Sell Now</div>
+                    <div className="font-bold text-xs text-slate-900 uppercase">{t.report.optionASell}</div>
                     <div className="text-xl font-black text-slate-900 font-mono">{formatEur(sellVsRentData.result.netCashProceedsFromSaleEur)}</div>
-                    <div className="text-[11px] text-slate-500">Liquid Cash Proceeds Today</div>
+                    <div className="text-[11px] text-slate-500">{t.report.liquidProceedsToday}</div>
                     
                     <div className="pt-2 border-t border-slate-200 space-y-1 text-xs text-slate-600">
                       <div className="flex justify-between">
-                        <span>Transfer Tax (Art. 111):</span>
+                        <span>{t.report.transferTaxArt111}</span>
                         <span className="font-mono text-rose-600">-{formatEur(sellVsRentData.result.transferTaxEur)}</span>
                       </div>
                       {sellVsRentData.inputs.hasExistingMortgage && (
                         <div className="flex justify-between">
-                          <span>Mortgage Payoff:</span>
+                          <span>{t.report.mortgagePayoff}</span>
                           <span className="font-mono text-rose-600">-{formatEur(sellVsRentData.result.mortgagePayoffEur)}</span>
                         </div>
                       )}
                       <div className="flex justify-between pt-1 border-t border-slate-200 font-bold text-slate-900">
-                        <span>{sellVsRentData.inputs.projectionHorizonYears}-Yr Reinvested Wealth:</span>
+                        <span>{t.report.horizonWealth}</span>
                         <span className="font-mono text-indigo-600">+{formatEur(sellVsRentData.result.selectedHorizonReinvestmentWealthEur)}</span>
                       </div>
                     </div>
@@ -374,23 +374,23 @@ export const FormalReportModal: React.FC<Props> = ({
 
                   {/* Rent Path */}
                   <div className="border border-slate-300 rounded-xl p-4 space-y-2 bg-slate-50">
-                    <div className="font-bold text-xs text-slate-900 uppercase">Option B: Hold & Rent Long-Term</div>
+                    <div className="font-bold text-xs text-slate-900 uppercase">{t.report.optionBHoldRent}</div>
                     <div className="text-xl font-black text-emerald-600 font-mono">
                       {sellVsRentData.result.monthlyNetRentalCashFlowEur >= 0 ? '+' : ''}{formatEur(sellVsRentData.result.monthlyNetRentalCashFlowEur)}/mo
                     </div>
-                    <div className="text-[11px] text-slate-500">Net Monthly In-Pocket Cash Flow</div>
+                    <div className="text-[11px] text-slate-500">{t.report.netMonthlyCashFlow}</div>
 
                     <div className="pt-2 border-t border-slate-200 space-y-1 text-xs text-slate-600">
                       <div className="flex justify-between">
-                        <span>Gross Annual Rent:</span>
+                        <span>{t.report.grossAnnualRent}</span>
                         <span className="font-mono">{formatEur(sellVsRentData.result.annualGrossRentEur)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Annual Taxes & Levies:</span>
+                        <span>{t.report.annualTaxesExpenses}</span>
                         <span className="font-mono text-rose-600">-{formatEur(sellVsRentData.result.annualTaxesAndExpensesEur)}</span>
                       </div>
                       <div className="flex justify-between pt-1 border-t border-slate-200 font-bold text-slate-900">
-                        <span>{sellVsRentData.inputs.projectionHorizonYears}-Yr Cumulative Wealth:</span>
+                        <span>{t.report.horizonWealth}</span>
                         <span className="font-mono text-emerald-600">+{formatEur(sellVsRentData.result.selectedHorizonRentalWealthEur)}</span>
                       </div>
                     </div>
@@ -402,22 +402,22 @@ export const FormalReportModal: React.FC<Props> = ({
               {/* Multi-Year Wealth Schedule Table */}
               <div>
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  3. Multi-Year Wealth Schedule
+                  {t.report.section3Schedule}
                 </h3>
                 <table className="w-full text-xs text-left border border-slate-200">
                   <thead className="bg-slate-100 border-b border-slate-200 text-[11px] text-slate-700 uppercase">
                     <tr>
-                      <th className="p-2">Year</th>
-                      <th className="p-2">Sell & Reinvest ({sellVsRentData.inputs.alternativeInvestmentReturnRatePercent}%)</th>
-                      <th className="p-2">Hold & Rent ({sellVsRentData.inputs.propertyAppreciationRatePercent}% Apprec.)</th>
-                      <th className="p-2">Property Value</th>
-                      <th className="p-2">Remaining Debt</th>
+                      <th className="p-2">{t.report.tableHeaders.year}</th>
+                      <th className="p-2">{t.report.tableHeaders.sellAndReinvest} ({sellVsRentData.inputs.alternativeInvestmentReturnRatePercent}%)</th>
+                      <th className="p-2">{t.report.tableHeaders.holdAndRent} ({sellVsRentData.inputs.propertyAppreciationRatePercent}%)</th>
+                      <th className="p-2">{t.report.tableHeaders.propertyValue}</th>
+                      <th className="p-2">{t.report.tableHeaders.remainingDebt}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 font-mono text-slate-800">
                     {sellVsRentData.result.yearlyBreakdown.filter((p: YearlyWealthPoint) => [1, 2, 3, 5, 10, 15].includes(p.year)).map((pt: YearlyWealthPoint) => (
                       <tr key={pt.year} className={pt.year === sellVsRentData.inputs.projectionHorizonYears ? 'bg-indigo-50 font-bold' : ''}>
-                        <td className="p-2 font-sans font-bold">Year {pt.year}</td>
+                        <td className="p-2 font-sans font-bold">{t.sellVsRent.yearSingle} {pt.year}</td>
                         <td className="p-2 text-indigo-600">{formatEur(pt.sellingWealth)}</td>
                         <td className="p-2 text-emerald-600">{formatEur(pt.rentingWealth)}</td>
                         <td className="p-2">{formatEur(pt.propertyValue)}</td>
@@ -438,23 +438,23 @@ export const FormalReportModal: React.FC<Props> = ({
               {/* Key Investment KPI Grid */}
               <div>
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  1. Executive Investment Underwriting Summary
+                  {t.report.roiSection1Summary}
                 </h3>
                 <div className="grid grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">Gross Yield</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiGrossYield}</span>
                     <strong className="text-lg font-black text-slate-900 font-mono">{formatPercent(roiData.calc.grossYieldPercent)}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">Net Yield</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiNetYield}</span>
                     <strong className="text-lg font-black text-emerald-600 font-mono">{formatPercent(roiData.calc.netYieldPercent)}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">Cash-on-Cash</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiCashOnCash}</span>
                     <strong className="text-lg font-black text-indigo-600 font-mono">{formatPercent(roiData.calc.cashOnCashReturnPercent)}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">Monthly Cash Flow</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiMonthlyCash}</span>
                     <strong className="text-lg font-black text-slate-900 font-mono">
                       {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatEur(roiData.calc.monthlyCashFlowAfterDebtEur)}
                     </strong>
@@ -465,23 +465,23 @@ export const FormalReportModal: React.FC<Props> = ({
               {/* Acquisition & Capital Breakdown */}
               <div>
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  2. Acquisition & Financing Structure
+                  {t.report.roiSection2Acquisition}
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Purchase Price</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiPurchasePrice}</span>
                     <strong className="font-mono text-slate-900">{formatEur(roiData.inputs.purchasePrice)}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Down Payment</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiDownPayment}</span>
                     <strong className="font-mono text-slate-900">{roiData.inputs.downPaymentPercent}% ({formatEur(roiData.calc.downPaymentEur)})</strong>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Loan Terms</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiLoanTerms}</span>
                     <strong className="font-mono text-slate-900">{roiData.inputs.loanTermYears} Yrs @ {roiData.inputs.interestRatePercent}%</strong>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Total Acquisition Cost</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiTotalAcquisition}</span>
                     <strong className="font-mono text-slate-900">{formatEur(roiData.calc.totalAcquisitionCost)}</strong>
                   </div>
                 </div>
@@ -490,23 +490,23 @@ export const FormalReportModal: React.FC<Props> = ({
               {/* Romanian Fiscal Breakdown Schedule */}
               <div>
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  3. Romanian Statutory Rental Tax Schedule (Law 227/2015 & OUG 115/2023)
+                  {t.report.roiSection3Taxes}
                 </h3>
                 <div className="grid grid-cols-3 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">10% Impozit pe Venit</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiIncomeTaxTitle}</span>
                     <strong className="text-slate-900 font-mono">{formatRon(roiData.calc.annualTaxesRon.rentalIncomeTaxRon)} / yr</strong>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Applied to 80% net rental base</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">{t.report.roiIncomeTaxDesc}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">CASS Sănătate (Tiers)</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiCassTitle}</span>
                     <strong className="text-slate-900 font-mono">{formatRon(roiData.calc.annualTaxesRon.cassHealthTaxRon)} / yr</strong>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Statutory minimum wage tier</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">{t.report.roiCassDesc}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Impozit Clădire Local</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiLocalTaxTitle}</span>
                     <strong className="text-slate-900 font-mono">{formatRon(roiData.calc.annualTaxesRon.propertyTaxRon)} / yr</strong>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">0.1% local municipal rate</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">{t.report.roiLocalTaxDesc}</span>
                   </div>
                 </div>
               </div>
@@ -517,11 +517,11 @@ export const FormalReportModal: React.FC<Props> = ({
           {/* Legal Compliance Footnote */}
           <div className="pt-6 border-t border-slate-300 text-[10px] text-slate-500 leading-relaxed space-y-1">
             <p>
-              <strong>Disclaimer & Legal Basis:</strong> This audit report was generated automatically by ROImob based on user inputs and the provisions of the Romanian Fiscal Code (Law 227/2015 as amended by OUG 115/2023 and Law 296/2023). Values are modeled for institutional planning and decision support. Actual notary and cadastral registration fees may vary based on territorial chamber tariffs.
+              <strong>{t.report.disclaimerTitle}</strong> {t.report.disclaimerText}
             </p>
             <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-2">
-              <span>ROImob Intelligence Platform</span>
-              <span>Generated on {currentDate}</span>
+              <span>{t.report.generatedPlatform}</span>
+              <span>{t.report.dateOfIssue} {currentDate}</span>
             </div>
           </div>
 
