@@ -16,7 +16,9 @@ import {
   ShieldCheck, 
   TrendingUp,
   BarChart3,
-  CheckCircle2
+  CheckCircle2,
+  Layers,
+  ChevronDown
 } from 'lucide-react';
 
 interface Props {
@@ -344,7 +346,7 @@ export const FormalReportModal: React.FC<Props> = ({
               color: #0f172a !important;
               font-size: 11px;
               line-height: 1.4;
-              padding: 20px;
+              padding: 0;
             }
             .font-bold { font-weight: 700; }
             .font-black { font-weight: 900; }
@@ -358,6 +360,7 @@ export const FormalReportModal: React.FC<Props> = ({
             .justify-between { justify-content: space-between; }
             .justify-center { justify-content: center; }
             .gap-1 { gap: 4px; }
+            .gap-1\\.5 { gap: 6px; }
             .gap-2 { gap: 8px; }
             .gap-3 { gap: 12px; }
             .gap-4 { gap: 16px; }
@@ -368,38 +371,50 @@ export const FormalReportModal: React.FC<Props> = ({
             
             .p-2 { padding: 8px; }
             .p-3 { padding: 12px; }
+            .p-3\\.5 { padding: 14px; }
             .p-4 { padding: 16px; }
-            .p-5 { padding: 20px; }
             .p-6 { padding: 24px; }
+            .p-8 { padding: 32px; }
+            .p-10 { padding: 40px; }
             .pb-1 { padding-bottom: 4px; }
+            .pb-1\\.5 { padding-bottom: 6px; }
             .pb-2 { padding-bottom: 8px; }
             .pb-3 { padding-bottom: 12px; }
             .pt-1 { padding-top: 4px; }
+            .pt-1\\.5 { padding-top: 6px; }
             .pt-2 { padding-top: 8px; }
             .pt-3 { padding-top: 12px; }
             .my-2 { margin-top: 8px; margin-bottom: 8px; }
             .my-3 { margin-top: 12px; margin-bottom: 12px; }
             
             .space-y-1 > * + * { margin-top: 4px; }
+            .space-y-1\\.5 > * + * { margin-top: 6px; }
             .space-y-2 > * + * { margin-top: 8px; }
             .space-y-3 > * + * { margin-top: 12px; }
             .space-y-4 > * + * { margin-top: 16px; }
+            .space-y-5 > * + * { margin-top: 20px; }
             
             .bg-white { background-color: #ffffff !important; }
             .bg-slate-50 { background-color: #f8fafc !important; }
             .bg-slate-100 { background-color: #f1f5f9 !important; }
             .bg-slate-900 { background-color: #0f172a !important; color: #ffffff !important; }
             .bg-emerald-50 { background-color: #ecfdf5 !important; }
+            .bg-emerald-600 { background-color: #059669 !important; color: #ffffff !important; }
             .bg-indigo-50 { background-color: #eef2ff !important; }
+            .bg-indigo-600 { background-color: #4f46e5 !important; color: #ffffff !important; }
             
             .text-slate-900 { color: #0f172a !important; }
             .text-slate-800 { color: #1e293b !important; }
             .text-slate-700 { color: #334155 !important; }
+            .text-slate-600 { color: #475569 !important; }
             .text-slate-500 { color: #64748b !important; }
             .text-slate-400 { color: #94a3b8 !important; }
+            .text-slate-300 { color: #cbd5e1 !important; }
             .text-white { color: #ffffff !important; }
             .text-emerald-700 { color: #047857 !important; }
+            .text-emerald-800 { color: #065f46 !important; }
             .text-indigo-600 { color: #4f46e5 !important; }
+            .text-indigo-700 { color: #4338ca !important; }
             .text-rose-600 { color: #e11d48 !important; }
             
             .border { border: 1px solid #e2e8f0; }
@@ -409,7 +424,9 @@ export const FormalReportModal: React.FC<Props> = ({
             .border-t-2 { border-top: 2px solid #0f172a; }
             .border-slate-200 { border-color: #e2e8f0; }
             .border-slate-300 { border-color: #cbd5e1; }
+            .border-slate-900 { border-color: #0f172a; }
             
+            .rounded-md { border-radius: 6px; }
             .rounded-lg { border-radius: 8px; }
             .rounded-xl { border-radius: 12px; }
             .rounded-full { border-radius: 9999px; }
@@ -422,6 +439,11 @@ export const FormalReportModal: React.FC<Props> = ({
             .text-lg { font-size: 16px; }
             .text-xl { font-size: 20px; }
             
+            .list-disc { list-style-type: disc; }
+            .pl-4 { padding-left: 16px; }
+            .w-full { width: 100%; }
+            .h-auto { height: auto; }
+            
             table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 10.5px; }
             th, td { padding: 5px 8px; text-align: left; }
             th { background-color: #f1f5f9; border-bottom: 1.5px solid #cbd5e1; color: #0f172a; font-weight: 700; }
@@ -430,6 +452,7 @@ export const FormalReportModal: React.FC<Props> = ({
             
             .page-break-before { page-break-before: always; }
             .page-break-inside-avoid { page-break-inside: avoid; }
+            .page-break-preview-divider { display: none; }
             
             @page { size: A4 portrait; margin: 10mm; }
           </style>
@@ -448,18 +471,23 @@ export const FormalReportModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
       
       {/* Modal Outer Container */}
-      <div className="bg-slate-900 border border-slate-700 w-full max-w-6xl max-h-[94vh] flex flex-col rounded-3xl shadow-2xl overflow-hidden text-slate-900">
+      <div className="bg-slate-900 border border-slate-700 w-full max-w-5xl max-h-[94vh] flex flex-col rounded-3xl shadow-2xl overflow-hidden text-slate-900">
         
         {/* Top Control Bar */}
-        <div className="sticky top-0 z-20 bg-slate-950 p-3 sm:p-4 border-b border-slate-800 flex items-center justify-between shrink-0">
+        <div className="sticky top-0 z-20 bg-slate-950 p-3 sm:p-4 border-b border-slate-800 flex items-center justify-between shrink-0 shadow-lg">
           <div className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-400" />
-            <span className="text-sm font-bold text-white uppercase tracking-wider">
-              {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi} • Institutional Dossier
-            </span>
+            <div>
+              <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider block">
+                {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi} • {t.report.officialDossier}
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono">
+                {reportId} • 2-Page Verified A4 Format
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -482,480 +510,494 @@ export const FormalReportModal: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Scrollable Printable Dossier Sheet */}
-        <div id="formal-report-print-sheet" className="p-4 sm:p-8 sm:p-10 space-y-8 bg-white text-slate-900 overflow-y-auto flex-1 font-sans">
+        {/* Realistic Desk Workspace View with Distinct A4 Sheets */}
+        <div className="bg-slate-950/70 p-3 sm:p-8 overflow-y-auto flex-1 flex flex-col items-center gap-8">
           
-          {/* ========================================================================= */}
-          {/* PAGE 1: EXECUTIVE VALUATION & STRATEGIC RECOMMENDATION */}
-          {/* ========================================================================= */}
-          <div className="space-y-5 pb-6 border-b-2 border-slate-300 page-break-inside-avoid">
+          <div id="formal-report-print-sheet" className="w-full max-w-[820px] space-y-8 font-sans">
             
-            {/* Header Letterhead */}
-            <div className="flex flex-col sm:flex-row items-start justify-between gap-4 pb-3 border-b-2 border-slate-900">
-              <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <div className="w-7 h-7 rounded-md bg-slate-900 flex items-center justify-center text-white font-black text-xs">
-                    ROI
-                  </div>
-                  <span className="text-xl font-black tracking-tight text-slate-900">
-                    ROImob <span className="text-slate-600 text-sm font-bold">Institutional Intelligence Suite</span>
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-500 font-medium">
-                  Statutory Romanian Fiscal Code (Law nr. 227/2015, OUG nr. 115/2023 & BNR IRCC)
-                </p>
-              </div>
-
-              <div className="text-right space-y-1 text-xs">
-                <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 border border-slate-300 text-slate-800 font-bold rounded text-[9.5px] uppercase">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                  <span>Law 227/2015 & OUG 115/2023 Compliant</span>
-                </div>
-                <div className="text-slate-500 font-mono text-[10px]">
-                  <strong>Ref ID:</strong> {reportId}
-                </div>
-              </div>
-            </div>
-
-            {/* SELL VS RENT OPTIMIZER CONTENT */}
-            {type === 'sellVsRent' && sellVsRentData && (
-              <div className="space-y-4">
-                
-                {/* Executive Recommendation Banner (Black card from reference mockup) */}
-                <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-black uppercase tracking-wider text-slate-300 block">
-                      Executive Recommendation:
-                    </span>
-                    <span className="text-base sm:text-lg font-black text-white">
-                      {sellVsRentData.result.recommendedStrategy === 'RENT_LONG_TERM' 
-                        ? 'Hold & Rent Long-Term'
-                        : sellVsRentData.result.recommendedStrategy === 'RENT_SHORT_TERM'
-                        ? 'Short-Term (Airbnb) Arbitrage'
-                        : 'Sell & Reinvest'}
-                    </span>
-                  </div>
-                  <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase">
-                    {sellVsRentData.inputs.projectionHorizonYears} Yrs Horizon
-                  </span>
-                </div>
-
-                {/* 2-Column Side-by-Side Financial Valuation Table (EUR vs RON) */}
+            {/* ========================================================================= */}
+            {/* PAGE 1: EXECUTIVE VALUATION & STRATEGIC RECOMMENDATION */}
+            {/* ========================================================================= */}
+            <div className="bg-white text-slate-900 shadow-2xl rounded-sm p-6 sm:p-10 border border-slate-200 relative space-y-5 page-break-inside-avoid">
+              
+              {/* Header Letterhead */}
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-4 pb-3 border-b-2 border-slate-900">
                 <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <div className="w-7 h-7 rounded-md bg-slate-900 flex items-center justify-center text-white font-black text-xs">
+                      ROI
+                    </div>
+                    <span className="text-xl font-black tracking-tight text-slate-900">
+                      ROImob <span className="text-slate-600 text-sm font-bold">{t.report.suiteTitle}</span>
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    Statutory Romanian Fiscal Code (Law nr. 227/2015, OUG nr. 115/2023 & BNR IRCC)
+                  </p>
+                </div>
+
+                <div className="text-right space-y-1 text-xs">
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 border border-slate-300 text-slate-800 font-bold rounded text-[9.5px] uppercase">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                    <span>{t.report.verifiedCompliance}</span>
+                  </div>
+                  <div className="text-slate-500 font-mono text-[10px]">
+                    <strong>{t.report.auditRef}</strong> {reportId}
+                  </div>
+                </div>
+              </div>
+
+              {/* SELL VS RENT OPTIMIZER CONTENT (PAGE 1) */}
+              {type === 'sellVsRent' && sellVsRentData && (
+                <div className="space-y-4">
+                  
+                  {/* Executive Recommendation Banner (Black card from reference mockup) */}
+                  <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-black uppercase tracking-wider text-slate-300 block">
+                        {t.report.execRecommendationLabel}
+                      </span>
+                      <span className="text-base sm:text-lg font-black text-white">
+                        {sellVsRentData.result.recommendedStrategy === 'RENT_LONG_TERM' 
+                          ? t.sellVsRent.keepAndRentLongTerm
+                          : sellVsRentData.result.recommendedStrategy === 'RENT_SHORT_TERM'
+                          ? t.sellVsRent.shortTermAirbnb
+                          : t.sellVsRent.sellAndReinvest}
+                      </span>
+                    </div>
+                    <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase">
+                      {sellVsRentData.inputs.projectionHorizonYears} {t.sellVsRent.yearsPlural}
+                    </span>
+                  </div>
+
+                  {/* 2-Column Side-by-Side Financial Valuation Table (EUR vs RON) */}
+                  <div>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{t.report.financialMetricHeader}</th>
+                          <th className="text-right">EUR (€)</th>
+                          <th className="text-right">RON (lei)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="font-mono">
+                        <tr>
+                          <td className="font-sans font-bold">{t.report.propertyValue}</td>
+                          <td className="text-right font-bold text-slate-900">{formatEur(sellVsRentData.inputs.currentPropertyMarketValueEur)}</td>
+                          <td className="text-right text-slate-700">{formatRon(sellVsRentData.inputs.currentPropertyMarketValueEur * 4.975)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.report.annualRentalIncome}</td>
+                          <td className="text-right text-emerald-700 font-bold">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)}</td>
+                          <td className="text-right text-emerald-700">{formatRon(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 4.975)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.report.operatingExpenses}</td>
+                          <td className="text-right text-rose-600">-{formatEur(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12)}</td>
+                          <td className="text-right text-rose-600">-{formatRon(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12 * 4.975)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.report.netOperatingIncome}</td>
+                          <td className="text-right font-bold text-emerald-800">{formatEur(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12)}</td>
+                          <td className="text-right font-bold text-emerald-800">{formatRon(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 * 4.975)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.report.estimatedNetYield}</td>
+                          <td className="text-right font-bold text-emerald-700">
+                            {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
+                          </td>
+                          <td className="text-right text-slate-600">
+                            {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.report.noiValueRatio}</td>
+                          <td className="text-right text-slate-700">
+                            {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
+                          </td>
+                          <td className="text-right text-slate-600">
+                            {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Multi-Scenario Decision Breakdown Table */}
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
+                      {t.report.multiScenarioTitle}
+                    </h4>
+                    
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{t.report.horizonMetricHeader}</th>
+                          <th className="text-right">{t.report.holdAndRentHeader}</th>
+                          <th className="text-right">{t.report.sellAndReinvestHeader}</th>
+                        </tr>
+                      </thead>
+                      <tbody className="font-mono text-xs">
+                        {/* 5 Years */}
+                        <tr className="bg-slate-100 font-bold font-sans">
+                          <td colSpan={3}>{t.report.fiveYearHorizon}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.report.cumulativeRent}</td>
+                          <td className="text-right text-emerald-700 font-bold">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 5)}</td>
+                          <td className="text-right text-slate-400">-</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.report.projectedAppreciation}</td>
+                          <td className="text-right text-emerald-700 font-bold">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 5)}</td>
+                          <td className="text-right text-indigo-600 font-bold">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 5)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.report.totalHorizonWealth}</td>
+                          <td className="text-right text-emerald-800 font-black">
+                            {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.rentingWealth ?? 0)}
+                          </td>
+                          <td className="text-right text-indigo-700 font-black">
+                            {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.sellingWealth ?? 0)}
+                          </td>
+                        </tr>
+
+                        {/* 10 Years */}
+                        <tr className="bg-slate-100 font-bold font-sans">
+                          <td colSpan={3}>{t.report.tenYearHorizon}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.report.cumulativeRent}</td>
+                          <td className="text-right text-emerald-700 font-bold">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 10)}</td>
+                          <td className="text-right text-slate-400">-</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.report.projectedAppreciation}</td>
+                          <td className="text-right text-emerald-700 font-bold">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 10)}</td>
+                          <td className="text-right text-indigo-600 font-bold">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 10)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.report.totalHorizonWealth}</td>
+                          <td className="text-right text-emerald-800 font-black">
+                            {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.rentingWealth ?? 0)}
+                          </td>
+                          <td className="text-right text-indigo-700 font-black">
+                            {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.sellingWealth ?? 0)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Applicable Tax Itemization Table */}
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
+                      {t.report.applicableTaxesTitle}
+                    </h4>
+
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{t.report.taxRegimeItemHeader}</th>
+                          <th className="text-right">{t.report.statutoryQuotaHeader}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="font-bold">{t.report.taxRentalIncome}</td>
+                          <td className="text-right font-mono font-bold text-slate-900">{t.report.taxRentalIncomeDesc}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-bold">{t.report.taxCass}</td>
+                          <td className="text-right font-mono font-bold text-slate-900">{t.report.taxCassDesc}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-bold">{t.report.taxLocalProperty}</td>
+                          <td className="text-right font-mono text-slate-700">{t.report.taxLocalPropertyDesc}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-bold">{t.report.taxVat}</td>
+                          <td className="text-right font-mono text-slate-500">{t.report.taxVatDesc}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              )}
+
+              {/* REAL ESTATE ROI CALCULATOR (PAGE 1) */}
+              {type === 'roiCalculator' && roiData && (
+                <div className="space-y-4">
+                  <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-black uppercase tracking-wider text-slate-300 block">
+                        {t.report.verdictUnderwritingLabel}
+                      </span>
+                      <span className="text-base sm:text-lg font-black text-white">
+                        {roiData.calc.grossYieldPercent >= 7.0 ? t.report.highYieldAsset : t.report.stableAsset}
+                      </span>
+                    </div>
+                    <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase">
+                      {formatPercent(roiData.calc.netYieldPercent)} {t.report.estimatedNetYield}
+                    </span>
+                  </div>
+
                   <table>
                     <thead>
                       <tr>
-                        <th>Financial Metric</th>
+                        <th>{t.report.financialMetricHeader}</th>
                         <th className="text-right">EUR (€)</th>
                         <th className="text-right">RON (lei)</th>
                       </tr>
                     </thead>
                     <tbody className="font-mono">
                       <tr>
-                        <td className="font-sans font-bold">Property Value</td>
-                        <td className="text-right font-bold text-slate-900">{formatEur(sellVsRentData.inputs.currentPropertyMarketValueEur)}</td>
-                        <td className="text-right text-slate-700">{formatRon(sellVsRentData.inputs.currentPropertyMarketValueEur * 4.975)}</td>
+                        <td className="font-sans font-bold">{t.roiCalculator.purchasePrice}</td>
+                        <td className="text-right font-bold text-slate-900">{formatEur(roiData.inputs.purchasePrice)}</td>
+                        <td className="text-right text-slate-700">{formatRon(roiData.inputs.purchasePrice * 4.975)}</td>
                       </tr>
                       <tr>
-                        <td className="font-sans">Annual Rental Income</td>
-                        <td className="text-right text-emerald-700 font-bold">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)}</td>
-                        <td className="text-right text-emerald-700">{formatRon(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 4.975)}</td>
+                        <td className="font-sans">{t.roiCalculator.downPayment}</td>
+                        <td className="text-right text-slate-900">{formatEur(roiData.calc.downPaymentEur)} ({roiData.inputs.downPaymentPercent}%)</td>
+                        <td className="text-right text-slate-700">{formatRon(roiData.calc.downPaymentEur * 4.975)}</td>
                       </tr>
                       <tr>
-                        <td className="font-sans">Operating Expenses</td>
-                        <td className="text-right text-rose-600">-{formatEur(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12)}</td>
-                        <td className="text-right text-rose-600">-{formatRon(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12 * 4.975)}</td>
+                        <td className="font-sans">Mortgage Loan Balance</td>
+                        <td className="text-right text-slate-900">{formatEur(roiData.calc.loanAmountEur)}</td>
+                        <td className="text-right text-slate-700">{formatRon(roiData.calc.loanAmountEur * 4.975)}</td>
                       </tr>
                       <tr>
-                        <td className="font-sans font-bold">Net Operating Income (NOI)</td>
-                        <td className="text-right font-bold text-emerald-800">{formatEur(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12)}</td>
-                        <td className="text-right font-bold text-emerald-800">{formatRon(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 * 4.975)}</td>
+                        <td className="font-sans font-bold">{t.report.annualRentalIncome}</td>
+                        <td className="text-right font-bold text-emerald-700">{formatEur(roiData.inputs.monthlyRentEur * 12)}</td>
+                        <td className="text-right text-emerald-700">{formatRon(roiData.inputs.monthlyRentEur * 12 * 4.975)}</td>
                       </tr>
                       <tr>
-                        <td className="font-sans font-bold">Estimated Net Yield</td>
-                        <td className="text-right font-bold text-emerald-700">
-                          {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
+                        <td className="font-sans">{t.roiCalculator.totalAnnualTaxes}</td>
+                        <td className="text-right text-rose-600 font-bold">-{formatEur(roiData.calc.annualTaxesEur)}</td>
+                        <td className="text-right text-rose-600">-{formatRon(roiData.calc.annualTaxesEur * 4.975)}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-sans font-bold">{t.roiCalculator.kpi.monthlyCashFlow}</td>
+                        <td className="text-right font-bold text-emerald-800">
+                          {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatEur(roiData.calc.monthlyCashFlowAfterDebtEur)}/mo
                         </td>
-                        <td className="text-right text-slate-600">
-                          {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">NOI / Value Ratio</td>
-                        <td className="text-right text-slate-700">
-                          {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
-                        </td>
-                        <td className="text-right text-slate-600">
-                          {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
+                        <td className="text-right font-bold text-emerald-800">
+                          {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatRon(roiData.calc.monthlyCashFlowAfterDebtEur * 4.975)}/mo
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                </div>
 
-                {/* Multi-Scenario Decision Breakdown Table */}
-                <div className="space-y-1">
-                  <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
-                    Multi-Scenario Decision Breakdown
-                  </h4>
-                  
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Horizon Metric</th>
-                        <th className="text-right">📊 Hold & Rent</th>
-                        <th className="text-right">📈 Sell & Reinvest</th>
-                      </tr>
-                    </thead>
-                    <tbody className="font-mono text-xs">
-                      {/* 5 Years */}
-                      <tr className="bg-slate-100 font-bold font-sans">
-                        <td colSpan={3}>5-Year Horizon Projection</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">Cumulative rental income</td>
-                        <td className="text-right text-emerald-700 font-bold">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 5)}</td>
-                        <td className="text-right text-slate-400">-</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">Projected property appreciation</td>
-                        <td className="text-right text-emerald-700 font-bold">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 5)}</td>
-                        <td className="text-right text-indigo-600 font-bold">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 5)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans font-bold">Total Horizon Wealth</td>
-                        <td className="text-right text-emerald-800 font-black">
-                          {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.rentingWealth ?? 0)}
-                        </td>
-                        <td className="text-right text-indigo-700 font-black">
-                          {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.sellingWealth ?? 0)}
-                        </td>
-                      </tr>
+                  {/* Applicable Tax Itemization Table */}
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
+                      {t.report.applicableTaxesTitle}
+                    </h4>
 
-                      {/* 10 Years */}
-                      <tr className="bg-slate-100 font-bold font-sans">
-                        <td colSpan={3}>10-Year Horizon Projection</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">Cumulative rental income</td>
-                        <td className="text-right text-emerald-700 font-bold">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 10)}</td>
-                        <td className="text-right text-slate-400">-</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">Projected property appreciation</td>
-                        <td className="text-right text-emerald-700 font-bold">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 10)}</td>
-                        <td className="text-right text-indigo-600 font-bold">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 10)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans font-bold">Total Horizon Wealth</td>
-                        <td className="text-right text-emerald-800 font-black">
-                          {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.rentingWealth ?? 0)}
-                        </td>
-                        <td className="text-right text-indigo-700 font-black">
-                          {formatEur(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.sellingWealth ?? 0)}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Applicable Tax Itemization Table */}
-                <div className="space-y-1">
-                  <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
-                    Applicable Statutory Tax Itemization
-                  </h4>
-
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Tax Regime Item</th>
-                        <th className="text-right">Statutory Rate / Quota</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="font-bold">Impozit pe Venitul din Chirii (Rental Income Tax)</td>
-                        <td className="text-right font-mono font-bold text-slate-900">10% (8% efectiv cota forfetară)</td>
-                      </tr>
-                      <tr>
-                        <td className="font-bold">Contribuția de Asigurări Sociale de Sănătate (CASS)</td>
-                        <td className="text-right font-mono font-bold text-slate-900">10% din plafoane (6, 12, 24 salarii)</td>
-                      </tr>
-                      <tr>
-                        <td className="font-bold">Impozit pe Clădiri (Local Property Tax)</td>
-                        <td className="text-right font-mono text-slate-700">Cotă consiliu local (0.1% - 0.2%)</td>
-                      </tr>
-                      <tr>
-                        <td className="font-bold">Taxă pe Valoarea Adăugată (TVA, if applicable)</td>
-                        <td className="text-right font-mono text-slate-500">Scutit fără drept de deducere / 19%</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-              </div>
-            )}
-
-            {/* REAL ESTATE ROI CALCULATOR PAGE 1 */}
-            {type === 'roiCalculator' && roiData && (
-              <div className="space-y-4">
-                <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-black uppercase tracking-wider text-slate-300 block">
-                      Underwriting Verdict:
-                    </span>
-                    <span className="text-base sm:text-lg font-black text-white">
-                      {roiData.calc.grossYieldPercent >= 7.0 ? 'High-Performing Buy-To-Let Asset' : 'Stable Capital Preservation Asset'}
-                    </span>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{t.report.taxRegimeItemHeader}</th>
+                          <th>Statutory Base</th>
+                          <th className="text-right">Annual Liability</th>
+                        </tr>
+                      </thead>
+                      <tbody className="font-mono text-xs">
+                        <tr>
+                          <td className="font-sans font-bold">{t.roiCalculator.incomeTaxTitle}</td>
+                          <td className="font-sans text-slate-600">{t.roiCalculator.incomeTaxDesc}</td>
+                          <td className="text-right font-bold text-rose-600">{formatEur(roiData.calc.annualTaxesEur * 0.5)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.roiCalculator.cassHealthTitle}</td>
+                          <td className="font-sans text-slate-600">{t.roiCalculator.cassHealthDesc}</td>
+                          <td className="text-right font-bold text-rose-600">{formatEur(roiData.calc.annualTaxesEur * 0.35)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.roiCalculator.localTaxTitle}</td>
+                          <td className="font-sans text-slate-600">{t.roiCalculator.localTaxDesc}</td>
+                          <td className="text-right font-bold text-slate-700">{formatEur(roiData.calc.annualTaxesEur * 0.15)}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                  <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase">
-                    {formatPercent(roiData.calc.netYieldPercent)} Net Yield
-                  </span>
                 </div>
+              )}
 
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Acquisition & Operating Metric</th>
-                      <th className="text-right">EUR (€)</th>
-                      <th className="text-right">RON (lei)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="font-mono">
-                    <tr>
-                      <td className="font-sans font-bold">Purchase Price</td>
-                      <td className="text-right font-bold text-slate-900">{formatEur(roiData.inputs.purchasePrice)}</td>
-                      <td className="text-right text-slate-700">{formatRon(roiData.inputs.purchasePrice * 4.975)}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-sans">Down Payment (Avans)</td>
-                      <td className="text-right text-slate-900">{formatEur(roiData.calc.downPaymentEur)} ({roiData.inputs.downPaymentPercent}%)</td>
-                      <td className="text-right text-slate-700">{formatRon(roiData.calc.downPaymentEur * 4.975)}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-sans">Mortgage Loan Amount</td>
-                      <td className="text-right text-slate-900">{formatEur(roiData.calc.loanAmountEur)}</td>
-                      <td className="text-right text-slate-700">{formatRon(roiData.calc.loanAmountEur * 4.975)}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-sans font-bold">Gross Annual Rental Income</td>
-                      <td className="text-right font-bold text-emerald-700">{formatEur(roiData.inputs.monthlyRentEur * 12)}</td>
-                      <td className="text-right text-emerald-700">{formatRon(roiData.inputs.monthlyRentEur * 12 * 4.975)}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-sans">Annual Operating Taxes (Fiscal Code)</td>
-                      <td className="text-right text-rose-600 font-bold">-{formatEur(roiData.calc.annualTaxesEur)}</td>
-                      <td className="text-right text-rose-600">-{formatRon(roiData.calc.annualTaxesEur * 4.975)}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-sans font-bold">Net Monthly Cash Flow</td>
-                      <td className="text-right font-bold text-emerald-800">
-                        {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatEur(roiData.calc.monthlyCashFlowAfterDebtEur)}/mo
-                      </td>
-                      <td className="text-right font-bold text-emerald-800">
-                        {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatRon(roiData.calc.monthlyCashFlowAfterDebtEur * 4.975)}/mo
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              {/* Page 1 Footer */}
+              <div className="flex justify-between items-center pt-3 text-[9.5px] text-slate-400 border-t border-slate-200">
+                <span>{currentDate}</span>
+                <span>{t.report.page1Of2}</span>
+              </div>
+            </div>
 
-                {/* Applicable Tax Itemization Table */}
-                <div className="space-y-1">
-                  <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
-                    Applicable Statutory Tax Itemization (2024–2026)
-                  </h4>
+            {/* Visual Page Break Indicator for Desktop Preview */}
+            <div className="page-break-preview-divider flex items-center justify-center gap-3 text-xs text-slate-400 font-bold uppercase tracking-wider py-1">
+              <div className="h-px bg-slate-700 flex-1 max-w-[200px]" />
+              <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 px-3 py-1 rounded-full text-[10px]">
+                <Layers className="w-3.5 h-3.5 text-brand-400" />
+                <span>{t.report.pageBreakPreview}</span>
+              </div>
+              <div className="h-px bg-slate-700 flex-1 max-w-[200px]" />
+            </div>
 
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Tax Component</th>
-                        <th>Statutory Base</th>
-                        <th className="text-right">Annual Liability</th>
-                      </tr>
-                    </thead>
-                    <tbody className="font-mono text-xs">
-                      <tr>
-                        <td className="font-sans font-bold">Impozit pe Venit din Chirii</td>
-                        <td className="font-sans text-slate-600">10% pe 80% din chiria brută</td>
-                        <td className="text-right font-bold text-rose-600">{formatEur(roiData.calc.annualTaxesEur * 0.5)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans font-bold">CASS (Contribuție Sănătate)</td>
-                        <td className="font-sans text-slate-600">Plafon bazat pe salariul minim</td>
-                        <td className="text-right font-bold text-rose-600">{formatEur(roiData.calc.annualTaxesEur * 0.35)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans font-bold">Impozit pe Clădiri & Asigurare</td>
-                        <td className="font-sans text-slate-600">Cotă locală + PAD obligatoriu</td>
-                        <td className="text-right font-bold text-slate-700">{formatEur(roiData.calc.annualTaxesEur * 0.15)}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+            {/* ========================================================================= */}
+            {/* PAGE 2: FINANCIAL DECISION ANALYSIS, GRAPHS & DETAILED PROJECTIONS */}
+            {/* ========================================================================= */}
+            <div className="bg-white text-slate-900 shadow-2xl rounded-sm p-6 sm:p-10 border border-slate-200 relative space-y-5 page-break-before page-break-inside-avoid">
+              
+              {/* Header */}
+              <div className="flex justify-between items-center pb-2 border-b border-slate-900">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                    {t.report.page2Title}
+                  </h3>
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    {t.report.page2Subtitle}
+                  </p>
                 </div>
+                <span className="text-[10px] font-mono text-slate-400">{reportId}</span>
               </div>
-            )}
 
-            {/* Page 1 Footer */}
-            <div className="flex justify-between items-center pt-2 text-[9.5px] text-slate-400 border-t border-slate-200">
-              <span>{currentDate}</span>
-              <span>Page 1 of 2</span>
-            </div>
-          </div>
-
-          {/* ========================================================================= */}
-          {/* PAGE 2: FINANCIAL DECISION ANALYSIS, GRAPHS & DETAILED PROJECTIONS */}
-          {/* ========================================================================= */}
-          <div className="space-y-5 page-break-before page-break-inside-avoid">
-            
-            {/* Header */}
-            <div className="flex justify-between items-center pb-2 border-b border-slate-900">
-              <div>
-                <h3 className="text-lg font-black text-slate-900 tracking-tight">
-                  Financial Decision Analysis & Strategic Projection
-                </h3>
-                <p className="text-[10px] text-slate-500 font-medium">
-                  Long-term compounding equity, debt payoff schedules, and sensitivity metrics
-                </p>
+              {/* Bulleted Strategic Analysis Commentary */}
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 text-xs text-slate-700">
+                <span className="font-bold text-slate-900 block uppercase tracking-wider text-[10px]">
+                  {t.report.commentaryTitle}
+                </span>
+                <ul className="list-disc pl-4 space-y-1 text-[11px] leading-relaxed">
+                  {type === 'sellVsRent' && sellVsRentData ? (
+                    <>
+                      <li>
+                        <strong>{t.report.commentaryRentIncome}</strong> {formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)} / yr ({formatRon(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 4.975)}) {t.report.commentaryRentIncomeDesc}
+                      </li>
+                      <li>
+                        <strong>{t.report.commentaryAppreciation}</strong> {sellVsRentData.inputs.propertyAppreciationRatePercent}% {t.report.commentaryAppreciationDesc}
+                      </li>
+                      <li>
+                        <strong>{t.report.commentaryWealthAdvantage}</strong> {t.report.commentaryWealthAdvantageDesc} {formatEur(sellVsRentData.result.selectedHorizonRentalWealthEur)} (Yr {sellVsRentData.inputs.projectionHorizonYears}).
+                      </li>
+                      <li>
+                        <strong>{t.report.commentaryTaxCompliance}</strong> {t.report.commentaryTaxComplianceDesc}
+                      </li>
+                    </>
+                  ) : roiData ? (
+                    <>
+                      <li>
+                        <strong>{t.report.commentaryCashOnCash}</strong> {formatPercent(roiData.calc.cashOnCashReturnPercent)} {t.report.commentaryCashOnCashDesc} ({formatEur(roiData.calc.downPaymentEur)}).
+                      </li>
+                      <li>
+                        <strong>{t.report.commentaryMortgageDebt}</strong> {t.report.commentaryMortgageDebtDesc}
+                      </li>
+                      <li>
+                        <strong>{t.report.commentaryTotalNetEquity}</strong> {formatEur(roiData.calc.downPaymentEur + (roiData.calc.loanAmountEur * 0.4) + (roiData.inputs.purchasePrice * 0.41))} {t.report.commentaryTotalNetEquityDesc}
+                      </li>
+                    </>
+                  ) : null}
+                </ul>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">{reportId}</span>
-            </div>
 
-            {/* Bulleted Strategic Analysis Commentary */}
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 text-xs text-slate-700">
-              <span className="font-bold text-slate-900 block uppercase tracking-wider text-[10px]">
-                Executive Strategic Commentary:
-              </span>
-              <ul className="list-disc pl-4 space-y-1 text-[11px] leading-relaxed">
-                {type === 'sellVsRent' && sellVsRentData ? (
-                  <>
-                    <li>
-                      <strong>Annual Rental Income:</strong> {formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)} / year ({formatRon(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 4.975)}) generating ongoing operational cash flow.
-                    </li>
-                    <li>
-                      <strong>Projected Property Appreciation:</strong> {sellVsRentData.inputs.propertyAppreciationRatePercent}% compounding annual growth under standard Romanian urban indices.
-                    </li>
-                    <li>
-                      <strong>Hold & Rent Wealth Advantage:</strong> Retaining the real estate asset provides an inflation-hedged wealth trajectory yielding {formatEur(sellVsRentData.result.selectedHorizonRentalWealthEur)} at Year {sellVsRentData.inputs.projectionHorizonYears}.
-                    </li>
-                    <li>
-                      <strong>Tax Compliance (Law 227/2015):</strong> Rental income is modeled with full compliance under the 20% deductible quota (8% effective rate) plus statutory CASS health thresholds.
-                    </li>
-                  </>
-                ) : roiData ? (
-                  <>
-                    <li>
-                      <strong>Cash-on-Cash Return:</strong> {formatPercent(roiData.calc.cashOnCashReturnPercent)} annual return on initial invested capital ({formatEur(roiData.calc.downPaymentEur)}).
-                    </li>
-                    <li>
-                      <strong>Mortgage Debt Payoff:</strong> Principal amortization builds equity year-over-year while interest payments decrease in real terms.
-                    </li>
-                    <li>
-                      <strong>Total 10-Year Built Net Equity:</strong> Projected to reach {formatEur(roiData.calc.downPaymentEur + (roiData.calc.loanAmountEur * 0.4) + (roiData.inputs.purchasePrice * 0.41))} through appreciation and debt reduction.
-                    </li>
-                  </>
-                ) : null}
-              </ul>
-            </div>
-
-            {/* Embedded Vector SVG Visual Graph */}
-            {type === 'sellVsRent' && sellVsRentData && (
-              <DossierWealthChart
-                data={sellVsRentData.result.yearlyBreakdown}
-                selectedHorizon={sellVsRentData.inputs.projectionHorizonYears}
-              />
-            )}
-
-            {type === 'roiCalculator' && roiData && (
-              <DossierROIChart
-                purchasePrice={roiData.inputs.purchasePrice}
-                downPayment={roiData.calc.downPaymentEur}
-                loanAmount={roiData.calc.loanAmountEur}
-                loanTerm={roiData.inputs.loanTermYears || 30}
-                annualTaxes={roiData.calc.annualTaxesEur}
-                annualDebt={roiData.calc.annualDebtServiceEur}
-                annualOpex={roiData.calc.annualOperatingExpenses}
-              />
-            )}
-
-            {/* Detailed Multi-Year Progression Table */}
-            <div className="space-y-1">
-              <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
-                Multi-Year Progression Schedule
-              </h4>
-
+              {/* Embedded Vector SVG Visual Graph */}
               {type === 'sellVsRent' && sellVsRentData && (
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Year</th>
-                      <th className="text-right">Hold & Rent (€)</th>
-                      <th className="text-right">Sell & Reinvest (€)</th>
-                      <th className="text-right">Airbnb Net (€)</th>
-                      <th className="text-right">Property Value (€)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="font-mono text-xs">
-                    {sellVsRentData.result.yearlyBreakdown.filter((p) => [1, 2, 3, 5, 7, 10, 15].includes(p.year)).map((r) => (
-                      <tr key={r.year} className={r.year === sellVsRentData.inputs.projectionHorizonYears ? 'bg-indigo-50 font-bold' : ''}>
-                        <td className="font-sans font-bold">Year {r.year}</td>
-                        <td className="text-right text-emerald-700 font-bold">{formatEur(r.rentingWealth)}</td>
-                        <td className="text-right text-indigo-700">{formatEur(r.sellingWealth)}</td>
-                        <td className="text-right text-amber-700">{formatEur(r.shortTermWealth ?? 0)}</td>
-                        <td className="text-right text-slate-600">{formatEur(r.propertyValue)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <DossierWealthChart
+                  data={sellVsRentData.result.yearlyBreakdown}
+                  selectedHorizon={sellVsRentData.inputs.projectionHorizonYears}
+                />
               )}
 
               {type === 'roiCalculator' && roiData && (
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Year</th>
-                      <th className="text-right">Property Value (+3.5%)</th>
-                      <th className="text-right">Annual Cash Flow</th>
-                      <th className="text-right">Cumulative Cash</th>
-                      <th className="text-right">Total Net Equity</th>
-                    </tr>
-                  </thead>
-                  <tbody className="font-mono text-xs">
-                    {[1, 2, 3, 4, 5, 7, 10].map((yr) => {
-                      const propVal = roiData.inputs.purchasePrice * Math.pow(1.035, yr);
-                      const annualCF = roiData.calc.annualCashFlowAfterDebtEur;
-                      const cumCF = annualCF * yr;
-                      const debtPayoffPerYear = (roiData.calc.loanAmountEur / (roiData.inputs.loanTermYears || 30)) * 0.85;
-                      const equity = (roiData.calc.downPaymentEur) + (debtPayoffPerYear * yr) + (propVal - roiData.inputs.purchasePrice);
-
-                      return (
-                        <tr key={yr}>
-                          <td className="font-sans font-bold">Year {yr}</td>
-                          <td className="text-right text-slate-700">{formatEur(propVal)}</td>
-                          <td className={`text-right ${annualCF >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold'}`}>
-                            {annualCF >= 0 ? '+' : ''}{formatEur(annualCF)}
-                          </td>
-                          <td className="text-right text-indigo-700 font-bold">{formatEur(cumCF)}</td>
-                          <td className="text-right text-emerald-800 font-black">{formatEur(equity)}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                <DossierROIChart
+                  purchasePrice={roiData.inputs.purchasePrice}
+                  downPayment={roiData.calc.downPaymentEur}
+                  loanAmount={roiData.calc.loanAmountEur}
+                  loanTerm={roiData.inputs.loanTermYears || 30}
+                  annualTaxes={roiData.calc.annualTaxesEur}
+                  annualDebt={roiData.calc.annualDebtServiceEur}
+                  annualOpex={roiData.calc.annualOperatingExpenses}
+                />
               )}
-            </div>
 
-            {/* Official Legal Disclaimer Footnote */}
-            <div className="pt-3 border-t-2 border-slate-900 space-y-1 text-[9px] text-slate-500">
-              <div className="font-bold text-slate-700 uppercase tracking-wider">
-                {t.report.disclaimerTitle}
+              {/* Detailed Multi-Year Progression Table */}
+              <div className="space-y-1">
+                <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
+                  {t.report.progressionScheduleTitle}
+                </h4>
+
+                {type === 'sellVsRent' && sellVsRentData && (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>{t.sellVsRent.scheduleHeaders.year}</th>
+                        <th className="text-right">{t.sellVsRent.scheduleHeaders.holdAndRent} (€)</th>
+                        <th className="text-right">{t.sellVsRent.scheduleHeaders.sellAndReinvest} (€)</th>
+                        <th className="text-right">Airbnb (€)</th>
+                        <th className="text-right">{t.sellVsRent.scheduleHeaders.propertyValue} (€)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="font-mono text-xs">
+                      {sellVsRentData.result.yearlyBreakdown.filter((p) => [1, 2, 3, 5, 7, 10, 15].includes(p.year)).map((r) => (
+                        <tr key={r.year} className={r.year === sellVsRentData.inputs.projectionHorizonYears ? 'bg-indigo-50 font-bold' : ''}>
+                          <td className="font-sans font-bold">Year {r.year}</td>
+                          <td className="text-right text-emerald-700 font-bold">{formatEur(r.rentingWealth)}</td>
+                          <td className="text-right text-indigo-700">{formatEur(r.sellingWealth)}</td>
+                          <td className="text-right text-amber-700">{formatEur(r.shortTermWealth ?? 0)}</td>
+                          <td className="text-right text-slate-600">{formatEur(r.propertyValue)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+
+                {type === 'roiCalculator' && roiData && (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>{t.roiCalculator.scheduleHeaders.year}</th>
+                        <th className="text-right">{t.roiCalculator.scheduleHeaders.propertyValue}</th>
+                        <th className="text-right">{t.roiCalculator.scheduleHeaders.annualCashFlow}</th>
+                        <th className="text-right">{t.roiCalculator.scheduleHeaders.cumulativeCash}</th>
+                        <th className="text-right">{t.roiCalculator.scheduleHeaders.totalNetEquity}</th>
+                      </tr>
+                    </thead>
+                    <tbody className="font-mono text-xs">
+                      {[1, 2, 3, 4, 5, 7, 10].map((yr) => {
+                        const propVal = roiData.inputs.purchasePrice * Math.pow(1.035, yr);
+                        const annualCF = roiData.calc.annualCashFlowAfterDebtEur;
+                        const cumCF = annualCF * yr;
+                        const debtPayoffPerYear = (roiData.calc.loanAmountEur / (roiData.inputs.loanTermYears || 30)) * 0.85;
+                        const equity = (roiData.calc.downPaymentEur) + (debtPayoffPerYear * yr) + (propVal - roiData.inputs.purchasePrice);
+
+                        return (
+                          <tr key={yr}>
+                            <td className="font-sans font-bold">Year {yr}</td>
+                            <td className="text-right text-slate-700">{formatEur(propVal)}</td>
+                            <td className={`text-right ${annualCF >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold'}`}>
+                              {annualCF >= 0 ? '+' : ''}{formatEur(annualCF)}
+                            </td>
+                            <td className="text-right text-indigo-700 font-bold">{formatEur(cumCF)}</td>
+                            <td className="text-right text-emerald-800 font-black">{formatEur(equity)}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
               </div>
-              <p className="leading-relaxed">
-                {t.report.disclaimerText}
-              </p>
-              <div className="flex justify-between pt-1 border-t border-slate-200 text-slate-400">
-                <span>{currentDate}</span>
-                <span>Ref: {reportId} • Stamp: AUTHENTICATED FISCAL DOSSIER • BNR RATE 1 EUR = 4.975 RON • Page 2 of 2</span>
+
+              {/* Official Legal Disclaimer Footnote */}
+              <div className="pt-3 border-t-2 border-slate-900 space-y-1 text-[9px] text-slate-500">
+                <div className="font-bold text-slate-700 uppercase tracking-wider">
+                  {t.report.disclaimerTitle}
+                </div>
+                <p className="leading-relaxed">
+                  {t.report.disclaimerText}
+                </p>
+                <div className="flex justify-between pt-1 border-t border-slate-200 text-slate-400">
+                  <span>{currentDate}</span>
+                  <span>Ref: {reportId} • {t.report.stamp} • {t.report.bnrRate} • {t.report.page2Of2}</span>
+                </div>
               </div>
+
             </div>
 
           </div>
