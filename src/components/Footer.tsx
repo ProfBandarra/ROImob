@@ -1,7 +1,9 @@
 import React from 'react';
-import { Building2, ShieldCheck } from 'lucide-react';
+import { Building2, ShieldCheck, AlertCircle, ExternalLink, Github } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { useTheme } from '../theme';
+
+const ISSUES_URL = 'https://github.com/ProfBandarra/ROImob/issues/new';
 
 export const Footer: React.FC = () => {
   const { t } = useI18n();
@@ -26,11 +28,23 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-6 text-xs font-semibold">
+          <div className="flex flex-wrap items-center gap-4 text-xs font-semibold">
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span className={themeConfig.textPrimary}>{t.footer.fiscalCompliance}</span>
             </div>
+
+            {/* Direct GitHub Issue Reporting Button */}
+            <a
+              href={ISSUES_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
+            >
+              <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+              <span>{t.footer.reportIssueBtn}</span>
+              <ExternalLink className="w-3 h-3 text-slate-400" />
+            </a>
           </div>
         </div>
 
@@ -43,8 +57,17 @@ export const Footer: React.FC = () => {
           </p>
         </div>
 
-        <div className="text-[10px] text-center pt-4 border-t border-slate-800/40">
-          {t.footer.aiDisclaimer}
+        {/* AI Disclaimer Footnote & Direct GitHub Reporting */}
+        <div className="text-[10px] text-center pt-4 border-t border-slate-800/40 flex flex-col sm:flex-row items-center justify-center gap-2">
+          <span>{t.footer.aiDisclaimer}</span>
+          <a
+            href={ISSUES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-400 hover:underline font-bold inline-flex items-center gap-1"
+          >
+            <span>{t.footer.reportIssueBtn} →</span>
+          </a>
         </div>
 
       </div>

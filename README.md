@@ -172,6 +172,14 @@ ROImob is pre-configured for instant zero-configuration deployment on **Vercel**
 
 ---
 
+## 🤝 Community & Reporting Issues
+
+Found a bug or have a suggestion?
+- [Report an Issue on GitHub](https://github.com/ProfBandarra/ROImob/issues/new)
+- Pull requests and regulatory improvements are welcome!
+
+---
+
 ## 📜 License & Disclaimers
 
 Distributed under the **MIT License**. Free and open-source for educational and individual research use.

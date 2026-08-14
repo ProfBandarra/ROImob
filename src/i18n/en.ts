@@ -50,6 +50,7 @@ export const en: TranslationDictionary = {
     devTitle: 'Open-Source Project & Developer Community',
     devDesc: 'ROImob is an open-source project released under the MIT License. Built with React 18, TypeScript, Tailwind CSS, and Vite. Developers and researchers are welcome to audit calculations, submit pull requests, or adapt the formulas for other jurisdictions on GitHub.',
     githubRepoBtn: 'GitHub Repository',
+    reportIssueBtn: 'Report an Issue on GitHub',
     aiFootnote: 'Note: The development of this platform was assisted by AI and, while carefully audited against Romanian fiscal laws, small discrepancies or changes in local tax interpretations can happen. Always double-check with your notary or certified tax advisor for official transactions.',
   },
   report: {
@@ -291,5 +292,6 @@ export const en: TranslationDictionary = {
     copyright: 'ROImob. Romanian Real Estate Decision & ROI Suite.',
     builtWith: 'Built with institutional precision & multi-language support (EN • RO • FR • DE • UK • PT)',
     aiDisclaimer: 'Note: Platform development was assisted by AI. Calculations are modeled for decision support; consult a certified advisor for binding fiscal operations.',
+    reportIssueBtn: 'Report an Issue on GitHub',
   },
 };

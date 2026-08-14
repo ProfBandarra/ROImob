@@ -50,6 +50,7 @@ export const de: TranslationDictionary = {
     devTitle: 'Open-Source-Projekt & Entwickler-Community',
     devDesc: 'ROImob ist ein Open-Source-Projekt unter MIT-Lizenz, entwickelt mit React 18, TypeScript, Tailwind CSS und Vite. Entwickler und Forscher sind herzlich eingeladen, auf GitHub beizutragen.',
     githubRepoBtn: 'GitHub-Repository',
+    reportIssueBtn: 'Problem auf GitHub Melden',
     aiFootnote: 'Hinweis: Die Entwicklung dieser Plattform wurde durch KI unterstützt. Trotz sorgfältiger Prüfung können lokale steuerliche Auslegungen variieren. Wenden Sie sich für verbindliche Rechtsgeschäfte an einen Notar oder Steuerberater.',
   },
   report: {
@@ -291,5 +292,6 @@ export const de: TranslationDictionary = {
     copyright: 'ROImob. Entscheidungs- und ROI-Rechnersuite.',
     builtWith: 'Erstellt mit institutioneller Präzision & Mehrsprachen-Support (EN • RO • FR • DE • UK • PT)',
     aiDisclaimer: 'Hinweis: Die Plattform-Entwicklung wurde durch KI unterstützt. Berechnungen dienen als Entscheidungshilfe; für verbindliche Vorgänge wenden Sie sich an einen Berater.',
+    reportIssueBtn: 'Problem auf GitHub Melden',
   },
 };

@@ -322,16 +322,28 @@ export const HomePage: React.FC<Props> = ({
               {t.home.devTitle}
             </h3>
           </div>
-          <a
-            href={REPO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1.5 border border-slate-700 transition-colors"
-          >
-            <Github className="w-3.5 h-3.5" />
-            <span>{t.home.githubRepoBtn}</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
-          </a>
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href="https://github.com/ProfBandarra/ROImob/issues/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold flex items-center gap-1.5 border border-amber-500/30 transition-colors"
+            >
+              <span>{t.home.reportIssueBtn}</span>
+              <ExternalLink className="w-3 h-3 text-amber-400" />
+            </a>
+
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1.5 border border-slate-700 transition-colors"
+            >
+              <Github className="w-3.5 h-3.5" />
+              <span>{t.home.githubRepoBtn}</span>
+              <ExternalLink className="w-3 h-3 text-slate-400" />
+            </a>
+          </div>
         </div>
 
         <p className={`${themeConfig.textSecondary} leading-relaxed`}>
@@ -340,11 +352,23 @@ export const HomePage: React.FC<Props> = ({
       </div>
 
       {/* 5. AI Assistance Footnote */}
-      <div className={`p-4 ${themeConfig.cardBg} rounded-2xl border ${themeConfig.cardBorder} text-[11px] ${themeConfig.textSecondary} flex items-start gap-2.5`}>
-        <Bot className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-        <p className="leading-relaxed">
-          {t.home.aiFootnote}
-        </p>
+      <div className={`p-4 ${themeConfig.cardBg} rounded-2xl border ${themeConfig.cardBorder} text-[11px] ${themeConfig.textSecondary} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}>
+        <div className="flex items-start gap-2.5">
+          <Bot className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+          <p className="leading-relaxed">
+            {t.home.aiFootnote}
+          </p>
+        </div>
+
+        <a
+          href="https://github.com/ProfBandarra/ROImob/issues/new"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] font-bold inline-flex items-center gap-1.5 border border-slate-700 transition-colors"
+        >
+          <span>{t.home.reportIssueBtn}</span>
+          <ExternalLink className="w-3 h-3" />
+        </a>
       </div>
 
     </div>

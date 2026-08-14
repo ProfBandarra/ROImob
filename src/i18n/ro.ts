@@ -50,6 +50,7 @@ export const ro: TranslationDictionary = {
     devTitle: 'Proiect Open-Source & Comunitate Dezvoltatori',
     devDesc: 'ROImob este un proiect open-source lansat sub licența MIT. Construit cu React 18, TypeScript, Tailwind CSS și Vite. Dezvoltatorii și cercetătorii sunt bineveniți să auditeze calculele sau să propună îmbunătățiri pe GitHub.',
     githubRepoBtn: 'Depozit GitHub',
+    reportIssueBtn: 'Raportează o Problemă pe GitHub',
     aiFootnote: 'Notă: Dezvoltarea acestei platforme a fost asistată de IA și, deși atent auditată conform Codului Fiscal, mici discrepanțe sau interpretări fiscale locale sunt posibile. Consultați întotdeauna notarul sau consultantul fiscal pentru tranzacții oficiale.',
   },
   report: {
@@ -291,5 +292,6 @@ export const ro: TranslationDictionary = {
     copyright: 'ROImob. Suită Decizională și Calculatoare ROI.',
     builtWith: 'Dezvoltat cu precizie instituțională & suport multilingv (EN • RO • FR • DE • UK • PT)',
     aiDisclaimer: 'Notă: Dezvoltarea platformei a fost asistată de IA. Calculele sunt modelate pentru suport decizional; consultați un consilier fiscal autorizat pentru operațiuni obligatorii.',
+    reportIssueBtn: 'Raportează o Problemă pe GitHub',
   },
 };

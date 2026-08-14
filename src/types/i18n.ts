@@ -48,6 +48,7 @@ export interface TranslationDictionary {
     devTitle: string;
     devDesc: string;
     githubRepoBtn: string;
+    reportIssueBtn: string;
     aiFootnote: string;
   };
   report: {
@@ -289,5 +290,6 @@ export interface TranslationDictionary {
     copyright: string;
     builtWith: string;
     aiDisclaimer: string;
+    reportIssueBtn: string;
   };
 }
