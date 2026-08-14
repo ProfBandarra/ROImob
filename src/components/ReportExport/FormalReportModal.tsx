@@ -100,7 +100,7 @@ export const FormalReportModal: React.FC<Props> = ({
         </div>
 
         {/* Formal Printable Document Sheet */}
-        <div className="p-8 sm:p-12 space-y-8 bg-white text-slate-900 print:p-0">
+        <div id="formal-report-print-sheet" className="p-8 sm:p-12 space-y-8 bg-white text-slate-900 print:p-0">
           
           {/* Formal Letterhead */}
           <div className="flex items-start justify-between pb-6 border-b-2 border-slate-900">

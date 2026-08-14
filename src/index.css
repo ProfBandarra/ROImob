@@ -48,3 +48,75 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
+
+/* ==========================================================================
+   FORMAL REPORT PRINT STYLES (PDF & PRINT ISOLATION)
+   ========================================================================== */
+@media print {
+  /* Hide all background app elements (navbar, main view, background sliders, footer) */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Isolate and display ONLY the formal report sheet */
+  #formal-report-print-sheet,
+  #formal-report-print-sheet * {
+    visibility: visible;
+  }
+
+  #formal-report-print-sheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 24px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force background colors and borders to render in print */
+  #formal-report-print-sheet .bg-slate-50 {
+    background-color: #f8fafc !important;
+  }
+  #formal-report-print-sheet .bg-slate-100 {
+    background-color: #f1f5f9 !important;
+  }
+  #formal-report-print-sheet .bg-indigo-50 {
+    background-color: #eef2ff !important;
+  }
+  #formal-report-print-sheet .border-slate-200 {
+    border-color: #e2e8f0 !important;
+  }
+  #formal-report-print-sheet .border-slate-300 {
+    border-color: #cbd5e1 !important;
+  }
+  #formal-report-print-sheet .border-slate-900 {
+    border-color: #0f172a !important;
+  }
+  #formal-report-print-sheet .text-emerald-600 {
+    color: #059669 !important;
+  }
+  #formal-report-print-sheet .text-indigo-600 {
+    color: #4f46e5 !important;
+  }
+  #formal-report-print-sheet .text-rose-600 {
+    color: #e11d48 !important;
+  }
+
+  /* Remove interactive buttons and headers from print output */
+  header,
+  footer,
+  nav,
+  button,
+  .print-hidden {
+    display: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+}
