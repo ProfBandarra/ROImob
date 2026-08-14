@@ -118,21 +118,20 @@ export interface CountyMacroStats {
 }
 
 export interface ROITaxSettings {
-  // Romanian Tax Law specifics (2024-2026)
   flatTaxRatePercent: number; // 10%
   flatDeductionPercent: number; // 20% deductible flat expense => 8% effective rate
   cassMinWageThresholds: {
-    sixSalaries: number; // 6 x 3700 RON (or updated min wage)
+    sixSalaries: number;
     twelveSalaries: number;
     twentyFourSalaries: number;
   };
   minimumWageRon: number;
   eurToRonRate: number;
-  localPropertyTaxPercent: number; // e.g. 0.1% of taxable value
-  padInsuranceAnnualEur: number; // e.g. 20 EUR or 130 RON
+  localPropertyTaxPercent: number;
+  padInsuranceAnnualEur: number;
   facultativeInsuranceAnnualEur: number;
-  annualMaintenanceReservePercent: number; // e.g. 1%
-  vacancyRatePercent: number; // e.g. 5%
+  annualMaintenanceReservePercent: number;
+  vacancyRatePercent: number;
 }
 
 export interface FinancialCalculationResult {
@@ -150,7 +149,6 @@ export interface FinancialCalculationResult {
   netOperatingIncomeEur: number;
   netYieldPercent: number;
   
-  // Mortgage specific
   downPaymentEur: number;
   loanAmountEur: number;
   monthlyMortgagePaymentEur: number;
@@ -159,61 +157,93 @@ export interface FinancialCalculationResult {
   monthlyCashFlowAfterDebtEur: number;
   cashOnCashReturnPercent: number;
 
-  // Comparison with Short Term (Airbnb)
   shortTermGrossAnnualEur: number;
   shortTermNetAnnualEur: number;
   shortTermYieldPercent: number;
 }
 
-// Sell vs Rent Owner Analysis Models
+// -------------------------------------------------------------
+// ADVANCED SELL VS RENT OWNER OPTIMIZER TYPES
+// -------------------------------------------------------------
 export interface SellVsRentInputs {
   currentPropertyMarketValueEur: number;
-  ownershipDurationYears: number; // >3 years = 1% RO tax, <3 years = 3% RO tax
+  ownershipDurationYears: number; // >3 years = 1% RO tax, <=3 years = 3% RO tax
   hasExistingMortgage: boolean;
   remainingMortgageBalanceEur: number;
   monthlyMortgagePaymentEur: number;
   remainingMortgageYears: number;
   mortgageInterestRatePercent: number;
+  earlyMortgagePrepaymentFeePercent: number; // 0% (standard variable) or up to 1% (fixed)
   
+  // Transaction & Selling Costs
+  realEstateAgentCommissionPercent: number; // 0% (Direct Owner) to 3%
+  sellingPreparationCostEur: number; // Painting, staging, repairs
+
   // Renting Assumptions
   estimatedMonthlyRentEur: number;
   monthlyOperatingExpensesEur: number;
-  isShortTermRentCandidate: boolean;
+  propertyAppreciationRatePercent: number; // 0% to 8% p.a., default 3.5%
+  
+  // Short-Term Rental Toggle & Assumptions
+  includeShortTermOption: boolean;
   estimatedShortTermMonthlyNetEur: number;
 
-  // Alternative Reinvestment for Sale Proceeds
-  alternativeInvestmentReturnRatePercent: number; // e.g. 7% Romanian Treasury Bonds (Titluri Tezaur/Fidelis) or S&P500
+  // Alternative Reinvestment for Sale Proceeds (Supports 0% to 15%)
+  alternativeInvestmentReturnRatePercent: number;
+
+  // Projection Horizon
+  projectionHorizonYears: number; // 1, 3, 5, 10, 15
+}
+
+export interface YearlyWealthPoint {
+  year: number;
+  sellingWealth: number;
+  rentingWealth: number;
+  shortTermWealth?: number;
+  propertyValue: number;
+  remainingMortgage: number;
+  cumulativeRentalCashFlow: number;
 }
 
 export interface SellVsRentResult {
-  // Selling Route
+  // Selling Route Breakdown
   grossSalePriceEur: number;
-  transferTaxRatePercent: number; // 1% or 3% under Romanian Fiscal Code Art. 111
+  transferTaxRatePercent: number; // 1% or 3% (Cod Fiscal Art. 111)
   transferTaxEur: number;
   notaryAndAgentFeesEur: number;
+  prepaymentPenaltyEur: number;
+  sellingPreparationCostEur: number;
   mortgagePayoffEur: number;
   netCashProceedsFromSaleEur: number;
   
   // Reinvestment of Sale Proceeds
   annualReinvestmentIncomeEur: number;
+  selectedHorizonReinvestmentWealthEur: number;
   fiveYearReinvestmentWealthEur: number;
   tenYearReinvestmentWealthEur: number;
 
-  // Long-Term Renting Route
+  // Long-Term Renting Route Breakdown
   annualGrossRentEur: number;
   annualTaxesAndExpensesEur: number;
   annualMortgagePaymentsEur: number;
   annualNetRentalCashFlowEur: number;
   monthlyNetRentalCashFlowEur: number;
-  fiveYearRentalWealthEur: number; // Cumulative cash flow + property appreciation + equity build-up
+  selectedHorizonRentalWealthEur: number;
+  fiveYearRentalWealthEur: number;
   tenYearRentalWealthEur: number;
 
-  // Short-Term Renting Route
+  // Short-Term Renting Route Breakdown (if enabled)
+  includeShortTermOption: boolean;
   annualShortTermNetCashFlowEur: number;
+  selectedHorizonShortTermWealthEur: number;
   fiveYearShortTermWealthEur: number;
+
+  // Multi-Year Amortization Schedule
+  yearlyBreakdown: YearlyWealthPoint[];
 
   // Final Verdict & Recommendation
   recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM';
+  wealthDifferenceAtHorizonEur: number;
   breakEvenHorizonYears: number;
   verdictSummary: string;
   verdictHighlights: string[];

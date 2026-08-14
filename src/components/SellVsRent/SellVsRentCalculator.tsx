@@ -16,27 +16,59 @@ import {
   ShieldCheck, 
   ArrowRight,
   PieChart,
-  HelpCircle
+  HelpCircle,
+  Sliders,
+  ChevronDown,
+  ChevronUp,
+  Table as TableIcon,
+  Zap,
+  Info,
+  DollarSign,
+  Percent
 } from 'lucide-react';
+
+const REINVESTMENT_PRESETS = [
+  { label: '0% Cash / Personal Use', rate: 0.0, desc: 'Hold cash in checking account or personal consumption' },
+  { label: '3.5% Bank Deposit (Depozit Bancar)', rate: 3.5, desc: 'Guaranteed commercial bank term deposit' },
+  { label: '6.8% Tezaur / Fidelis (State Bonds)', rate: 6.8, desc: 'Romanian Ministry of Finance bonds (100% Tax-Free)' },
+  { label: '8.5% S&P 500 / Global ETF', rate: 8.5, desc: 'Long-term diversified equities index fund' },
+  { label: '10.5% BET Index (BVB)', rate: 10.5, desc: 'Bucharest Stock Exchange blue-chip index with dividends' },
+];
+
+const HORIZON_OPTIONS = [1, 3, 5, 10, 15];
 
 export const SellVsRentCalculator: React.FC = () => {
   const { t } = useI18n();
 
-  // Inputs State
+  // Core Inputs
   const [propertyValueEur, setPropertyValueEur] = useState<number>(135000);
-  const [ownershipDurationYears, setOwnershipDurationYears] = useState<number>(4); // >3 years
+  const [ownershipDurationYears, setOwnershipDurationYears] = useState<number>(4); // >3 years = 1% tax
   const [hasMortgage, setHasMortgage] = useState<boolean>(true);
   const [remainingMortgageBalanceEur, setRemainingMortgageBalanceEur] = useState<number>(65000);
   const [monthlyMortgagePaymentEur, setMonthlyMortgagePaymentEur] = useState<number>(430);
   const [remainingMortgageYears, setRemainingMortgageYears] = useState<number>(18);
   const [mortgageInterestRatePercent, setMortgageInterestRatePercent] = useState<number>(6.5);
   
+  // Rental Inputs
   const [monthlyRentEur, setMonthlyRentEur] = useState<number>(650);
   const [monthlyOperatingExpensesEur, setMonthlyOperatingExpensesEur] = useState<number>(50);
-  const [isShortTermCandidate, setIsShortTermCandidate] = useState<boolean>(true);
+  
+  // Short-Term Rental Toggle
+  const [includeShortTerm, setIncludeShortTerm] = useState<boolean>(false);
   const [shortTermMonthlyNetEur, setShortTermMonthlyNetEur] = useState<number>(920);
   
-  const [alternativeReturnPercent, setAlternativeReturnPercent] = useState<number>(7.0); // e.g. Titluri Tezaur/Fidelis
+  // Reinvestment Benchmark
+  const [alternativeReturnPercent, setAlternativeReturnPercent] = useState<number>(6.8); // Default to Tezaur
+
+  // Advanced Owner Options
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  const [propertyAppreciationPercent, setPropertyAppreciationPercent] = useState<number>(3.5);
+  const [agentCommissionPercent, setAgentCommissionPercent] = useState<number>(0.0); // Direct owner 0%
+  const [prepaymentPenaltyPercent, setPrepaymentPenaltyPercent] = useState<number>(0.0); // 0% variable IRCC
+  const [prepCostEur, setPrepCostEur] = useState<number>(0);
+  
+  // Projection Horizon
+  const [horizonYears, setHorizonYears] = useState<number>(5);
 
   const inputs: SellVsRentInputs = {
     currentPropertyMarketValueEur: propertyValueEur,
@@ -46,11 +78,16 @@ export const SellVsRentCalculator: React.FC = () => {
     monthlyMortgagePaymentEur,
     remainingMortgageYears,
     mortgageInterestRatePercent,
+    earlyMortgagePrepaymentFeePercent: prepaymentPenaltyPercent,
+    realEstateAgentCommissionPercent: agentCommissionPercent,
+    sellingPreparationCostEur: prepCostEur,
     estimatedMonthlyRentEur: monthlyRentEur,
     monthlyOperatingExpensesEur,
-    isShortTermRentCandidate: isShortTermCandidate,
+    propertyAppreciationRatePercent: propertyAppreciationPercent,
+    includeShortTermOption: includeShortTerm,
     estimatedShortTermMonthlyNetEur: shortTermMonthlyNetEur,
     alternativeInvestmentReturnRatePercent: alternativeReturnPercent,
+    projectionHorizonYears: horizonYears,
   };
 
   const result = calculateSellVsRent(inputs);
@@ -63,7 +100,7 @@ export const SellVsRentCalculator: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-3">
             <Scale className="w-3.5 h-3.5 text-brand-400" />
-            <span>Property Owner Decision Engine (Romanian Fiscal Law Art. 111)</span>
+            <span>Owner Decision Matrix • Romanian Fiscal Code Art. 111</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
             {t.sellVsRent.title}
@@ -76,10 +113,10 @@ export const SellVsRentCalculator: React.FC = () => {
         <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-700 text-xs space-y-1 shrink-0">
           <div className="flex items-center gap-2 text-emerald-400 font-bold">
             <ShieldCheck className="w-4 h-4" />
-            <span>Net Present Value & Wealth Horizon</span>
+            <span>Multi-Horizon Amortization (1–15 Yrs)</span>
           </div>
           <p className="text-slate-400 text-[11px]">
-            Factors in transfer taxes (1% vs 3%), mortgage amortization & Titluri Tezaur.
+            Includes 0% cash option, short-term toggle, and OUG 115/2023 tax rules.
           </p>
         </div>
       </div>
@@ -101,7 +138,7 @@ export const SellVsRentCalculator: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">{t.sellVsRent.propertyValuation}</span>
-                <strong className="text-white font-mono">{formatEur(propertyValueEur)}</strong>
+                <strong className="text-white font-mono text-sm">{formatEur(propertyValueEur)}</strong>
               </div>
               <input
                 type="range"
@@ -123,9 +160,9 @@ export const SellVsRentCalculator: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setOwnershipDurationYears(4)}
-                  className={`p-2 rounded-xl text-xs font-semibold border transition-all text-left ${
+                  className={`p-2.5 rounded-xl text-xs font-semibold border transition-all text-left ${
                     ownershipDurationYears > 3
-                      ? 'bg-brand-600/20 border-brand-500 text-white shadow-sm'
+                      ? 'bg-brand-600/20 border-brand-500 text-white shadow-sm ring-1 ring-brand-500/50'
                       : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
@@ -136,9 +173,9 @@ export const SellVsRentCalculator: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setOwnershipDurationYears(2)}
-                  className={`p-2 rounded-xl text-xs font-semibold border transition-all text-left ${
+                  className={`p-2.5 rounded-xl text-xs font-semibold border transition-all text-left ${
                     ownershipDurationYears <= 3
-                      ? 'bg-brand-600/20 border-brand-500 text-white shadow-sm'
+                      ? 'bg-brand-600/20 border-brand-500 text-white shadow-sm ring-1 ring-brand-500/50'
                       : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
@@ -160,8 +197,8 @@ export const SellVsRentCalculator: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setHasMortgage(true)}
-                  className={`px-2 py-1 rounded text-[11px] font-bold ${
-                    hasMortgage ? 'bg-purple-600 text-white' : 'text-slate-400'
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors ${
+                    hasMortgage ? 'bg-purple-600 text-white shadow-sm' : 'text-slate-400'
                   }`}
                 >
                   With Debt
@@ -169,8 +206,8 @@ export const SellVsRentCalculator: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setHasMortgage(false)}
-                  className={`px-2 py-1 rounded text-[11px] font-bold ${
-                    !hasMortgage ? 'bg-emerald-600 text-white' : 'text-slate-400'
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors ${
+                    !hasMortgage ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400'
                   }`}
                 >
                   Debt-Free
@@ -196,42 +233,60 @@ export const SellVsRentCalculator: React.FC = () => {
                   />
                 </div>
 
-                <div>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-400">{t.sellVsRent.monthlyInstallment}</span>
-                    <strong className="text-white font-mono">{formatEur(monthlyMortgagePaymentEur)}/mo</strong>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-slate-400">Monthly Rate:</span>
+                      <strong className="text-white font-mono">{formatEur(monthlyMortgagePaymentEur)}/mo</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min="150"
+                      max="2000"
+                      step="10"
+                      value={monthlyMortgagePaymentEur}
+                      onChange={(e) => setMonthlyMortgagePaymentEur(Number(e.target.value))}
+                      className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                    />
                   </div>
-                  <input
-                    type="range"
-                    min="150"
-                    max="2000"
-                    step="10"
-                    value={monthlyMortgagePaymentEur}
-                    onChange={(e) => setMonthlyMortgagePaymentEur(Number(e.target.value))}
-                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
-                  />
+
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-slate-400">Remaining Yrs:</span>
+                      <strong className="text-white font-mono">{remainingMortgageYears} yrs</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min="1"
+                      max="30"
+                      step="1"
+                      value={remainingMortgageYears}
+                      onChange={(e) => setRemainingMortgageYears(Number(e.target.value))}
+                      className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                    />
+                  </div>
                 </div>
               </div>
             ) : (
               <div className="p-3 bg-emerald-950/30 rounded-xl border border-emerald-500/20 text-xs text-emerald-300 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Property is 100% owned without bank encumbrances. All rental income goes directly to you.</span>
+                <span>Property is 100% owned free and clear. Zero debt service.</span>
               </div>
             )}
           </div>
 
-          {/* 3. Rental & Reinvestment Projections */}
+          {/* 3. Rental Expectations & Short-Term Toggle */}
           <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-5 space-y-4 shadow-lg">
             <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 pb-2 border-b border-slate-800 flex items-center gap-2">
               <Coins className="w-4 h-4 text-emerald-400" />
-              <span>Rental Expectations & Reinvestment</span>
+              <span>Rental Expectations & Strategy Options</span>
             </h3>
 
-            {/* Expected Rent */}
+            {/* Long-Term Rent */}
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">{t.sellVsRent.rentalExpectation}</span>
-                <strong className="text-white font-mono">{formatEur(monthlyRentEur)}/mo</strong>
+                <strong className="text-white font-mono text-sm">{formatEur(monthlyRentEur)}/mo</strong>
               </div>
               <input
                 type="range"
@@ -244,39 +299,219 @@ export const SellVsRentCalculator: React.FC = () => {
               />
             </div>
 
-            {/* Alternative Reinvestment Rate */}
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-400">Alternative Return (Tezaur / ETF):</span>
-                <strong className="text-brand-300 font-mono">{alternativeReturnPercent.toFixed(1)}% p.a.</strong>
+            {/* Short-Term / Airbnb Option Toggle */}
+            <div className="pt-2 border-t border-slate-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-bold text-slate-200 block">Include Short-Term (Airbnb) Option</span>
+                  <span className="text-[10px] text-slate-400">Evaluate tourist rental vs standard residential</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIncludeShortTerm(!includeShortTerm)}
+                  className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
+                    includeShortTerm ? 'bg-indigo-600 justify-end' : 'bg-slate-800 justify-start'
+                  }`}
+                >
+                  <div className="w-4 h-4 rounded-full bg-white shadow-md" />
+                </button>
               </div>
+
+              {includeShortTerm && (
+                <div className="mt-3 p-3 bg-slate-950 rounded-xl border border-indigo-500/30 space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Estimated Net Airbnb Income:</span>
+                    <strong className="text-indigo-300 font-mono">{formatEur(shortTermMonthlyNetEur)}/mo</strong>
+                  </div>
+                  <input
+                    type="range"
+                    min="300"
+                    max="3500"
+                    step="25"
+                    value={shortTermMonthlyNetEur}
+                    onChange={(e) => setShortTermMonthlyNetEur(Number(e.target.value))}
+                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 4. Alternative Reinvestment Rate (Supports 0% to 15%) */}
+          <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-5 space-y-4 shadow-lg">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                <Percent className="w-4 h-4 text-brand-400" />
+                <span>Alternative Reinvestment Rate</span>
+              </h3>
+              <strong className="text-sm font-mono text-brand-300">
+                {alternativeReturnPercent.toFixed(1)}% p.a.
+              </strong>
+            </div>
+
+            {/* Quick Presets */}
+            <div className="space-y-1.5">
+              <span className="text-[10px] text-slate-400 block uppercase font-bold tracking-wider">
+                Select Benchmark Asset:
+              </span>
+              <div className="grid grid-cols-1 gap-1.5">
+                {REINVESTMENT_PRESETS.map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setAlternativeReturnPercent(preset.rate)}
+                    className={`px-3 py-2 rounded-xl text-left text-xs transition-all border flex items-center justify-between ${
+                      alternativeReturnPercent === preset.rate
+                        ? 'bg-brand-600/20 border-brand-500 text-white font-bold'
+                        : 'bg-slate-950/70 border-slate-800/80 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <div>
+                      <span className="block font-medium">{preset.label}</span>
+                      <span className="text-[10px] text-slate-400">{preset.desc}</span>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-brand-400 shrink-0 ml-2">
+                      {preset.rate}%
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Custom Slider */}
+            <div className="pt-2">
               <input
                 type="range"
-                min="4.0"
-                max="12.0"
+                min="0.0"
+                max="15.0"
                 step="0.5"
                 value={alternativeReturnPercent}
                 onChange={(e) => setAlternativeReturnPercent(Number(e.target.value))}
                 className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500"
               />
-              <span className="text-[10px] text-slate-500 block mt-1">
-                Romanian Titluri de Stat Tezaur/Fidelis are ~6.5-7.0% tax-free.
-              </span>
+              <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+                <span>0% (Personal Cash)</span>
+                <span>7% (Tezaur Bonds)</span>
+                <span>15% (Aggressive)</span>
+              </div>
             </div>
+          </div>
+
+          {/* 5. Advanced Parameters Toggle */}
+          <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-4 space-y-3">
+            <button
+              type="button"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="w-full flex items-center justify-between text-xs font-bold text-slate-300 hover:text-white"
+            >
+              <div className="flex items-center gap-2">
+                <Sliders className="w-4 h-4 text-brand-400" />
+                <span>Advanced Market & Friction Parameters</span>
+              </div>
+              {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+
+            {showAdvanced && (
+              <div className="pt-3 border-t border-slate-800 space-y-3 text-xs">
+                {/* Property Appreciation */}
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-slate-400">Annual Property Appreciation:</span>
+                    <strong className="text-white font-mono">{propertyAppreciationPercent.toFixed(1)}% p.a.</strong>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.0"
+                    max="8.0"
+                    step="0.5"
+                    value={propertyAppreciationPercent}
+                    onChange={(e) => setPropertyAppreciationPercent(Number(e.target.value))}
+                    className="w-full h-1.5 bg-slate-800 rounded appearance-none accent-brand-500"
+                  />
+                </div>
+
+                {/* Real Estate Agent Commission */}
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-slate-400">Real Estate Agent Commission:</span>
+                    <strong className="text-white font-mono">{agentCommissionPercent.toFixed(1)}%</strong>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.0"
+                    max="3.0"
+                    step="0.5"
+                    value={agentCommissionPercent}
+                    onChange={(e) => setAgentCommissionPercent(Number(e.target.value))}
+                    className="w-full h-1.5 bg-slate-800 rounded appearance-none accent-brand-500"
+                  />
+                  <span className="text-[10px] text-slate-500">0% = Direct Owner sale (Fără comision)</span>
+                </div>
+
+                {/* Early Mortgage Prepayment Penalty */}
+                {hasMortgage && (
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-slate-400">Early Mortgage Payoff Fee (OUG 52/2016):</span>
+                      <strong className="text-white font-mono">{prepaymentPenaltyPercent.toFixed(1)}%</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.0"
+                      max="1.0"
+                      step="0.1"
+                      value={prepaymentPenaltyPercent}
+                      onChange={(e) => setPrepaymentPenaltyPercent(Number(e.target.value))}
+                      className="w-full h-1.5 bg-slate-800 rounded appearance-none accent-purple-500"
+                    />
+                    <span className="text-[10px] text-slate-500">0% for variable IRCC, max 1% for fixed</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
         </div>
 
-        {/* Right Column: 3-Way Comparison Matrix & Verdict (7 cols) */}
+        {/* Right Column: Comparison Matrix, Horizon Selector & Verdict (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           
+          {/* Horizon Selector Bar */}
+          <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+            <div>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-200 block">
+                Projection Horizon:
+              </span>
+              <span className="text-[11px] text-slate-400">
+                Compare cumulative financial wealth at:
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+              {HORIZON_OPTIONS.map((yr) => (
+                <button
+                  key={yr}
+                  type="button"
+                  onClick={() => setHorizonYears(yr)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    horizonYears === yr
+                      ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {yr} {yr === 1 ? 'Year' : 'Years'}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Algorithmic Verdict Card */}
           <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950/60 p-6 rounded-3xl border border-brand-500/40 shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-brand-400" />
                 <span className="text-xs font-black uppercase tracking-wider text-brand-300">
-                  {t.sellVsRent.verdictTitle}
+                  {t.sellVsRent.verdictTitle} ({horizonYears}-Year Horizon)
                 </span>
               </div>
               <span
@@ -292,7 +527,7 @@ export const SellVsRentCalculator: React.FC = () => {
                   ? 'KEEP & RENT LONG-TERM'
                   : result.recommendedStrategy === 'RENT_SHORT_TERM'
                   ? 'SHORT-TERM (AIRBNB)'
-                  : 'SELL & REINVEST'}
+                  : 'SELL NOW & REINVEST'}
               </span>
             </div>
 
@@ -310,8 +545,8 @@ export const SellVsRentCalculator: React.FC = () => {
             </div>
           </div>
 
-          {/* Side-by-Side 3 Strategy Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Side-by-Side Strategy Cards */}
+          <div className={`grid grid-cols-1 ${includeShortTerm ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4`}>
             
             {/* Strategy 1: Sell Now */}
             <div
@@ -323,30 +558,30 @@ export const SellVsRentCalculator: React.FC = () => {
             >
               <div>
                 <span className="text-[10px] font-bold uppercase text-slate-400 block mb-1">
-                  {t.sellVsRent.sellScenario.title}
+                  Strategy 1: SELL NOW
                 </span>
                 <span className="text-xl font-black text-white font-mono block">
                   {formatEur(result.netCashProceedsFromSaleEur)}
                 </span>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
-                  Immediate Liquid Cash in Hand
+                  Liquid Cash in Hand Today
                 </span>
               </div>
 
               <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-400">Tax ({result.transferTaxRatePercent}%):</span>
+                  <span className="text-slate-400">Transfer Tax ({result.transferTaxRatePercent}%):</span>
                   <span className="text-rose-300 font-mono">-{formatEur(result.transferTaxEur)}</span>
                 </div>
                 {hasMortgage && (
                   <div className="flex justify-between text-[11px]">
-                    <span className="text-slate-400">Loan Payoff:</span>
+                    <span className="text-slate-400">Mortgage Payoff:</span>
                     <span className="text-rose-300 font-mono">-{formatEur(result.mortgagePayoffEur)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-[11px] pt-1 border-t border-slate-800 font-bold">
-                  <span className="text-slate-300">5-Yr Wealth:</span>
-                  <span className="text-brand-400 font-mono">+{formatEur(result.fiveYearReinvestmentWealthEur)}</span>
+                <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
+                  <span className="text-slate-300">{horizonYears}-Yr Wealth:</span>
+                  <span className="text-brand-400 font-mono">+{formatEur(result.selectedHorizonReinvestmentWealthEur)}</span>
                 </div>
               </div>
             </div>
@@ -361,14 +596,14 @@ export const SellVsRentCalculator: React.FC = () => {
             >
               <div>
                 <span className="text-[10px] font-bold uppercase text-emerald-400 block mb-1">
-                  {t.sellVsRent.rentScenario.title}
+                  Strategy 2: RENT LONG-TERM
                 </span>
                 <span className="text-xl font-black text-emerald-400 font-mono block">
                   {result.monthlyNetRentalCashFlowEur >= 0 ? '+' : ''}
                   {formatEur(result.monthlyNetRentalCashFlowEur)} / mo
                 </span>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
-                  Monthly Cash Flow in Pocket
+                  Net Monthly Cash Flow
                 </span>
               </div>
 
@@ -383,110 +618,112 @@ export const SellVsRentCalculator: React.FC = () => {
                     <span className="text-rose-300 font-mono">-{formatEur(monthlyMortgagePaymentEur)}/mo</span>
                   </div>
                 )}
-                <div className="flex justify-between text-[11px] pt-1 border-t border-slate-800 font-bold">
-                  <span className="text-slate-300">5-Yr Wealth:</span>
-                  <span className="text-emerald-400 font-mono">+{formatEur(result.fiveYearRentalWealthEur)}</span>
+                <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
+                  <span className="text-slate-300">{horizonYears}-Yr Wealth:</span>
+                  <span className="text-emerald-400 font-mono">+{formatEur(result.selectedHorizonRentalWealthEur)}</span>
                 </div>
               </div>
             </div>
 
-            {/* Strategy 3: Airbnb / Short Term */}
-            <div
-              className={`p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition-all ${
-                result.recommendedStrategy === 'RENT_SHORT_TERM'
-                  ? 'bg-slate-900 border-indigo-500 ring-2 ring-indigo-500/30'
-                  : 'bg-slate-900/60 border-slate-800'
-              }`}
-            >
-              <div>
-                <span className="text-[10px] font-bold uppercase text-indigo-400 block mb-1">
-                  {t.sellVsRent.shortTermScenario.title}
-                </span>
-                <span className="text-xl font-black text-indigo-400 font-mono block">
-                  +{formatEur(result.annualShortTermNetCashFlowEur / 12)} / mo
-                </span>
-                <span className="text-[10px] text-slate-400 block mt-0.5">
-                  Estimated Airbnb Net Cash
-                </span>
-              </div>
+            {/* Strategy 3: Airbnb / Short Term (if enabled) */}
+            {includeShortTerm && (
+              <div
+                className={`p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition-all ${
+                  result.recommendedStrategy === 'RENT_SHORT_TERM'
+                    ? 'bg-slate-900 border-indigo-500 ring-2 ring-indigo-500/30'
+                    : 'bg-slate-900/60 border-slate-800'
+                }`}
+              >
+                <div>
+                  <span className="text-[10px] font-bold uppercase text-indigo-400 block mb-1">
+                    Strategy 3: SHORT-TERM (AIRBNB)
+                  </span>
+                  <span className="text-xl font-black text-indigo-400 font-mono block">
+                    +{formatEur(result.annualShortTermNetCashFlowEur / 12)} / mo
+                  </span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    Estimated Net Cash Flow
+                  </span>
+                </div>
 
-              <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-400">Annual Net:</span>
-                  <span className="text-slate-200 font-mono">+{formatEur(result.annualShortTermNetCashFlowEur)}/yr</span>
-                </div>
-                <div className="flex justify-between text-[11px] pt-1 border-t border-slate-800 font-bold">
-                  <span className="text-slate-300">5-Yr Wealth:</span>
-                  <span className="text-indigo-400 font-mono">+{formatEur(result.fiveYearShortTermWealthEur)}</span>
+                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
+                  <div className="flex justify-between text-[11px]">
+                    <span className="text-slate-400">Annual Net:</span>
+                    <span className="text-slate-200 font-mono">+{formatEur(result.annualShortTermNetCashFlowEur)}/yr</span>
+                  </div>
+                  <div className="flex justify-between text-[11px] pt-1.5 border-t border-slate-800 font-bold">
+                    <span className="text-slate-300">{horizonYears}-Yr Wealth:</span>
+                    <span className="text-indigo-400 font-mono">+{formatEur(result.selectedHorizonShortTermWealthEur)}</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
           </div>
 
-          {/* 5-Year & 10-Year Cumulative Wealth Bar Chart */}
+          {/* Year-by-Year Multi-Year Comparison Schedule Table */}
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-4">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 pb-2 border-b border-slate-800 flex items-center justify-between">
-              <span>Cumulative Net Worth Comparison (5-Year & 10-Year Horizons)</span>
-              <span className="text-[10px] text-slate-400 font-mono">Equity + Cash</span>
-            </h3>
-
-            <div className="space-y-4">
-              
-              {/* 5-Year Horizon */}
-              <div>
-                <div className="flex justify-between text-xs mb-1.5 font-bold">
-                  <span className="text-slate-300">5-Year Net Wealth Projection</span>
-                </div>
-                <div className="space-y-2 text-xs">
-                  <div>
-                    <div className="flex justify-between text-[11px] mb-1">
-                      <span className="text-slate-400">If You Sell Now & Reinvest at {alternativeReturnPercent}%:</span>
-                      <strong className="text-brand-300 font-mono">{formatEur(result.fiveYearReinvestmentWealthEur)}</strong>
-                    </div>
-                    <div className="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
-                      <div className="bg-brand-500 h-full rounded-full" style={{ width: '75%' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between text-[11px] mb-1">
-                      <span className="text-slate-400">If You Hold & Rent Long-Term:</span>
-                      <strong className="text-emerald-400 font-mono">{formatEur(result.fiveYearRentalWealthEur)}</strong>
-                    </div>
-                    <div className="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
-                      <div
-                        className="bg-emerald-500 h-full rounded-full"
-                        style={{
-                          width: `${Math.min(100, (result.fiveYearRentalWealthEur / Math.max(result.fiveYearRentalWealthEur, result.fiveYearReinvestmentWealthEur)) * 100)}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <TableIcon className="w-4 h-4 text-brand-400" />
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                  Year-by-Year Cumulative Wealth Schedule
+                </h3>
               </div>
+              <span className="text-[10px] text-slate-400 font-mono">
+                Nominal Values (€)
+              </span>
+            </div>
 
-              {/* 10-Year Horizon */}
-              <div className="pt-3 border-t border-slate-800">
-                <div className="flex justify-between text-xs mb-1.5 font-bold">
-                  <span className="text-slate-300">10-Year Long-Range Wealth Projection</span>
-                </div>
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block uppercase">10-Yr Reinvestment</span>
-                    <strong className="text-lg font-black text-brand-400 font-mono">
-                      {formatEur(result.tenYearReinvestmentWealthEur)}
-                    </strong>
-                  </div>
-                  <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block uppercase">10-Yr Rent & Property</span>
-                    <strong className="text-lg font-black text-emerald-400 font-mono">
-                      {formatEur(result.tenYearRentalWealthEur)}
-                    </strong>
-                  </div>
-                </div>
-              </div>
-
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left">
+                <thead>
+                  <tr className="border-b border-slate-800 text-[11px] text-slate-400 uppercase font-bold">
+                    <th className="pb-2">Year</th>
+                    <th className="pb-2">Sell & Reinvest ({alternativeReturnPercent}%)</th>
+                    <th className="pb-2">Hold & Rent ({propertyAppreciationPercent}% Apprec.)</th>
+                    {includeShortTerm && <th className="pb-2">Short-Term (Airbnb)</th>}
+                    <th className="pb-2">Property Value</th>
+                    {hasMortgage && <th className="pb-2">Remaining Debt</th>}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60 font-mono text-xs">
+                  {result.yearlyBreakdown.filter((p) => [1, 2, 3, 5, 10, 15].includes(p.year)).map((pt) => {
+                    const isSelected = pt.year === horizonYears;
+                    return (
+                      <tr 
+                        key={pt.year}
+                        className={`transition-colors ${
+                          isSelected ? 'bg-brand-500/10 font-bold' : 'hover:bg-slate-800/40'
+                        }`}
+                      >
+                        <td className="py-2.5 text-slate-200">
+                          Year {pt.year} {isSelected && <span className="text-brand-400 font-sans text-[10px]">(Active)</span>}
+                        </td>
+                        <td className="py-2.5 text-brand-300">
+                          {formatEur(pt.sellingWealth)}
+                        </td>
+                        <td className="py-2.5 text-emerald-400">
+                          {formatEur(pt.rentingWealth)}
+                        </td>
+                        {includeShortTerm && (
+                          <td className="py-2.5 text-indigo-300">
+                            {formatEur(pt.shortTermWealth || 0)}
+                          </td>
+                        )}
+                        <td className="py-2.5 text-slate-400">
+                          {formatEur(pt.propertyValue)}
+                        </td>
+                        {hasMortgage && (
+                          <td className="py-2.5 text-rose-300">
+                            {formatEur(pt.remainingMortgage)}
+                          </td>
+                        )}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
 
