@@ -3,19 +3,16 @@ import {
   Building2, 
   Scale, 
   Calculator, 
-  Search, 
   CheckCircle2, 
   ChevronDown, 
-  Sparkles,
-  Activity
+  Sparkles
 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { Language } from '../types';
 
 interface Props {
-  activeTab: 'listingAnalyzer' | 'sellVsRent' | 'calculator';
-  setActiveTab: (tab: 'listingAnalyzer' | 'sellVsRent' | 'calculator') => void;
-  openSyncModal: () => void;
+  activeTab: 'sellVsRent' | 'calculator';
+  setActiveTab: (tab: 'sellVsRent' | 'calculator') => void;
 }
 
 const LANGUAGES: { code: Language; label: string; flag: string }[] = [
@@ -26,8 +23,8 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
   { code: 'uk', label: 'Українська', flag: '🇺🇦' },
 ];
 
-export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal }) => {
-  const { language, setLanguage, t } = useI18n();
+export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
+  const { language, setLanguage } = useI18n();
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
 
   const currentLang = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
@@ -66,59 +63,32 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal
             {/* Tab 1: Sell vs Rent Optimizer */}
             <button
               onClick={() => setActiveTab('sellVsRent')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
                 activeTab === 'sellVsRent'
                   ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-lg shadow-brand-500/30 ring-1 ring-white/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
               }`}
             >
               <Scale className="w-4 h-4 text-emerald-400" />
-              <span>Sell vs. Rent</span>
+              <span>Owner Strategy: Sell vs. Rent</span>
             </button>
 
-            {/* Tab 2: Listing Offer Analyzer */}
-            <button
-              onClick={() => setActiveTab('listingAnalyzer')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
-                activeTab === 'listingAnalyzer'
-                  ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-lg shadow-brand-500/30 ring-1 ring-white/20'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
-              }`}
-            >
-              <Search className="w-4 h-4 text-brand-300" />
-              <span>Listing Evaluator</span>
-            </button>
-
-            {/* Tab 3: ROI & Fiscal Engine */}
+            {/* Tab 2: ROI & Fiscal Engine */}
             <button
               onClick={() => setActiveTab('calculator')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-200 ${
                 activeTab === 'calculator'
                   ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-lg shadow-brand-500/30 ring-1 ring-white/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
               }`}
             >
               <Calculator className="w-4 h-4 text-amber-400" />
-              <span>ROI & Taxes</span>
+              <span>ROI & Romanian Tax Engine</span>
             </button>
           </nav>
 
-          {/* Right Actions: Live Data Sync & Language Switcher */}
+          {/* Right Actions: 5-Language Switcher */}
           <div className="flex items-center gap-3">
-            
-            <button
-              type="button"
-              onClick={openSyncModal}
-              className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-950/30 hover:bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs font-bold transition-all"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="text-[11px]">ANCPI & data.gov.ro</span>
-            </button>
-
-            {/* Language Switcher */}
             <div className="relative">
               <button
                 type="button"
@@ -155,7 +125,6 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal
                 </div>
               )}
             </div>
-
           </div>
 
         </div>

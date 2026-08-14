@@ -1,5 +1,4 @@
 import { 
-  Property, 
   FinancialCalculationResult, 
   ROITaxSettings, 
   SellVsRentInputs, 
@@ -9,7 +8,6 @@ import {
   StressScenarioResult,
   LegalRiskAnalysis
 } from '../types';
-import { COUNTY_MACRO_STATS } from '../data/insseCountyStats';
 
 export const DEFAULT_TAX_SETTINGS: ROITaxSettings = {
   flatTaxRatePercent: 10,
@@ -28,140 +26,10 @@ export const DEFAULT_TAX_SETTINGS: ROITaxSettings = {
   vacancyRatePercent: 5.0,
 };
 
-export interface PropertyScoreResult {
-  livabilityScore: number;
-  safetyScore: number;
-  investmentScore: number;
-  compositeOverallScore: number;
-  highlights: string[];
-  warnings: string[];
-}
-
-export function calculatePropertyScores(property: Property): PropertyScoreResult {
-  const highlights: string[] = [];
-  const warnings: string[] = [];
-
-  // 1. Livability Score (0 - 100)
-  const d = property.diagnostics;
-  let livability = 0;
-
-  livability += (d.mobility.walkScore * 0.20);
-  livability += (d.mobility.transitScore * 0.15);
-  if (d.mobility.walkScore > 85) highlights.push('Exceptional walkability to daily amenities (15-min city)');
-
-  const schoolScoreNorm = Math.min(100, Math.max(0, (d.education.examAverageScore / 10) * 100));
-  livability += (schoolScoreNorm * 0.25);
-  if (d.education.examAverageScore >= 9.0) highlights.push(`Top rated school nearby (${d.education.nearestSchoolName} - Avg ${d.education.examAverageScore})`);
-
-  const airScore = Math.max(0, 100 - (d.airQuality.aqi * 1.0));
-  livability += (airScore * 0.25);
-  if (d.airQuality.aqi <= 35) highlights.push('Clean air sensor readings (Low PM2.5 / PM10)');
-  else if (d.airQuality.aqi > 70) warnings.push('Elevated urban particulate pollution (PM2.5) during peak traffic hours');
-
-  const commuteScore = Math.max(0, 100 - (d.mobility.commuteToCityCenterMin * 3));
-  livability += (commuteScore * 0.15);
-
-  livability = Math.round(Math.min(100, Math.max(10, livability)));
-
-  // 2. Safety & Structural Score (0 - 100)
-  let safety = 85;
-
-  switch (d.seismic.riskClass) {
-    case 'NEW_BUILD_SAFE':
-      safety = 98;
-      highlights.push('Complies with modern Eurocode 8 & P100-1/2013 seismic standards');
-      break;
-    case 'POST_1977_SAFE':
-      safety = 85;
-      highlights.push('Built after 1977 with earthquake-resistant reinforced concrete framing');
-      break;
-    case 'RsIV':
-      safety = 70;
-      break;
-    case 'RsIII':
-      safety = 55;
-      warnings.push('Class RsIII: Moderate structural and non-structural damage expected under major seismic event');
-      break;
-    case 'U3':
-      safety = 50;
-      warnings.push('Urgency Category U3 (Pre-1996 classification)');
-      break;
-    case 'RsII':
-    case 'U2':
-      safety = 35;
-      warnings.push('Class RsII: Major structural damage risk; special bank insurance needed');
-      break;
-    case 'RsI':
-    case 'U1':
-      safety = 12;
-      warnings.push('CRITICAL RISK: Class RsI (Red Bullet) - Ineligible for bank mortgages, high collapse hazard');
-      break;
-    case 'UNEXPERTIZED_PRE_1977':
-      safety = 40;
-      warnings.push('Built pre-1977 and unexpertized - high structural vulnerability alert');
-      break;
-  }
-
-  if (d.flood.level === 'HIGH_HQ10') {
-    safety -= 30;
-    warnings.push('High Flood Hazard Zone (HQ10 10-year river overflow risk)');
-  } else if (d.flood.level === 'MEDIUM_HQ100') {
-    safety -= 15;
-    warnings.push('Medium Flood Hazard Zone (HQ100 100-year return period)');
-  }
-
-  if (d.heritage.isMonument) {
-    warnings.push('Historical Monument (LMI) / Protected Zone: Facade alteration and renovation strictly regulated');
-  }
-
-  safety = Math.round(Math.min(100, Math.max(5, safety)));
-
-  // 3. Investment Viability Score (0 - 100)
-  const macro = COUNTY_MACRO_STATS[property.city] || COUNTY_MACRO_STATS['Bucharest'];
-  let investment = 50;
-
-  const grossYield = ((property.investment.monthlyRentEstimateEur * 12) / property.priceEur) * 100;
-  if (grossYield >= 7.0) investment += 25;
-  else if (grossYield >= 5.5) investment += 18;
-  else if (grossYield >= 4.5) investment += 10;
-
-  if (macro.population5YrGrowthPercent > 5.0) {
-    investment += 15;
-    highlights.push(`High demographic migration in ${property.city} (+${macro.population5YrGrowthPercent}% 5-yr growth)`);
-  } else if (macro.population5YrGrowthPercent > 0) {
-    investment += 8;
-  }
-
-  if (macro.transactionsYoYPercent > 5.0) {
-    investment += 10;
-    highlights.push(`Strong ANCPI transaction liquidity (+${macro.transactionsYoYPercent}% YoY sales)`);
-  }
-
-  if (macro.priceToIncomeYears <= 8.5) {
-    investment += 10;
-    highlights.push(`Favorable Affordability Index (${macro.priceToIncomeYears} years of avg net wage to purchase)`);
-  }
-
-  if (['RsI', 'U1', 'RsII'].includes(d.seismic.riskClass)) {
-    investment -= 35;
-  }
-
-  investment = Math.round(Math.min(100, Math.max(10, investment)));
-
-  const compositeOverallScore = Math.round((livability * 0.35) + (safety * 0.35) + (investment * 0.30));
-
-  return {
-    livabilityScore: livability,
-    safetyScore: safety,
-    investmentScore: investment,
-    compositeOverallScore,
-    highlights,
-    warnings,
-  };
-}
-
+// -------------------------------------------------------------
+// 1. REAL ESTATE ROI & ROMANIAN TAX ENGINE
+// -------------------------------------------------------------
 export function calculateRealEstateFinancials(
-  property: Property,
   inputs: {
     purchasePrice: number;
     downPaymentPercent: number;
@@ -172,12 +40,14 @@ export function calculateRealEstateFinancials(
     managementFeePercent: number;
     maintenanceReservePercent: number;
     customRenovationEur?: number;
+    shortTermNightlyRateEur?: number;
+    shortTermOccupancyPercent?: number;
   },
   taxSettings: ROITaxSettings = DEFAULT_TAX_SETTINGS
 ): FinancialCalculationResult {
   const price = inputs.purchasePrice;
   const notaryAndLegalFees = price * 0.018;
-  const furnishingAndReno = inputs.customRenovationEur ?? property.investment.estimatedRenovationCostEur;
+  const furnishingAndReno = inputs.customRenovationEur ?? 5000;
   const totalAcquisitionCost = price + notaryAndLegalFees + furnishingAndReno;
 
   const grossMonthlyRent = inputs.monthlyRentEur;
@@ -231,8 +101,8 @@ export function calculateRealEstateFinancials(
   const totalOutOfPocketCapital = downPaymentEur + notaryAndLegalFees + furnishingAndReno;
   const cashOnCashReturnPercent = totalOutOfPocketCapital > 0 ? (annualCashFlowAfterDebtEur / totalOutOfPocketCapital) * 100 : 0;
 
-  const nightlyRate = property.investment.shortTermNightlyRateEur;
-  const occupancyDays = 365 * (property.investment.shortTermOccupancyPercent / 100);
+  const nightlyRate = inputs.shortTermNightlyRateEur ?? Math.round(grossMonthlyRent / 11);
+  const occupancyDays = 365 * ((inputs.shortTermOccupancyPercent ?? 70) / 100);
   const shortTermGrossAnnualEur = nightlyRate * occupancyDays;
   const platformFeeAndCleaning = shortTermGrossAnnualEur * 0.28;
   const shortTermUtilities = 1800;
@@ -267,7 +137,7 @@ export function calculateRealEstateFinancials(
 }
 
 // -------------------------------------------------------------
-// ADVANCED SELL VS. RENT DECISION CALCULATOR
+// 2. OWNER STRATEGY: SELL VS. RENT OPTIMIZER
 // -------------------------------------------------------------
 export function calculateSellVsRent(
   inputs: SellVsRentInputs,
@@ -275,16 +145,15 @@ export function calculateSellVsRent(
 ): SellVsRentResult {
   const actualSalePrice = inputs.currentPropertyMarketValueEur;
   
-  // Selling Transfer Tax Base (Accounts for potential under-declaration simulation)
+  // Selling Transfer Tax Base
   const taxableDeclaredSalePrice = inputs.simulateInformalSellingPriceUnderdeclaration && inputs.unreportedDeclaredPriceEur > 0
     ? inputs.unreportedDeclaredPriceEur
     : actualSalePrice;
 
-  // 1. Romanian Real Estate Transfer Tax (Cod Fiscal Art. 111)
+  // Romanian Real Estate Transfer Tax (Cod Fiscal Art. 111)
   const transferTaxRatePercent = inputs.ownershipDurationYears > 3 ? 1.0 : 3.0;
   const transferTaxEur = taxableDeclaredSalePrice * (transferTaxRatePercent / 100);
   
-  // Agency / Marketing commission + Notary seller fee
   const agentCommissionRate = (inputs.realEstateAgentCommissionPercent ?? 0) / 100;
   const notaryAndAgentFeesEur = (taxableDeclaredSalePrice * agentCommissionRate) + (taxableDeclaredSalePrice * 0.005);
   const sellingPreparationCostEur = inputs.sellingPreparationCostEur ?? 0;
@@ -295,17 +164,17 @@ export function calculateSellVsRent(
   const prepaymentPenaltyEur = remainingMortgage * prepaymentPenaltyRate;
   const mortgagePayoffEur = remainingMortgage + prepaymentPenaltyEur;
   
-  // Net cash proceeds from immediate sale (Seller receives actualSalePrice minus fees)
+  // Net cash proceeds from sale
   const netCashProceedsFromSaleEur = Math.max(
     0,
     actualSalePrice - transferTaxEur - notaryAndAgentFeesEur - sellingPreparationCostEur - mortgagePayoffEur
   );
 
-  // 2. Reinvestment of Sale Proceeds (Handles 0% up to 15%+)
+  // Reinvestment of Sale Proceeds
   const reinvestmentRate = Math.max(0, inputs.alternativeInvestmentReturnRatePercent / 100);
   const annualReinvestmentIncomeEur = netCashProceedsFromSaleEur * reinvestmentRate;
 
-  // 3. Tax Regime Comparison
+  // Tax Regime Comparison
   const annualGrossRentEur = inputs.estimatedMonthlyRentEur * 12;
   const grossRentRon = annualGrossRentEur * taxSettings.eurToRonRate;
   const annualMaintenanceAndInsuranceEur = (inputs.monthlyOperatingExpensesEur * 12) + taxSettings.padInsuranceAnnualEur + taxSettings.facultativeInsuranceAnnualEur;
@@ -320,7 +189,7 @@ export function calculateSellVsRent(
   else if (taxableRentRonFlat >= 6 * minWage) cassRonFlat = 6 * minWage * 0.10;
   const annualTaxEurFlat = (taxRonFlat + cassRonFlat) / taxSettings.eurToRonRate;
 
-  // B. PF Sistem Real (Actual Expenses)
+  // B. PF Sistem Real
   const deductibleExpensesRon = annualMaintenanceAndInsuranceEur * taxSettings.eurToRonRate;
   const netIncomeRealRon = Math.max(0, grossRentRon - deductibleExpensesRon);
   const taxRonReal = netIncomeRealRon * 0.10;
@@ -330,15 +199,12 @@ export function calculateSellVsRent(
   else if (netIncomeRealRon >= 6 * minWage) cassRonReal = 6 * minWage * 0.10;
   const annualTaxEurReal = (taxRonReal + cassRonReal) / taxSettings.eurToRonRate;
 
-  // C. SRL Micro (1% or 3% micro + 8% dividend tax on net profit)
+  // C. SRL Micro
   const microTurnoverTaxRon = grossRentRon * 0.01;
   const srlAccountingCostEur = 600;
   const srlNetProfitEur = Math.max(0, annualGrossRentEur - (microTurnoverTaxRon / taxSettings.eurToRonRate) - annualMaintenanceAndInsuranceEur - srlAccountingCostEur);
   const srlDividendTaxEur = srlNetProfitEur * 0.08;
   const annualTaxEurSRL = (microTurnoverTaxRon / taxSettings.eurToRonRate) + srlDividendTaxEur + srlAccountingCostEur;
-
-  // D. Informal 0% Tax (Unreported Rental / Contract Neînregistrat ANAF)
-  const annualTaxEurInformal = 0;
 
   const taxRegimesComparison: TaxRegimeComparison[] = [
     {
@@ -375,27 +241,23 @@ export function calculateSellVsRent(
     }
   ];
 
-  // Selected regime tax
   let selectedAnnualTaxEur = annualTaxEurFlat;
   if (inputs.taxRegime === 'INDIVIDUAL_REAL') selectedAnnualTaxEur = annualTaxEurReal;
   else if (inputs.taxRegime === 'SRL_MICRO') selectedAnnualTaxEur = annualTaxEurSRL;
-  else if (inputs.taxRegime === 'INFORMAL_ZERO_TAX') selectedAnnualTaxEur = annualTaxEurInformal;
+  else if (inputs.taxRegime === 'INFORMAL_ZERO_TAX') selectedAnnualTaxEur = 0;
 
   const annualTaxesAndExpensesEur = selectedAnnualTaxEur + annualMaintenanceAndInsuranceEur;
   const annualMortgagePaymentsEur = inputs.hasExistingMortgage ? inputs.monthlyMortgagePaymentEur * 12 : 0;
   const annualNetRentalCashFlowEur = annualGrossRentEur - annualTaxesAndExpensesEur - annualMortgagePaymentsEur;
   const monthlyNetRentalCashFlowEur = annualNetRentalCashFlowEur / 12;
 
-  // Property Appreciation Rate
   const appreciationRate = Math.max(0, (inputs.propertyAppreciationRatePercent ?? 3.5) / 100);
   const inflationRate = inputs.adjustForInflation ? (inputs.annualInflationRatePercent ?? 3.0) / 100 : 0;
 
-  // Short-Term Renting Calculation
   const annualShortTermNetCashFlowEur = inputs.includeShortTermOption
     ? inputs.estimatedShortTermMonthlyNetEur * 12 - annualMortgagePaymentsEur
     : 0;
 
-  // 4. Multi-Year Projection (Year 1 to 15) with Accelerated Prepayment support
   const maxYears = 15;
   const yearlyBreakdown: YearlyWealthPoint[] = [];
   let mortgageDebtFreeYear: number | undefined = undefined;
@@ -403,15 +265,12 @@ export function calculateSellVsRent(
   let cumulativeCashFlowTracker = 0;
 
   for (let yr = 1; yr <= maxYears; yr++) {
-    // Selling Route
-    let sellingWealth = reinvestmentRate > 0 
+    const sellingWealth = reinvestmentRate > 0 
       ? netCashProceedsFromSaleEur * Math.pow(1 + reinvestmentRate, yr)
       : netCashProceedsFromSaleEur;
 
-    // Property Value
     const propertyValue = actualSalePrice * Math.pow(1 + appreciationRate, yr);
 
-    // Mortgage Amortization (Standard vs Accelerated Prepayment)
     if (inputs.hasExistingMortgage && remainingMortgageTracker > 0) {
       if (inputs.reinvestCashFlowToPrepayMortgage && annualNetRentalCashFlowEur > 0) {
         const regularPrincipalPayment = inputs.remainingMortgageBalanceEur / Math.max(1, inputs.remainingMortgageYears);
@@ -430,17 +289,14 @@ export function calculateSellVsRent(
       cumulativeCashFlowTracker += annualNetRentalCashFlowEur;
     }
 
-    // Renting Wealth
     const rentingWealth = (propertyValue - remainingMortgageTracker) + cumulativeCashFlowTracker;
 
-    // Short-Term Wealth
     let shortTermWealth: number | undefined = undefined;
     if (inputs.includeShortTermOption) {
       const cumulativeShortTerm = annualShortTermNetCashFlowEur * yr;
       shortTermWealth = (propertyValue - remainingMortgageTracker) + cumulativeShortTerm;
     }
 
-    // Inflation adjustments
     const inflationFactor = Math.pow(1 + inflationRate, yr);
     const realPurchasingPowerSelling = inputs.adjustForInflation ? sellingWealth / inflationFactor : undefined;
     const realPurchasingPowerRenting = inputs.adjustForInflation ? rentingWealth / inflationFactor : undefined;
@@ -458,7 +314,6 @@ export function calculateSellVsRent(
     });
   }
 
-  // Horizon metrics
   const horizon = Math.min(15, Math.max(1, inputs.projectionHorizonYears || 5));
   const horizonPoint = yearlyBreakdown.find((p) => p.year === horizon) || yearlyBreakdown[4];
   const point5Y = yearlyBreakdown[4];
@@ -481,7 +336,6 @@ export function calculateSellVsRent(
   const tenYearReinvestmentWealthEur = point10Y.sellingWealth;
   const tenYearRentalWealthEur = point10Y.rentingWealth;
 
-  // 5. Stress-Test Scenarios (Bear, Base, Bull)
   const stressScenarios: StressScenarioResult[] = [
     {
       scenarioName: 'Bear (Pessimistic)',
@@ -509,13 +363,12 @@ export function calculateSellVsRent(
     }
   ];
 
-  // 6. Legal Risk & Compliance Analysis
   const hasInformalRenting = inputs.taxRegime === 'INFORMAL_ZERO_TAX';
   const hasInformalSelling = inputs.simulateInformalSellingPriceUnderdeclaration;
   
   const estimatedUnpaidTaxes5Y = hasInformalRenting ? annualTaxEurFlat * 5 : 0;
   const estimatedUnderdeclaredTransferTax = hasInformalSelling ? (actualSalePrice - taxableDeclaredSalePrice) * (transferTaxRatePercent / 100) : 0;
-  const anfePenaltiesEstimateEur = Math.round((estimatedUnpaidTaxes5Y + estimatedUnderdeclaredTransferTax) * 1.70); // unpaid taxes + 0.08%/day delay penalty + ANAF non-declaration surcharge (0.08%/day)
+  const anfePenaltiesEstimateEur = Math.round((estimatedUnpaidTaxes5Y + estimatedUnderdeclaredTransferTax) * 1.70);
 
   const legalRisk: LegalRiskAnalysis = {
     hasInformalRenting,
@@ -525,7 +378,6 @@ export function calculateSellVsRent(
     penaltiesDescription: 'Consecințe legale: Dobânzi și penalități de întârziere ANAF (0.02% dobândă/zi + 0.01% penalitate/zi + 0.08% penalitate de nedeclarare), executare silită pe conturi bancare, pierderea dreptului de a evacua legal chiriașii rău-platnici prin titlu executoriu și răspundere penală pentru fapte de evaziune fiscală.'
   };
 
-  // 7. Strategic Verdict
   let recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM' = 'RENT_LONG_TERM';
   const verdictHighlights: string[] = [];
 
