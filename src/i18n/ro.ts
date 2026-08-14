@@ -15,6 +15,13 @@ export const ro: TranslationDictionary = {
     emerald: 'Smarald & Bogăție',
     accessibility: 'Contrast Înalt (AAA)',
   },
+  mode: {
+    quick: 'Mod Rapid ⚡',
+    quickDesc: 'Estimare în 15 secunde pentru proprietari și cumpărători',
+    pro: 'Mod Avansat Pro 🔬',
+    proDesc: 'Motor complet cu peste 20 de variabile și legislație fiscală',
+    switchMode: 'Schimbă Modul',
+  },
   home: {
     heroBadge: 'ROImob • Motor Financiar și Fiscal Imobiliar pentru România',
     heroTitle: 'Calcule Financiare și Fiscale Clare pentru Imobiliare în România',

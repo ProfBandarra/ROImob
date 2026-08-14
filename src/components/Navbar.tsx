@@ -21,11 +21,13 @@ import {
 import { useI18n } from '../i18n';
 import { useTheme } from '../theme';
 import { useCurrency } from '../currency';
-import { Language, Theme } from '../types';
+import { Language, Theme, CalculatorMode } from '../types';
 
 interface Props {
   activeTab: 'home' | 'sellVsRent' | 'calculator';
   setActiveTab: (tab: 'home' | 'sellVsRent' | 'calculator') => void;
+  calculatorMode: CalculatorMode;
+  setCalculatorMode: (mode: CalculatorMode) => void;
 }
 
 const LANGUAGES: { code: Language; label: string; flag: string }[] = [
@@ -37,7 +39,12 @@ const LANGUAGES: { code: Language; label: string; flag: string }[] = [
   { code: 'pt', label: 'Português', flag: '🇵🇹' },
 ];
 
-export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
+export const Navbar: React.FC<Props> = ({ 
+  activeTab, 
+  setActiveTab,
+  calculatorMode,
+  setCalculatorMode
+}) => {
   const { language, setLanguage, t } = useI18n();
   const { theme, setTheme, themeConfig } = useTheme();
   const { currency, setCurrency } = useCurrency();
@@ -137,9 +144,41 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
               </button>
             </nav>
 
-            {/* Desktop Actions: Currency, Theme & Language (Hidden on mobile) */}
+            {/* Desktop Actions: Mode Switcher, Currency, Theme & Language (Hidden on mobile) */}
             <div className="hidden sm:flex items-center gap-2">
               
+              {/* Mode Toggle (Quick ⚡ vs Pro 🔬) */}
+              <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-sm text-xs font-bold">
+                <button
+                  type="button"
+                  onClick={() => setCalculatorMode('simple')}
+                  className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer ${
+                    calculatorMode === 'simple'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm font-black'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title={t.mode.quickDesc}
+                >
+                  <span>⚡</span>
+                  <span className="hidden xl:inline">{t.mode.quick}</span>
+                  <span className="xl:hidden">Quick</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCalculatorMode('pro')}
+                  className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer ${
+                    calculatorMode === 'pro'
+                      ? 'bg-brand-600 text-white shadow-sm font-black'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title={t.mode.proDesc}
+                >
+                  <span>🔬</span>
+                  <span className="hidden xl:inline">{t.mode.pro}</span>
+                  <span className="xl:hidden">Pro</span>
+                </button>
+              </div>
+
               {/* Global Currency Toggle (EUR ↔ RON) */}
               <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-sm text-xs font-mono font-bold">
                 <button
@@ -302,6 +341,39 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
         {mobileMenuOpen && (
           <div className="sm:hidden border-t border-slate-800 bg-slate-950/98 px-4 py-6 space-y-6 animate-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto">
             
+            {/* Mode Selection Row on Mobile */}
+            <div className="space-y-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-2 block">
+                {t.mode.switchMode}
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCalculatorMode('simple')}
+                  className={`p-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    calculatorMode === 'simple'
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-md font-black'
+                      : 'bg-slate-900 border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <span>⚡</span>
+                  <span>{t.mode.quick}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCalculatorMode('pro')}
+                  className={`p-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    calculatorMode === 'pro'
+                      ? 'bg-brand-600 text-white border-brand-500 shadow-md font-black'
+                      : 'bg-slate-900 border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <span>🔬</span>
+                  <span>{t.mode.pro}</span>
+                </button>
+              </div>
+            </div>
+
             {/* 1. Mobile Navigation Links */}
             <div className="space-y-2">
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-2 block">

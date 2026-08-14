@@ -10,10 +10,17 @@ export const pt: TranslationDictionary = {
   },
   theme: {
     label: 'Tema',
-    midnight: 'Meia-Noite Escuro (Midnight)',
-    corporate: 'Claro Corporativo (Corporate)',
-    emerald: 'Esmeralda & Riqueza',
+    midnight: 'Meia-Noite Escuro',
+    corporate: 'Claro Corporativo',
+    emerald: 'Esmeralda Património',
     accessibility: 'Alto Contraste (AAA)',
+  },
+  mode: {
+    quick: 'Modo Rápido ⚡',
+    quickDesc: 'Estimativa rápida em 15 segundos para proprietários e investidores',
+    pro: 'Modo Pro Institucional 🔬',
+    proDesc: 'Motor completo com 20+ variáveis e legislação fiscal romena',
+    switchMode: 'Alterar Modo',
   },
   home: {
     heroBadge: 'ROImob • Motor Financeiro e Fiscal Imobiliário para a Roménia',

@@ -10,10 +10,17 @@ export const fr: TranslationDictionary = {
   },
   theme: {
     label: 'Thème',
-    midnight: 'Nuit Sombre (Midnight)',
+    midnight: 'Sombre Minuit',
     corporate: 'Clair Corporate',
-    emerald: 'Émeraude & Richesse',
+    emerald: 'Émeraude Patrimoine',
     accessibility: 'Contraste Élevé (AAA)',
+  },
+  mode: {
+    quick: 'Mode Rapide ⚡',
+    quickDesc: 'Estimation rapide en 15 secondes pour propriétaires et acheteurs',
+    pro: 'Mode Pro Institutionnel 🔬',
+    proDesc: 'Moteur complet avec 20+ variables et barèmes fiscaux officiels',
+    switchMode: 'Changer de Mode',
   },
   home: {
     heroBadge: 'ROImob • Moteur Financier et Fiscal Immobilier pour la Roumanie',

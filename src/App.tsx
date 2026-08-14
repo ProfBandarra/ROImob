@@ -8,10 +8,23 @@ import { SellVsRentCalculator } from './components/SellVsRent/SellVsRentCalculat
 import { ROICalculator } from './components/FinancialEngine/ROICalculator';
 import { Footer } from './components/Footer';
 
+import { CalculatorMode } from './types';
+import { QuickSellVsRent } from './components/SimpleMode/QuickSellVsRent';
+import { QuickROICalculator } from './components/SimpleMode/QuickROICalculator';
+
 const MainAppContent: React.FC = () => {
   // Navigation State: 'home' | 'sellVsRent' | 'calculator'
   const [activeTab, setActiveTab] = useState<'home' | 'sellVsRent' | 'calculator'>('home');
+  const [calculatorMode, setCalculatorModeState] = useState<CalculatorMode>(() => {
+    const saved = localStorage.getItem('roimob_mode') as CalculatorMode;
+    return saved && ['simple', 'pro'].includes(saved) ? saved : 'simple';
+  });
   const { themeConfig } = useTheme();
+
+  const setCalculatorMode = (mode: CalculatorMode) => {
+    setCalculatorModeState(mode);
+    localStorage.setItem('roimob_mode', mode);
+  };
 
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-200 ${themeConfig.appBg} selection:bg-brand-500 selection:text-white`}>
@@ -20,6 +33,8 @@ const MainAppContent: React.FC = () => {
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        calculatorMode={calculatorMode}
+        setCalculatorMode={setCalculatorMode}
       />
 
       {/* Main Content Stage */}
@@ -30,17 +45,27 @@ const MainAppContent: React.FC = () => {
           <HomePage
             onNavigateToSellVsRent={() => setActiveTab('sellVsRent')}
             onNavigateToRoiCalculator={() => setActiveTab('calculator')}
+            calculatorMode={calculatorMode}
+            setCalculatorMode={setCalculatorMode}
           />
         )}
 
         {/* ENGINE 1: Owner Strategy - Sell vs. Rent Optimizer */}
         {activeTab === 'sellVsRent' && (
-          <SellVsRentCalculator />
+          calculatorMode === 'simple' ? (
+            <QuickSellVsRent onSwitchToPro={() => setCalculatorMode('pro')} />
+          ) : (
+            <SellVsRentCalculator onSwitchToSimple={() => setCalculatorMode('simple')} />
+          )
         )}
 
         {/* ENGINE 2: Romanian Real Estate ROI & Fiscal Engine */}
         {activeTab === 'calculator' && (
-          <ROICalculator />
+          calculatorMode === 'simple' ? (
+            <QuickROICalculator onSwitchToPro={() => setCalculatorMode('pro')} />
+          ) : (
+            <ROICalculator onSwitchToSimple={() => setCalculatorMode('simple')} />
+          )
         )}
 
       </main>

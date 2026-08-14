@@ -15,6 +15,13 @@ export const en: TranslationDictionary = {
     emerald: 'Emerald Wealth',
     accessibility: 'High Contrast (AAA)',
   },
+  mode: {
+    quick: 'Quick Check ⚡',
+    quickDesc: '15-second fast estimator for everyday homeowners & buyers',
+    pro: 'Institutional Pro 🔬',
+    proDesc: 'Full 20+ variable engine with legal Romanian tax schedules',
+    switchMode: 'Switch Mode',
+  },
   home: {
     heroBadge: 'ROImob • Romanian Real Estate Financial & Tax Engine',
     heroTitle: 'Clear Financial & Tax Calculations for Romanian Real Estate',

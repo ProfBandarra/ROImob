@@ -42,7 +42,11 @@ const CITY_PRICE_PER_SQM: Record<string, { base: number; rentRatio: number }> = 
   'Ilfov': { base: 1450, rentRatio: 0.0062 },
 };
 
-export const SellVsRentCalculator: React.FC = () => {
+interface Props {
+  onSwitchToSimple?: () => void;
+}
+
+export const SellVsRentCalculator: React.FC<Props> = ({ onSwitchToSimple }) => {
   const { t } = useI18n();
   const { formatMoney } = useCurrency();
   const { themeConfig, theme } = useTheme();
@@ -164,10 +168,22 @@ export const SellVsRentCalculator: React.FC = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
+          {onSwitchToSimple && (
+            <button
+              type="button"
+              onClick={onSwitchToSimple}
+              className="px-3.5 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold flex items-center justify-center gap-1.5 border border-amber-500/30 transition-all cursor-pointer shadow-md"
+              title="Switch to Simplified 3-Step Quick Check"
+            >
+              <span>⚡</span>
+              <span>Quick 15s Mode</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => setShowAutoValuator(true)}
-            className="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 transition-all"
+            className="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 transition-all cursor-pointer"
           >
             <Compass className="w-4 h-4" />
             <span>{t.sellVsRent.autoEstimateBtn}</span>
@@ -176,7 +192,7 @@ export const SellVsRentCalculator: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowReportModal(true)}
-            className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors shadow-md"
+            className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors shadow-md cursor-pointer"
           >
             <FileText className="w-4 h-4 text-brand-400" />
             <span>{t.sellVsRent.exportReportBtn}</span>

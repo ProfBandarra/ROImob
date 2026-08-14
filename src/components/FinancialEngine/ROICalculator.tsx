@@ -22,7 +22,11 @@ import {
 import { FormalReportModal } from '../ReportExport/FormalReportModal';
 import { ROIEquityCashflowChart } from '../Charts/ROIEquityCashflowChart';
 
-export const ROICalculator: React.FC = () => {
+interface Props {
+  onSwitchToSimple?: () => void;
+}
+
+export const ROICalculator: React.FC<Props> = ({ onSwitchToSimple }) => {
   const { t } = useI18n();
   const { themeConfig } = useTheme();
   const { formatMoney } = useCurrency();
@@ -105,14 +109,28 @@ export const ROICalculator: React.FC = () => {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setShowReportModal(true)}
-          className="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center justify-center gap-2 border border-brand-500 transition-colors shrink-0 shadow-lg shadow-brand-600/30 w-full sm:w-auto cursor-pointer"
-        >
-          <FileText className="w-4 h-4 text-white" />
-          <span>{t.roiCalculator.exportPdfBtn}</span>
-        </button>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 w-full sm:w-auto">
+          {onSwitchToSimple && (
+            <button
+              type="button"
+              onClick={onSwitchToSimple}
+              className="px-3.5 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold flex items-center justify-center gap-1.5 border border-amber-500/30 transition-all cursor-pointer shadow-md"
+              title="Switch to Simplified 3-Step Quick Check"
+            >
+              <span>⚡</span>
+              <span>Quick 15s Mode</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setShowReportModal(true)}
+            className="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center justify-center gap-2 border border-brand-500 transition-colors shadow-lg shadow-brand-600/30 cursor-pointer"
+          >
+            <FileText className="w-4 h-4 text-white" />
+            <span>{t.roiCalculator.exportPdfBtn}</span>
+          </button>
+        </div>
       </div>
 
       {/* Quick Price Preset Selectors */}

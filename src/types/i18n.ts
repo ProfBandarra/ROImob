@@ -13,6 +13,13 @@ export interface TranslationDictionary {
     emerald: string;
     accessibility: string;
   };
+  mode: {
+    quick: string;
+    quickDesc: string;
+    pro: string;
+    proDesc: string;
+    switchMode: string;
+  };
   home: {
     heroBadge: string;
     heroTitle: string;

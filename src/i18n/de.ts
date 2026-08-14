@@ -10,10 +10,17 @@ export const de: TranslationDictionary = {
   },
   theme: {
     label: 'Design',
-    midnight: 'Mitternacht Dunkel (Midnight)',
-    corporate: 'Hell & Klar (Corporate)',
-    emerald: 'Smaragd & Wohlstand',
+    midnight: 'Mitternacht Dunkel',
+    corporate: 'Hell (Corporate)',
+    emerald: 'Smaragd-Vermögen',
     accessibility: 'Hoher Kontrast (AAA)',
+  },
+  mode: {
+    quick: 'Schnellcheck ⚡',
+    quickDesc: '15-Sekunden-Schnellbewertung für Eigentümer & Käufer',
+    pro: 'Profi-Modus (Pro) 🔬',
+    proDesc: 'Vollständige Analyse mit über 20 Parametern und Steuerplänen',
+    switchMode: 'Modus Wechseln',
   },
   home: {
     heroBadge: 'ROImob • Immobilien-Finanz- und Steuer-Engine für Rumänien',

@@ -12,8 +12,15 @@ export const uk: TranslationDictionary = {
     label: 'Тема',
     midnight: 'Темна (Midnight)',
     corporate: 'Світла (Corporate)',
-    emerald: 'Смарагд & Капітал',
+    emerald: 'Смарагдова',
     accessibility: 'Високий Контраст (AAA)',
+  },
+  mode: {
+    quick: 'Швидкий Розрахунок ⚡',
+    quickDesc: '15-секундна оцінка для власників та покупців',
+    pro: 'Професійний Режим 🔬',
+    proDesc: 'Повний аналіз з понад 20 змінними та податковими сітками',
+    switchMode: 'Змінити Режим',
   },
   home: {
     heroBadge: 'ROImob • Фінансово-Податковий Калькулятор Нерухомості в Румунії',

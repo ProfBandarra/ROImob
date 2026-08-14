@@ -19,9 +19,14 @@ import {
 import { useI18n } from '../i18n';
 import { useTheme } from '../theme';
 
+import { CalculatorMode } from '../types';
+import { Zap, Settings2 } from 'lucide-react';
+
 interface Props {
   onNavigateToSellVsRent: () => void;
   onNavigateToRoiCalculator: () => void;
+  calculatorMode?: CalculatorMode;
+  setCalculatorMode?: (mode: CalculatorMode) => void;
 }
 
 const OFFICIAL_REFERENCES = [
@@ -74,7 +79,9 @@ const ISSUES_URL = 'https://github.com/ProfBandarra/ROImob/issues/new';
 
 export const HomePage: React.FC<Props> = ({
   onNavigateToSellVsRent,
-  onNavigateToRoiCalculator
+  onNavigateToRoiCalculator,
+  calculatorMode = 'simple',
+  setCalculatorMode
 }) => {
   const { t } = useI18n();
   const { themeConfig } = useTheme();
@@ -84,16 +91,49 @@ export const HomePage: React.FC<Props> = ({
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6 sm:space-y-10">
       
       {/* 1. Compact Header / Hero Intro */}
-      <div className={`relative overflow-hidden rounded-2xl sm:rounded-3xl ${themeConfig.cardBg} border ${themeConfig.cardBorder} p-5 sm:p-8 shadow-xl space-y-3 sm:space-y-4 transition-colors`}>
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-[11px] font-bold">
-            <Sparkles className="w-3.5 h-3.5 text-brand-400" />
-            <span>{t.home.heroBadge}</span>
+      <div className={`relative overflow-hidden rounded-2xl sm:rounded-3xl ${themeConfig.cardBg} border ${themeConfig.cardBorder} p-5 sm:p-8 shadow-xl space-y-4 transition-colors`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-[11px] font-bold">
+              <Sparkles className="w-3.5 h-3.5 text-brand-400" />
+              <span>{t.home.heroBadge}</span>
+            </div>
+            <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Law 227/2015 & OUG 115/2023 Compliant</span>
+            </span>
           </div>
-          <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Law 227/2015 & OUG 115/2023 Compliant</span>
-          </span>
+
+          {/* Mode Switcher Chips */}
+          {setCalculatorMode && (
+            <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-sm text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setCalculatorMode('simple')}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                  calculatorMode === 'simple'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                <span>{t.mode.quick}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setCalculatorMode('pro')}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                  calculatorMode === 'pro'
+                    ? 'bg-brand-600 text-white shadow-sm font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Settings2 className="w-3.5 h-3.5 text-brand-300" />
+                <span>{t.mode.pro}</span>
+              </button>
+            </div>
+          )}
         </div>
 
         <h1 className={`text-2xl sm:text-4xl font-black ${themeConfig.textPrimary} tracking-tight leading-tight`}>
