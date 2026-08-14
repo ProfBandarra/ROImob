@@ -23,7 +23,7 @@ const MainAppContent: React.FC = () => {
       />
 
       {/* Main Content Stage */}
-      <main className="flex-1 pb-16">
+      <main className="flex-1 pb-24 md:pb-16">
         
         {/* HOMEPAGE: Overview, Highlights & Legal Framework */}
         {activeTab === 'home' && (

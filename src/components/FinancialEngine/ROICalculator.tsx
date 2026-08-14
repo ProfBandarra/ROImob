@@ -93,10 +93,10 @@ export const ROICalculator: React.FC = () => {
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-5 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-5 sm:gap-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-3">
             <Calculator className="w-3.5 h-3.5 text-brand-400" />
@@ -113,7 +113,7 @@ export const ROICalculator: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowReportModal(true)}
-          className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors shrink-0 shadow-lg"
+          className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors shrink-0 shadow-lg w-full sm:w-auto"
         >
           <FileText className="w-4 h-4 text-brand-400" />
           <span>{t.roiCalculator.exportPdfBtn}</span>
@@ -121,27 +121,29 @@ export const ROICalculator: React.FC = () => {
       </div>
 
       {/* Quick Price Preset Selectors */}
-      <div className="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-2">
+      <div className="bg-slate-900/80 p-3 sm:p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row sm:items-center gap-2">
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
           {t.roiCalculator.quickPresetsTitle}
         </span>
-        {pricePresets.map((preset, idx) => (
-          <button
-            key={idx}
-            type="button"
-            onClick={() => {
-              setPurchasePrice(preset.price);
-              setMonthlyRentEur(preset.rent);
-            }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
-              purchasePrice === preset.price
-                ? 'bg-brand-600 border-brand-500 text-white shadow-md'
-                : 'bg-slate-950 border-slate-800 text-slate-300 hover:text-white'
-            }`}
-          >
-            {preset.label}
-          </button>
-        ))}
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+          {pricePresets.map((preset, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => {
+                setPurchasePrice(preset.price);
+                setMonthlyRentEur(preset.rent);
+              }}
+              className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition-all border text-center ${
+                purchasePrice === preset.price
+                  ? 'bg-brand-600 border-brand-500 text-white shadow-md'
+                  : 'bg-slate-950 border-slate-800 text-slate-300 hover:text-white'
+              }`}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Main 2-Column Grid */}

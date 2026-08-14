@@ -78,10 +78,10 @@ export const HomePage: React.FC<Props> = ({
   const { themeConfig, theme } = useTheme();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-10 sm:space-y-16">
       
       {/* 1. Main User Hero & Decision Hub */}
-      <div className={`relative overflow-hidden rounded-3xl ${themeConfig.cardBg} border ${themeConfig.cardBorder} p-8 sm:p-14 shadow-2xl space-y-8 transition-colors duration-200`}>
+      <div className={`relative overflow-hidden rounded-3xl ${themeConfig.cardBg} border ${themeConfig.cardBorder} p-6 sm:p-12 shadow-2xl space-y-6 sm:space-y-8 transition-colors duration-200`}>
         
         {/* Ambient Glow */}
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />

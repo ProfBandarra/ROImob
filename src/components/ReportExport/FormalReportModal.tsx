@@ -219,13 +219,13 @@ export const FormalReportModal: React.FC<Props> = ({
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
       
       {/* Modal Container */}
-      <div className="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden text-slate-900">
+      <div className="bg-slate-900 border border-slate-700 w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl shadow-2xl overflow-hidden text-slate-900">
         
         {/* Top Control Bar */}
-        <div className="bg-slate-950 p-4 border-b border-slate-800 flex items-center justify-between">
+        <div className="sticky top-0 z-20 bg-slate-950 p-3 sm:p-4 border-b border-slate-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-brand-400" />
-            <span className="text-sm font-bold text-white uppercase tracking-wider">
+            <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-brand-400 shrink-0" />
+            <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider truncate max-w-[180px] sm:max-w-none">
               {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi}
             </span>
           </div>
@@ -234,16 +234,16 @@ export const FormalReportModal: React.FC<Props> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-brand-600/30 transition-all cursor-pointer"
+              className="px-3 sm:px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-brand-600/30 transition-all cursor-pointer"
             >
-              <Printer className="w-4 h-4" />
+              <Printer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>{t.report.printBtn}</span>
             </button>
 
             <button
               type="button"
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -251,10 +251,10 @@ export const FormalReportModal: React.FC<Props> = ({
         </div>
 
         {/* Formal Printable Document Sheet */}
-        <div id="formal-report-print-sheet" className="p-8 sm:p-12 space-y-8 bg-white text-slate-900">
+        <div id="formal-report-print-sheet" className="p-4 sm:p-8 sm:p-12 space-y-6 sm:space-y-8 bg-white text-slate-900 overflow-y-auto flex-1">
           
           {/* Formal Letterhead */}
-          <div className="flex items-start justify-between pb-6 border-b-2 border-slate-900">
+          <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4 pb-4 sm:pb-6 border-b-2 border-slate-900">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold">
