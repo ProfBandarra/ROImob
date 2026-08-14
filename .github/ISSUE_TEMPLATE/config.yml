@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Community Discussions & Q&A
+    url: https://github.com/ProfBandarra/ROImob/discussions
+    about: Ask questions, share investment strategies, or discuss Romanian real estate market trends.
+  - name: 🌐 Live Web Application
+    url: https://www.roimob.eu/
+    about: Access the official live version of ROImob directly.

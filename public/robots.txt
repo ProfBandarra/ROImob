@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.roimob.eu/
+
+# Sitemaps
+Sitemap: https://www.roimob.eu/sitemap.xml

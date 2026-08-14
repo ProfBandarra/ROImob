@@ -2,19 +2,19 @@
 
 <div align="center">
 
+[![Live App](https://img.shields.io/badge/🌐%20Official%20Live%20App-www.roimob.eu-emerald?style=for-the-badge&logo=google-chrome)](https://www.roimob.eu/)
+[![Suggest Improvement](https://img.shields.io/badge/💡%20Suggest%20Improvement-Open%20Issue-brand?style=for-the-badge&color=6366f1)](https://github.com/ProfBandarra/ROImob/issues/new?template=feature_request.md)
 [![React](https://img.shields.io/badge/React-18.3-blue?style=for-the-badge&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
 [![Romanian Fiscal Code](https://img.shields.io/badge/Fiscal%20Code-2024--2026-emerald?style=for-the-badge)](https://static.anaf.ro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Modes](https://img.shields.io/badge/Modes-Quick%20⚡%20%7C%20Pro%20🔬-amber?style=for-the-badge)](#-dual-mode-architecture-quick-⚡-vs-pro-🔬)
-[![Themes](https://img.shields.io/badge/Themes-4%20Modes%20(incl.%20AAA)-purple?style=for-the-badge)](#-multi-theme-system)
-[![Currency](https://img.shields.io/badge/Currencies-5%20Currencies%20(EUR%20%7C%20RON%20%7C%20USD%20%7C%20GBP%20%7C%20CHF)-emerald?style=for-the-badge)](#-multi-currency-architecture-5-major-currencies)
-[![Languages](https://img.shields.io/badge/Languages-6%20Locales-blue?style=for-the-badge)](#-6-language-localization--translated-audit-reports)
 
 **An open-source, customer-friendly and institutional-grade decision intelligence suite for Romanian real estate owners, buyers, and investors.**
 
-[Overview](#-project-overview) • [Dual Modes](#-dual-mode-architecture-quick-⚡-vs-pro-🔬) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Audit Reports](#-institutional-audit-reports--printable-dossiers) • [Currency & Charts](#-global-currency-toggle-eur--ron) • [Themes](#-multi-theme-system) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization](#-6-language-localization--translated-audit-reports)
+🌐 **Live Application:** [**https://www.roimob.eu/**](https://www.roimob.eu/)
+
+[Overview](#-project-overview) • [Live App](https://www.roimob.eu/) • [Dual Modes](#-dual-mode-architecture-quick-⚡-vs-pro-🔬) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Audit Reports](#-institutional-audit-reports--printable-dossiers) • [Contributing](#-contributing--community-improvements) • [Legal Basis](#-statutory-romanian-legal-basis)
 
 <br />
 
@@ -174,6 +174,18 @@ Switching currency in the navigation bar dynamically updates all sliders, KPI sc
 
 ---
 
+## 🤝 Contributing & Community Improvements
+
+ROImob is 100% open-source and welcoming contributions from the community:
+
+- 💡 **Suggest an Idea or Feature**: Open a [Feature Request](https://github.com/ProfBandarra/ROImob/issues/new?template=feature_request.md)
+- 📜 **Report a Romanian Tax or Legislation Change**: Submit a [Fiscal Update](https://github.com/ProfBandarra/ROImob/issues/new?template=fiscal_update.md)
+- 🐛 **Report a Bug or Calculation Inaccuracy**: File a [Bug Report](https://github.com/ProfBandarra/ROImob/issues/new?template=bug_report.md)
+- 💬 **Join Community Discussions**: Participate in [GitHub Discussions](https://github.com/ProfBandarra/ROImob/discussions)
+- 🛠️ **Developer Contribution Guidelines**: See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
 ## 🛠️ Quick Start for Developers
 
 ```bash
@@ -198,4 +210,4 @@ npm run build
 
 ## 📄 License
 
-Released under the open-source **[MIT License](LICENSE)**. Contributions, audits, and PRs from the community are warmly welcomed.
+Released under the open-source **[MIT License](LICENSE)**. Community contributions, audits, and suggestions are warmly welcomed.
