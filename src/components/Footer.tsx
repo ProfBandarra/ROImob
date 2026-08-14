@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Scale, Calculator, ShieldCheck, Heart } from 'lucide-react';
+import { Building2, ShieldCheck } from 'lucide-react';
 import { useI18n } from '../i18n';
 
 export const Footer: React.FC = () => {
@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
                 ROI<span className="text-brand-400">mob</span> Calculators
               </span>
               <p className="text-[11px] text-slate-400">
-                Institutional Romanian Real Estate Financial & Tax Intelligence
+                {t.footer.tagline}
               </p>
             </div>
           </div>
@@ -27,17 +27,17 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-6 text-xs font-semibold">
             <div className="flex items-center gap-1.5 text-slate-300">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Romanian Fiscal Code 2024–2026 Compliant</span>
+              <span>{t.footer.fiscalCompliance}</span>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
           <p>
-            © {new Date().getFullYear()} ROImob. Romanian Real Estate Decision & ROI Suite.
+            © {new Date().getFullYear()} {t.footer.copyright}
           </p>
           <p className="flex items-center gap-1">
-            Built with institutional precision & multi-language support (EN • RO • FR • DE • UK)
+            {t.footer.builtWith}
           </p>
         </div>
 

@@ -1,36 +1,17 @@
 import React, { useState } from 'react';
 import { ROITaxSettings } from '../../types';
 import { calculateRealEstateFinancials, DEFAULT_TAX_SETTINGS } from '../../utils/calculations';
-import { formatEur, formatRon, formatPercent, formatNumber } from '../../utils/formatters';
+import { formatEur, formatRon, formatPercent } from '../../utils/formatters';
 import { useI18n } from '../../i18n';
 import { 
   Calculator, 
-  Banknote, 
-  TrendingUp, 
-  FileSpreadsheet, 
-  Coins, 
   Receipt, 
-  Percent, 
-  HelpCircle, 
   Sparkles, 
   Building, 
-  Calendar,
-  Layers,
-  ArrowRight,
-  BadgePercent,
-  CheckCircle2,
-  Printer,
-  Compass,
-  Sliders,
-  DollarSign
+  Coins, 
+  FileSpreadsheet, 
+  Printer 
 } from 'lucide-react';
-
-const PRICE_PRESETS = [
-  { label: 'Studio (€75k)', price: 75000, rent: 420 },
-  { label: '2-Room Standard (€120k)', price: 120000, rent: 650 },
-  { label: '3-Room Central (€185k)', price: 185000, rent: 950 },
-  { label: 'Premium / New Build (€260k)', price: 260000, rent: 1350 },
-];
 
 export const ROICalculator: React.FC = () => {
   const { t } = useI18n();
@@ -89,10 +70,17 @@ export const ROICalculator: React.FC = () => {
       year: yr,
       propertyValue: projectedPropertyValue,
       annualCashFlow,
-      cumulativeCashFlow,
+      cumulativeCash: cumulativeCashFlow,
       totalEquity: equityBuilt,
     };
   });
+
+  const pricePresets = [
+    { label: t.roiCalculator.presets.studio, price: 75000, rent: 420 },
+    { label: t.roiCalculator.presets.twoRoom, price: 120000, rent: 650 },
+    { label: t.roiCalculator.presets.threeRoom, price: 185000, rent: 950 },
+    { label: t.roiCalculator.presets.premium, price: 260000, rent: 1350 },
+  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -102,13 +90,13 @@ export const ROICalculator: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-3">
             <Calculator className="w-3.5 h-3.5 text-brand-400" />
-            <span>Romanian Fiscal Code 2024–2026 • Law 227/2015 & OUG 115/2023</span>
+            <span>ROImob Engine • Law 227/2015 & OUG 115/2023</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
-            Real Estate ROI & Romanian Tax Engine
+            {t.roiCalculator.title}
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-            Institutional investment evaluation, leveraged cash-on-cash yield, CASS health tax tier brackets, and 10-year equity amortization forecast.
+            {t.roiCalculator.subtitle}
           </p>
         </div>
 
@@ -118,16 +106,16 @@ export const ROICalculator: React.FC = () => {
           className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition-colors shrink-0 shadow-lg"
         >
           <Printer className="w-4 h-4 text-slate-400" />
-          <span>Export PDF Audit</span>
+          <span>{t.roiCalculator.exportPdfBtn}</span>
         </button>
       </div>
 
       {/* Quick Price Preset Selectors */}
       <div className="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 flex flex-wrap items-center gap-2">
         <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-2">
-          Quick Property Presets:
+          {t.roiCalculator.quickPresetsTitle}
         </span>
-        {PRICE_PRESETS.map((preset, idx) => (
+        {pricePresets.map((preset, idx) => (
           <button
             key={idx}
             type="button"
@@ -156,13 +144,13 @@ export const ROICalculator: React.FC = () => {
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-4 shadow-lg">
             <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 pb-2 border-b border-slate-800 flex items-center gap-2">
               <Building className="w-4 h-4 text-brand-400" />
-              <span>Acquisition Price & Financing Structure</span>
+              <span>{t.roiCalculator.acquisitionTitle}</span>
             </h3>
 
             {/* Purchase Price */}
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-400">Purchase Price:</span>
+                <span className="text-slate-400">{t.roiCalculator.purchasePrice}</span>
                 <strong className="text-white font-mono text-sm">{formatEur(purchasePrice)}</strong>
               </div>
               <input
@@ -179,7 +167,7 @@ export const ROICalculator: React.FC = () => {
             {/* Down Payment Presets */}
             <div>
               <div className="flex justify-between text-xs mb-1.5">
-                <span className="text-slate-400">Down Payment (Avans):</span>
+                <span className="text-slate-400">{t.roiCalculator.downPayment}</span>
                 <strong className="text-brand-300 font-mono font-bold">
                   {downPaymentPercent}% ({formatEur(calc.downPaymentEur)})
                 </strong>
@@ -196,7 +184,7 @@ export const ROICalculator: React.FC = () => {
                         : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
                     }`}
                   >
-                    {pct}% {pct === 15 ? '(1st Home)' : pct === 25 ? '(Invest)' : ''}
+                    {pct}% {pct === 15 ? t.roiCalculator.firstHomeLabel : pct === 25 ? t.roiCalculator.investLabel : ''}
                   </button>
                 ))}
               </div>
@@ -216,7 +204,7 @@ export const ROICalculator: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-800">
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-400">Interest (IRCC):</span>
+                    <span className="text-slate-400">{t.roiCalculator.mortgageInterestRate}</span>
                     <strong className="text-white font-mono">{interestRatePercent}%</strong>
                   </div>
                   <input
@@ -232,7 +220,7 @@ export const ROICalculator: React.FC = () => {
 
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-400">Loan Term:</span>
+                    <span className="text-slate-400">{t.roiCalculator.loanTermYears}</span>
                     <strong className="text-white font-mono">{loanTermYears} Yrs</strong>
                   </div>
                   <input
@@ -251,7 +239,7 @@ export const ROICalculator: React.FC = () => {
             {/* Renovation & Furnishing */}
             <div className="pt-2 border-t border-slate-800">
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-400">Renovation & Furnishing Budget:</span>
+                <span className="text-slate-400">{t.roiCalculator.renovationBudget}</span>
                 <strong className="text-white font-mono">{formatEur(renovationEur)}</strong>
               </div>
               <input
@@ -270,13 +258,13 @@ export const ROICalculator: React.FC = () => {
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 space-y-4 shadow-lg">
             <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200 pb-2 border-b border-slate-800 flex items-center gap-2">
               <Coins className="w-4 h-4 text-emerald-400" />
-              <span>Rental Revenue & Operating Expenses</span>
+              <span>{t.roiCalculator.revenueTitle}</span>
             </h3>
 
             {/* Monthly Rent */}
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-400">Expected Monthly Rent:</span>
+                <span className="text-slate-400">{t.roiCalculator.monthlyRent}</span>
                 <strong className="text-emerald-400 font-mono text-sm">{formatEur(monthlyRentEur)}/mo</strong>
               </div>
               <input
@@ -294,7 +282,7 @@ export const ROICalculator: React.FC = () => {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-400">Vacancy Rate:</span>
+                  <span className="text-slate-400">{t.roiCalculator.vacancyRate}</span>
                   <strong className="text-white font-mono">{vacancyRatePercent}%</strong>
                 </div>
                 <input
@@ -310,7 +298,7 @@ export const ROICalculator: React.FC = () => {
 
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-400">Maintenance Reserve:</span>
+                  <span className="text-slate-400">{t.roiCalculator.maintenanceReserve}</span>
                   <strong className="text-white font-mono">{maintenanceReservePercent}%</strong>
                 </div>
                 <input
@@ -329,8 +317,8 @@ export const ROICalculator: React.FC = () => {
             <div className="pt-2 border-t border-slate-800">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-bold text-slate-200 block">Short-Term (Airbnb) Arbitrage</span>
-                  <span className="text-[10px] text-slate-400">Simulate tourist nightly rate vs standard leasing</span>
+                  <span className="text-xs font-bold text-slate-200 block">{t.roiCalculator.airbnbArbitrage}</span>
+                  <span className="text-[10px] text-slate-400">{t.roiCalculator.airbnbArbitrageDesc}</span>
                 </div>
                 <button
                   type="button"
@@ -347,7 +335,7 @@ export const ROICalculator: React.FC = () => {
                 <div className="mt-3 p-3 bg-slate-950 rounded-xl border border-indigo-500/30 grid grid-cols-2 gap-3">
                   <div>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-slate-400">Nightly Rate:</span>
+                      <span className="text-slate-400">{t.roiCalculator.nightlyRate}</span>
                       <strong className="text-indigo-300 font-mono">€{nightlyRateEur}/night</strong>
                     </div>
                     <input
@@ -363,7 +351,7 @@ export const ROICalculator: React.FC = () => {
 
                   <div>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-slate-400">Occupancy:</span>
+                      <span className="text-slate-400">{t.roiCalculator.occupancy}</span>
                       <strong className="text-indigo-300 font-mono">{shortTermOccupancyPercent}%</strong>
                     </div>
                     <input
@@ -383,28 +371,28 @@ export const ROICalculator: React.FC = () => {
 
         </div>
 
-        {/* Right Column: Financial Results, Romanian Tax Schedule & 10-Yr Equity (7 cols) */}
+        {/* Right Column: Financial Results & Schedules (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           
           {/* Key Yield KPI Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 shadow-md text-center">
-              <span className="text-[10px] text-slate-400 uppercase font-bold block">Gross Yield</span>
+              <span className="text-[10px] text-slate-400 uppercase font-bold block">{t.roiCalculator.kpi.grossYield}</span>
               <strong className="text-xl font-black text-white font-mono">{formatPercent(calc.grossYieldPercent)}</strong>
             </div>
 
             <div className="bg-slate-900/90 p-4 rounded-2xl border border-emerald-500/40 shadow-md text-center">
-              <span className="text-[10px] text-emerald-400 uppercase font-bold block">Net Yield</span>
+              <span className="text-[10px] text-emerald-400 uppercase font-bold block">{t.roiCalculator.kpi.netYield}</span>
               <strong className="text-xl font-black text-emerald-400 font-mono">{formatPercent(calc.netYieldPercent)}</strong>
             </div>
 
             <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 shadow-md text-center">
-              <span className="text-[10px] text-brand-300 uppercase font-bold block">Cash-on-Cash</span>
+              <span className="text-[10px] text-brand-300 uppercase font-bold block">{t.roiCalculator.kpi.cashOnCash}</span>
               <strong className="text-xl font-black text-brand-300 font-mono">{formatPercent(calc.cashOnCashReturnPercent)}</strong>
             </div>
 
             <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 shadow-md text-center">
-              <span className="text-[10px] text-amber-300 uppercase font-bold block">Monthly Cash Flow</span>
+              <span className="text-[10px] text-amber-300 uppercase font-bold block">{t.roiCalculator.kpi.monthlyCashFlow}</span>
               <strong className="text-xl font-black text-amber-300 font-mono">
                 {calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}
                 {formatEur(calc.monthlyCashFlowAfterDebtEur)}
@@ -418,48 +406,48 @@ export const ROICalculator: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Receipt className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">
-                  Romanian Rental Tax Schedule (Fiscal Code Art. 111 & OUG 115/2023)
+                  {t.roiCalculator.taxScheduleTitle}
                 </h3>
               </div>
               <span className="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded">
-                Effective 8% + CASS
+                {t.roiCalculator.taxScheduleBadge}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
               <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-400 block uppercase font-bold">10% Impozit pe Venit</span>
+                <span className="text-[10px] text-slate-400 block uppercase font-bold">{t.roiCalculator.incomeTaxTitle}</span>
                 <strong className="text-sm font-bold text-white font-mono">
                   {formatRon(calc.annualTaxesRon.rentalIncomeTaxRon)} / yr
                 </strong>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
-                  10% applied to 80% net base (20% flat expense deductible)
+                  {t.roiCalculator.incomeTaxDesc}
                 </span>
               </div>
 
               <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-400 block uppercase font-bold">CASS Sănătate (Tiers)</span>
+                <span className="text-[10px] text-slate-400 block uppercase font-bold">{t.roiCalculator.cassHealthTitle}</span>
                 <strong className="text-sm font-bold text-white font-mono">
                   {formatRon(calc.annualTaxesRon.cassHealthTaxRon)} / yr
                 </strong>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
-                  Bracket: 6, 12, or 24 gross minimum wages (capped at 24)
+                  {t.roiCalculator.cassHealthDesc}
                 </span>
               </div>
 
               <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-400 block uppercase font-bold">Impozit Clădire Local</span>
+                <span className="text-[10px] text-slate-400 block uppercase font-bold">{t.roiCalculator.localTaxTitle}</span>
                 <strong className="text-sm font-bold text-white font-mono">
                   {formatRon(calc.annualTaxesRon.propertyTaxRon)} / yr
                 </strong>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
-                  0.1% residential municipal quota
+                  {t.roiCalculator.localTaxDesc}
                 </span>
               </div>
             </div>
 
             <div className="flex justify-between items-center pt-2 border-t border-slate-800 text-xs">
-              <span className="text-slate-400 font-bold">Total Annual Taxes & Levies:</span>
+              <span className="text-slate-400 font-bold">{t.roiCalculator.totalAnnualTaxes}</span>
               <strong className="text-rose-300 font-mono text-sm">
                 {formatEur(calc.annualTaxesEur)} / yr ({formatRon(calc.annualTaxesEur * taxSettings.eurToRonRate)})
               </strong>
@@ -473,7 +461,7 @@ export const ROICalculator: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-indigo-400" />
                   <h3 className="text-xs font-black uppercase tracking-wider text-indigo-300">
-                    Short-Term (Airbnb) Arbitrage Comparison
+                    {t.roiCalculator.airbnbCardTitle}
                   </h3>
                 </div>
                 <span className="text-xs font-mono font-bold text-indigo-400">
@@ -483,12 +471,12 @@ export const ROICalculator: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                  <span className="text-[10px] text-slate-400 block">Gross Annual Revenue:</span>
+                  <span className="text-[10px] text-slate-400 block">{t.roiCalculator.grossAnnualRevenue}</span>
                   <strong className="text-white font-mono text-sm">{formatEur(calc.shortTermGrossAnnualEur)}/yr</strong>
                 </div>
 
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                  <span className="text-[10px] text-slate-400 block">Net Annual Cash Flow:</span>
+                  <span className="text-[10px] text-slate-400 block">{t.roiCalculator.netAnnualCashFlow}</span>
                   <strong className="text-indigo-300 font-mono text-sm">+{formatEur(calc.shortTermNetAnnualEur)}/yr</strong>
                 </div>
               </div>
@@ -501,11 +489,11 @@ export const ROICalculator: React.FC = () => {
               <div className="flex items-center gap-2">
                 <FileSpreadsheet className="w-4 h-4 text-brand-400" />
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">
-                  10-Year Cumulative Equity & Cash Flow Schedule
+                  {t.roiCalculator.scheduleTitle}
                 </h3>
               </div>
               <span className="text-[10px] text-slate-400 font-mono">
-                3.5% Property Apprec. • 2.5% Rent Growth
+                {t.roiCalculator.scheduleSubtitle}
               </span>
             </div>
 
@@ -513,18 +501,18 @@ export const ROICalculator: React.FC = () => {
               <table className="w-full text-xs text-left">
                 <thead>
                   <tr className="border-b border-slate-800 text-[11px] text-slate-400 uppercase font-bold">
-                    <th className="pb-2">Year</th>
-                    <th className="pb-2">Property Value</th>
-                    <th className="pb-2">Annual Cash Flow</th>
-                    <th className="pb-2">Cumulative Cash</th>
-                    <th className="pb-2">Total Net Equity</th>
+                    <th className="pb-2">{t.roiCalculator.scheduleHeaders.year}</th>
+                    <th className="pb-2">{t.roiCalculator.scheduleHeaders.propertyValue}</th>
+                    <th className="pb-2">{t.roiCalculator.scheduleHeaders.annualCashFlow}</th>
+                    <th className="pb-2">{t.roiCalculator.scheduleHeaders.cumulativeCash}</th>
+                    <th className="pb-2">{t.roiCalculator.scheduleHeaders.totalNetEquity}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60 font-mono text-xs">
                   {projectionTable.filter((p) => [1, 2, 3, 5, 7, 10].includes(p.year)).map((pt) => (
                     <tr key={pt.year} className="hover:bg-slate-800/40 transition-colors">
                       <td className="py-2.5 text-slate-200 font-sans font-bold">
-                        Year {pt.year}
+                        {t.sellVsRent.yearSingle} {pt.year}
                       </td>
                       <td className="py-2.5 text-slate-300">
                         {formatEur(pt.propertyValue)}
@@ -533,7 +521,7 @@ export const ROICalculator: React.FC = () => {
                         {pt.annualCashFlow >= 0 ? '+' : ''}{formatEur(pt.annualCashFlow)}
                       </td>
                       <td className="py-2.5 text-brand-300">
-                        {formatEur(pt.cumulativeCashFlow)}
+                        {formatEur(pt.cumulativeCash)}
                       </td>
                       <td className="py-2.5 text-emerald-300 font-bold">
                         {formatEur(pt.totalEquity)}
