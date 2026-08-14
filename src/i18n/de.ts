@@ -373,6 +373,8 @@ export const de: TranslationDictionary = {
     builtWith: 'Entwickelt mit React, TypeScript & Institutionellen Finanzmodellen',
     aiDisclaimer: 'Hinweis: ROImob bietet mathematische und steuerliche Simulationen auf Basis des rumänischen Steuergesetzes (Gesetz Nr. 227/2015 & OUG Nr. 115/2023). Dient ausschließlich zu Informationszwecken.',
     reportIssueBtn: 'Problem / Vorschlag Melden',
-    donateBtn: 'Über Revolut Unterstützen',
+    donateBtn: 'Entwicklung Unterstützen',
+    donateBmac: 'Buy Me a Coffee',
+    donateRevolut: 'Revolut Pay',
   },
 };

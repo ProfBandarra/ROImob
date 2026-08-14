@@ -373,6 +373,8 @@ export const fr: TranslationDictionary = {
     builtWith: 'Développé avec React, TypeScript et Modélisation Financière Institutionnelle',
     aiDisclaimer: 'Avertissement: ROImob fournit des simulations basées sur le Code Fiscal Roumain (Loi n° 227/2015 et OUG n° 115/2023). Cet outil est uniquement informatif et ne constitue pas un conseil fiscal ou juridique agréé.',
     reportIssueBtn: 'Signaler un Problème / Suggestion',
-    donateBtn: 'Soutenir via Revolut',
+    donateBtn: 'Soutenir le Projet',
+    donateBmac: 'Buy Me a Coffee',
+    donateRevolut: 'Revolut Pay',
   },
 };

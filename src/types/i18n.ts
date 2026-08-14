@@ -372,5 +372,7 @@ export interface TranslationDictionary {
     aiDisclaimer: string;
     reportIssueBtn: string;
     donateBtn: string;
+    donateBmac: string;
+    donateRevolut: string;
   };
 }

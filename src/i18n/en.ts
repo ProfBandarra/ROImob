@@ -373,6 +373,8 @@ export const en: TranslationDictionary = {
     builtWith: 'Engineered with React, TypeScript & Institutional Financial Math',
     aiDisclaimer: 'Disclaimer: ROImob provides institutional-grade mathematical and statutory simulations based on Romanian Fiscal Code (Law nr. 227/2015 & OUG nr. 115/2023). This tool is for informational and educational purposes only and does not constitute certified tax, legal, or investment advisory. Always consult an authorized fiscal advisor (CCF) or certified notary before executing real estate transactions.',
     reportIssueBtn: 'Report Issue / Suggestion',
-    donateBtn: 'Support via Revolut',
+    donateBtn: 'Support Development',
+    donateBmac: 'Buy Me a Coffee',
+    donateRevolut: 'Revolut Pay',
   },
 };

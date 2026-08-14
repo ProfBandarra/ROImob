@@ -373,6 +373,8 @@ export const uk: TranslationDictionary = {
     builtWith: 'Створено з інституційною точністю та підтримкою мов (EN • RO • FR • DE • UK • PT)',
     aiDisclaimer: 'Примітка: Розробка платформи здійснювалася за підтримки ШІ. Розрахунки носять консультаційний характер; для офіційних операцій звертайтеся до фахівця.',
     reportIssueBtn: 'Повідомити про Помилку на GitHub',
-    donateBtn: 'Підтримати через Revolut',
+    donateBtn: 'Підтримати Розробку',
+    donateBmac: 'Buy Me a Coffee',
+    donateRevolut: 'Revolut Pay',
   },
 };
