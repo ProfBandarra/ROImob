@@ -17,79 +17,65 @@
 
 ---
 
-## 📌 Overview
+## 📌 The 3 Core Pillars of ROImob
 
-**ROImob** is an open-data-driven real estate intelligence and financial evaluation platform tailored for **small property investors**, **home buyers**, and **property owners** navigating the real estate market in Romania.
+**ROImob** is an open-data-driven real estate intelligence and financial evaluation platform built for **property buyers**, **investors**, and **homeowners** in Romania.
 
-By unifying verified government registries (**data.gov.ro**, **ANCPI**, **INSSE**, **AMCCRS**, **Apele Române**, **RNMCA**) with marketplace feeds (**OLX.ro**, **Imobiliare.ro**, **Storia.ro**), ROImob provides institutional-grade risk diagnostics, link analysis, and decision simulations before buying, selling, or leasing properties.
+The platform is anchored on 3 primary decision engines:
+
+```
+                                  ┌──────────────────────────────────────────────┐
+                                  │             ROImob Decision Hub              │
+                                  └──────────────────────┬───────────────────────┘
+                                                         │
+               ┌─────────────────────────────────────────┼────────────────────────────────────────┐
+               ▼                                         ▼                                        ▼
+    ┌──────────────────────┐                  ┌──────────────────────┐                 ┌──────────────────────┐
+    │       PILLAR 1       │                  │       PILLAR 2       │                 │       PILLAR 3       │
+    │   Listing Analyzer   │                  │  Sell vs. Rent Calc  │                 │  ROI & Fiscal Engine │
+    │    & Legal Audit     │                  │   Owner Optimizer    │                 │   (2024-2026 Code)   │
+    └──────────────────────┘                  └──────────────────────┘                 └──────────────────────┘
+```
 
 ---
 
-## 🌟 Key Features
+### 🔍 PILLAR 1: Real-Time Listing Analyzer & Due Diligence
+- **Multi-Portal Support**: Paste live URLs from **OLX.ro**, **Imobiliare.ro**, **Storia.ro**, and **HomeZZ.ro**.
+- **Manual Input Bypass**: For offline announcements or unlisted portals, users can directly enter parameters.
+- **Partial Extraction Auditing**: Explicitly flags any missing parameters (*Year Built*, *Floor*, *Cadastral #*) and shows conservative defaults while providing an instant 1-click in-place editor.
+- **Automated Official Data Cross-Check**:
+  - 🔴 **AMCCRS Seismic Risk Register**: Checks technical expertise classes (**RsI**, **RsII**, **RsIII**, **RsIV**, **U1–U3**, or pre-1977 alerts).
+  - 💧 **Apele Române Flood Hazards**: Evaluates EU Directive 2007/60 HQ10/HQ100 river catchment zones.
+  - 🍃 **RNMCA / Open-Meteo Air Quality**: Real-time fine particulate (PM2.5 / PM10) sensor streams.
+  - 🎓 **Ministry of Education**: 3-year *Evaluarea Națională* school catchment pass rates.
+  - 📊 **ANCPI & INSSE Wage Growth**: Verifies price/m² vs local transaction velocity.
 
-### 1. 🔍 OLX & Imobiliare.ro Listing Analyzer
-- Paste any link from **OLX.ro**, **Imobiliare.ro**, or **Storia.ro**.
-- Extracts property parameters (asking price, price/m², year built, address, rooms, photos).
-- Automatically cross-references with official government datasets:
-  - **AMCCRS Seismic Risk List**: Detects whether the building is in Class RsI, RsII, RsIII, or unexpertized pre-1977.
-  - **Apele Române Flood Hazards**: Checks HQ10/HQ100 river basin flood zones.
-  - **RNMCA Air Quality**: Pulls live fine particulate (PM2.5 / PM10) readings.
-  - **Ministry of Education**: Evaluates local school catchment exam averages (*Evaluarea Națională*).
-  - **ANCPI Price Benchmarking**: Compares the asking price against registered local transaction averages.
+---
 
-### 2. ⚖️ Owner Decision Engine: Sell vs. Rent Optimizer
-- Designed for property owners who currently own a house or apartment (with or without an active bank mortgage).
-- Compares 3 strategic scenarios side-by-side:
-  1. **Option 1: SELL NOW**:
-     - Calculates net liquid cash in hand after Romanian real estate transfer tax (Art. 111 Cod Fiscal: **1% if owned >3 years**, **3% if owned ≤3 years**), notary fees, and early bank mortgage payoff.
-     - Simulates 5-year and 10-year wealth if proceeds are reinvested in safe fixed-income assets (e.g. Romanian State Treasury Bonds *Titluri de Stat Tezaur/Fidelis* at ~6.5-7.0% tax-free) or index funds.
-  2. **Option 2: RENT LONG-TERM**:
-     - Calculates net monthly cash-flow after bank mortgage installment, 10% rental tax (on 80% net base), CASS health tax, local property tax, and PAD insurance.
-     - Projects 5-year and 10-year cumulative wealth combining rental income, tenant-funded mortgage debt pay-down, and property appreciation (~3.5% p.a.).
-  3. **Option 3: RENT SHORT-TERM (AIRBNB / BOOKING)**:
-     - Calculates net tourist rental returns after OTA commissions, cleaning, and seasonal occupancy.
-- **Algorithmic Verdict**: Recommends the optimal strategy with break-even horizon calculations and wealth difference metrics.
+### ⚖️ PILLAR 2: Sell vs. Rent Owner Strategy Optimizer
+Designed for owners with or without an active bank mortgage comparing exit vs. holding strategies:
 
-### 3. 🌍 5-Language Internationalization (i18n)
-- **Primary Language**: 🇬🇧 **English (`en`)**
-- **Alternative Languages**:
-  - 🇷🇴 **Română (`ro`)**
-  - 🇫🇷 **Français (`fr`)**
-  - 🇩🇪 **Deutsch (`de`)**
-  - 🇺🇦 **Українська (`uk`)**
-- Instant language switching with localized legal and fiscal terms (*Carte Funciară*, *IRCC*, *CASS*, *Titluri Tezaur*, *Clasă Risc Seismic*).
+- **🏛️ ANCPI & INSSE Auto-Valuation Estimator**: Auto-estimates market value and expected rent for all major Romanian cities (*Bucharest, Cluj-Napoca, Timișoara, Brașov, Iași, Constanța, Sibiu, Oradea, Ilfov*).
+- **Option 1: SELL NOW**:
+  - Models Romanian Real Estate Transfer Tax (**Cod Fiscal Art. 111**: **1% if owned >3 years**, **3% if owned ≤3 years**), notary fees, and early bank loan payoff.
+  - Compares compound wealth if proceeds are reinvested in **0.0% Cash**, **3.5% Bank Deposits**, **6.8% Romanian State Treasury Bonds (*Titluri Tezaur/Fidelis* - 100% Tax Free)**, **8.5% Global ETFs**, or **10.5% BET Index**.
+- **Option 2: RENT LONG-TERM**:
+  - Calculates net monthly cash flow under the 2024–2026 Fiscal Code and projects cumulative wealth combining rental income, tenant-funded debt paydown, and property appreciation.
+- **Option 3: SHORT-TERM (AIRBNB)**:
+  - Toggle tourist rental yields vs standard residential leasing.
+- **Advanced Owner Controls**:
+  - 📉 **Inflation Adjustment**: View nominal euro values or real purchasing power.
+  - ⚡ **Accelerated Prepayment Simulator**: Direct surplus rent to pay down mortgage principal early.
+  - 🧾 **Tax Regime Optimizer**: Compares **PF Forfetar (8% effective)** vs **PF Sistem Real** vs **SRL Microîntreprindere (1% + 8% div)**.
+  - 🐻 ⚖️ 🐂 **Stress-Test Matrix**: Bear (0% apprec.), Base (3.5% apprec.), Bull (+6.0% apprec.).
 
-### 4. 🗺️ Multi-Layer GIS Intelligence Map
-- **Seismic Vulnerability Overlay**: Visual red/amber pins for expertized buildings classified under **RsI** (Red Bullet), **RsII**, **RsIII**, **RsIV**, Urgency Categories **U1–U3**, and unexpertized pre-1977 alerts.
-- **Flood Hazard Zones**: EU Directive 2007/60/EC flood hazard designations (HQ10, HQ100, HQ1000 return periods).
-- **Educational Excellence**: Public and private schools with 3-year average pass grades for *Evaluarea Națională* and national rankings.
-- **Healthcare & Emergency Access**: Hospitals with 24/7 Urgent Care Units (UPU).
-- **Live Air Quality Sensors**: PM2.5, PM10, $\text{NO}_2$, and AQI index from RNMCA stations.
-- **15-Minute City Radius**: Visual walk-time radius per selected property.
+---
 
-### 5. 💰 Romanian Real Estate Fiscal & ROI Engine (2024–2026 Code)
+### 💰 PILLAR 3: Romanian Real Estate ROI & Fiscal Engine (2024–2026 Code)
 - **10% Flat Rental Income Tax**: Calculated on the **80% net rental base** after applying the mandatory 20% deductible flat expense (effective 8% rate).
-- **CASS Health Insurance Brackets**: Automatic calculation for annual thresholds (6, 12, or 24 gross minimum national wages).
-- **Leveraged Mortgage Simulator**: Variable IRCC + bank spread or fixed interest rates, 15% vs 25% down payments, debt service amortization.
-- **Metrics**: Gross Yield, Net Yield (Cap Rate), Cash-on-Cash Return (CoC), Monthly Net Cash Flow, and 10-Year Total ROI Forecasting.
-
----
-
-## 🏛️ Integrated Public & Marketplace Data Sources
-
-| Source Entity | Category / Dataset | Cadence | Standard / Endpoint |
-| :--- | :--- | :--- | :--- |
-| **OLX.ro** | Active Property Listings & Private Offers | Hourly | HTML / Scraped API |
-| **Imobiliare.ro** | Indicele Imobiliare.ro & Agency Portfolios | Daily | JSON / REST |
-| **data.gov.ro / Min. Educației** | Rețeaua Unităților de Învățământ | Annually | CKAN REST API (`/api/3/action/`) |
-| **ANCPI** | Tranzacții Imobiliare Lunare & Ipoteci | Monthly | CSV / WMS e-Terra |
-| **ANCPI Geoportal** | Cadastral Parcels & UAT Boundaries | Monthly | INSPIRE WFS / GeoJSON |
-| **AMCCRS & PMB** | Lista Imobilelor Expertizate Tehnic | Monthly | JSON / Official Register |
-| **INSSE (TEMPO Online)** | Autorizații de Construire (`LOC101A`) | Quarterly | SDMX / XML Matrix |
-| **INSSE (TEMPO Online)** | Dinamica Populației & Salarii (`FOM107D`) | Monthly | SDMX / XML Matrix |
-| **Apele Române** | Hărți de Hazard și Risc la Inundații | Static/Gov | WFS / Directiva 2007/60/CE |
-| **RNMCA / CalitateaAerului.ro** | Rețeaua Națională Calitatea Aerului | Hourly | Live Sensor JSON Stream |
-| **Institutul Național al Patrimoniului** | Lista Monumentelor Istorice (LMI) | Annually | CSV / Legea 422/2001 |
+- **CASS Health Insurance Brackets**: 6, 12, and 24 gross minimum national wages ($6 \times 3,700\text{ RON}$, $12 \times 3,700\text{ RON}$, $24 \times 3,700\text{ RON}$).
+- **Leveraged Mortgage Simulator**: 15% (first home) vs 25% (investment) down payments, IRCC + bank spread, and amortization schedules.
+- **10-Year Total ROI & Cash Flow Forecast**: Detailed year-by-year cash-on-cash and capital growth projections.
 
 ---
 
@@ -115,7 +101,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🚀 Deployment to Vercel
 
-ROImob includes a pre-configured `vercel.json` for single-page routing on Vercel.
+ROImob includes a pre-configured `vercel.json` and serverless scraper function (`api/analyze-listing.ts`):
 
 1. Open [vercel.com/new](https://vercel.com/new).
 2. Select your repository: **`ProfBandarra/ROImob`**.

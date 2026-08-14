@@ -34,8 +34,8 @@ import {
 const MainAppContent: React.FC = () => {
   const { t } = useI18n();
 
-  // Active Tab
-  const [activeTab, setActiveTab] = useState<'map' | 'properties' | 'listingAnalyzer' | 'sellVsRent' | 'calculator' | 'openDataHub' | 'report'>('map');
+  // Active Tab defaults to Listing Analyzer (Core Pillar 1)
+  const [activeTab, setActiveTab] = useState<'listingAnalyzer' | 'sellVsRent' | 'calculator' | 'map' | 'properties' | 'openDataHub'>('listingAnalyzer');
 
   // Search & Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -87,7 +87,7 @@ const MainAppContent: React.FC = () => {
     if (selectedCity !== 'ALL' && COUNTY_MACRO_STATS[selectedCity]) {
       return COUNTY_MACRO_STATS[selectedCity].cityCenterCoords;
     }
-    return [44.4323, 26.1063]; // Bucharest center
+    return [44.4323, 26.1063];
   }, [selectedCity]);
 
   // Handle Property Selection
@@ -131,7 +131,7 @@ const MainAppContent: React.FC = () => {
         openSyncModal={() => setIsSyncManagerOpen(true)}
       />
 
-      {/* Hero Header on Map / Properties view */}
+      {/* Hero Header when viewing Map or Properties */}
       {(activeTab === 'map' || activeTab === 'properties') && (
         <HeroBanner
           searchQuery={searchQuery}
@@ -145,13 +145,35 @@ const MainAppContent: React.FC = () => {
       {/* Main Content Areas */}
       <main className="flex-1">
         
-        {/* VIEW 1: Interactive GIS Map & Quick Cards */}
+        {/* PILLAR 1: OLX / Imobiliare / Storia / HomeZZ Real-Time Listing Analyzer */}
+        {activeTab === 'listingAnalyzer' && (
+          <ListingUrlImporter
+            onAnalyzeListing={handleSelectProperty}
+            onOpenCalculator={handleOpenCalculator}
+          />
+        )}
+
+        {/* PILLAR 2: Sell vs. Rent Owner Strategy Optimizer */}
+        {activeTab === 'sellVsRent' && (
+          <SellVsRentCalculator />
+        )}
+
+        {/* PILLAR 3: Real Estate ROI & Romanian Tax Engine */}
+        {activeTab === 'calculator' && (
+          <ROICalculator
+            selectedProperty={selectedProperty}
+            allProperties={SAMPLE_PROPERTIES}
+            onSelectPropertyChange={(p) => setSelectedProperty(p)}
+          />
+        )}
+
+        {/* SUPPORTING TOOL: Interactive GIS Map & Quick Cards */}
         {activeTab === 'map' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               
-              {/* Map Container (8 cols on lg) */}
+              {/* Map Container */}
               <div className="lg:col-span-8 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -174,11 +196,10 @@ const MainAppContent: React.FC = () => {
                 />
               </div>
 
-              {/* Map Layers & Macro Economic Card (4 cols on lg) */}
+              {/* Map Layers & Macro Economic Card */}
               <div className="lg:col-span-4 space-y-6">
                 <LayerControl layers={layers} toggleLayer={toggleLayer} />
 
-                {/* Macro Economic Snapshot Card */}
                 {selectedCity !== 'ALL' && COUNTY_MACRO_STATS[selectedCity] && (
                   <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-4 space-y-3">
                     <div className="flex items-center justify-between pb-2 border-b border-slate-800">
@@ -256,7 +277,7 @@ const MainAppContent: React.FC = () => {
           </div>
         )}
 
-        {/* VIEW 2: Property Dossiers Grid */}
+        {/* Property Dossiers Grid */}
         {activeTab === 'properties' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
             <div className="flex items-center justify-between">
@@ -287,29 +308,7 @@ const MainAppContent: React.FC = () => {
           </div>
         )}
 
-        {/* VIEW 3: OLX & Imobiliare.ro Listing Analyzer */}
-        {activeTab === 'listingAnalyzer' && (
-          <ListingUrlImporter
-            onAnalyzeListing={handleSelectProperty}
-            onOpenCalculator={handleOpenCalculator}
-          />
-        )}
-
-        {/* VIEW 4: Sell vs. Rent Owner Strategy Optimizer */}
-        {activeTab === 'sellVsRent' && (
-          <SellVsRentCalculator />
-        )}
-
-        {/* VIEW 5: Real Estate ROI & Romanian Tax Calculator */}
-        {activeTab === 'calculator' && (
-          <ROICalculator
-            selectedProperty={selectedProperty}
-            allProperties={SAMPLE_PROPERTIES}
-            onSelectPropertyChange={(p) => setSelectedProperty(p)}
-          />
-        )}
-
-        {/* VIEW 6: Official Open Data Hub & Live API Catalog */}
+        {/* SUPPORTING TOOL: Official Open Data Hub & Live API Catalog */}
         {activeTab === 'openDataHub' && (
           <DataCatalog
             onTriggerSync={handleTriggerSync}
