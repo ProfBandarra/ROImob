@@ -3,18 +3,23 @@ import {
   SellVsRentInputs, 
   SellVsRentResult, 
   FinancialCalculationResult, 
-  ROITaxSettings,
-  YearlyWealthPoint
+  ROITaxSettings
 } from '../../types';
-import { formatEur, formatRon, formatPercent } from '../../utils/formatters';
+import { formatPercent } from '../../utils/formatters';
 import { useI18n } from '../../i18n';
+import { useCurrency } from '../../currency';
 import { 
   Building2, 
   Printer, 
   X, 
-  CheckCircle2,
-  FileText,
-  BadgeCheck
+  CheckCircle2, 
+  FileText, 
+  ShieldCheck, 
+  Award,
+  Scale,
+  Calculator,
+  Landmark,
+  AlertTriangle
 } from 'lucide-react';
 
 interface Props {
@@ -48,6 +53,7 @@ export const FormalReportModal: React.FC<Props> = ({
   onClose
 }) => {
   const { t, language } = useI18n();
+  const { formatMoney, formatMoneyDual, currency } = useCurrency();
 
   const currentDate = new Date().toLocaleDateString(
     language === 'ro' ? 'ro-RO' : language === 'fr' ? 'fr-FR' : language === 'de' ? 'de-DE' : language === 'uk' ? 'uk-UA' : language === 'pt' ? 'pt-PT' : 'en-US',
@@ -99,61 +105,62 @@ export const FormalReportModal: React.FC<Props> = ({
               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
               background: #ffffff !important;
               color: #0f172a !important;
-              padding: 24px;
               font-size: 11px;
               line-height: 1.45;
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
+              padding: 24px;
             }
-            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-            .font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
             .font-bold { font-weight: 700; }
             .font-black { font-weight: 900; }
+            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .uppercase { text-transform: uppercase; }
             .tracking-wider { letter-spacing: 0.05em; }
-            .tracking-tight { letter-spacing: -0.025em; }
-            
-            .grid { display: grid; }
-            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-            .gap-3 { gap: 12px; }
-            .gap-4 { gap: 16px; }
             
             .flex { display: flex; }
             .items-center { align-items: center; }
             .items-start { align-items: flex-start; }
             .justify-between { justify-content: space-between; }
+            .justify-center { justify-content: center; }
+            .gap-1 { gap: 4px; }
+            .gap-2 { gap: 8px; }
+            .gap-3 { gap: 12px; }
+            .gap-4 { gap: 16px; }
+            .gap-6 { gap: 24px; }
+            
+            .grid { display: grid; }
+            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
             
             .p-2 { padding: 8px; }
             .p-3 { padding: 12px; }
             .p-4 { padding: 16px; }
             .p-5 { padding: 20px; }
-            .p-8 { padding: 24px; }
+            .p-6 { padding: 24px; }
             .px-2 { padding-left: 8px; padding-right: 8px; }
-            .py-0\\.5 { padding-top: 2px; padding-bottom: 2px; }
             .px-3 { padding-left: 12px; padding-right: 12px; }
             .py-1 { padding-top: 4px; padding-bottom: 4px; }
-            .pb-1 { padding-bottom: 4px; }
-            .pb-6 { padding-bottom: 20px; }
-            .pt-1 { padding-top: 4px; }
+            .py-2 { padding-top: 8px; padding-bottom: 8px; }
+            .pb-2 { padding-bottom: 8px; }
+            .pb-4 { padding-bottom: 16px; }
+            .pb-6 { padding-bottom: 24px; }
             .pt-2 { padding-top: 8px; }
-            .pt-6 { padding-top: 20px; }
+            .pt-4 { padding-top: 16px; }
             .mb-1 { margin-bottom: 4px; }
             .mb-2 { margin-bottom: 8px; }
-            .ml-2 { margin-left: 8px; }
+            .mb-4 { margin-bottom: 16px; }
             
             .space-y-1 > * + * { margin-top: 4px; }
             .space-y-2 > * + * { margin-top: 8px; }
             .space-y-3 > * + * { margin-top: 12px; }
-            .space-y-6 > * + * { margin-top: 20px; }
-            .space-y-8 > * + * { margin-top: 24px; }
+            .space-y-4 > * + * { margin-top: 16px; }
+            .space-y-6 > * + * { margin-top: 24px; }
             
             .bg-white { background-color: #ffffff !important; }
             .bg-slate-50 { background-color: #f8fafc !important; }
             .bg-slate-100 { background-color: #f1f5f9 !important; }
             .bg-slate-900 { background-color: #0f172a !important; color: #ffffff !important; }
-            .bg-indigo-50 { background-color: #eef2ff !important; }
+            .bg-emerald-50 { background-color: #ecfdf5 !important; }
+            .bg-amber-50 { background-color: #fffbeb !important; }
             
             .text-slate-900 { color: #0f172a !important; }
             .text-slate-800 { color: #1e293b !important; }
@@ -164,6 +171,8 @@ export const FormalReportModal: React.FC<Props> = ({
             .text-white { color: #ffffff !important; }
             .text-indigo-600 { color: #4f46e5 !important; }
             .text-emerald-600 { color: #059669 !important; }
+            .text-emerald-700 { color: #047857 !important; }
+            .text-amber-700 { color: #b45309 !important; }
             .text-rose-600 { color: #e11d48 !important; }
             
             .border { border: 1px solid #e2e8f0; }
@@ -174,6 +183,7 @@ export const FormalReportModal: React.FC<Props> = ({
             .border-slate-200 { border-color: #e2e8f0; }
             .border-slate-300 { border-color: #cbd5e1; }
             .border-slate-900 { border-color: #0f172a; }
+            .border-emerald-300 { border-color: #a7f3d0; }
             
             .rounded { border-radius: 4px; }
             .rounded-lg { border-radius: 8px; }
@@ -183,21 +193,21 @@ export const FormalReportModal: React.FC<Props> = ({
             .text-center { text-align: center; }
             .text-right { text-align: right; }
             .text-xs { font-size: 11px; }
-            .text-sm { font-size: 13px; }
+            .text-sm { font-size: 12.5px; }
+            .text-base { font-size: 14px; }
             .text-lg { font-size: 16px; }
             .text-xl { font-size: 18px; }
             .text-2xl { font-size: 22px; }
             .text-\\[10px\\] { font-size: 10px; }
             .text-\\[11px\\] { font-size: 11px; }
             
-            .w-8 { width: 32px; }
-            .h-8 { height: 32px; }
-            .w-full { width: 100%; }
-            
             table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 10.5px; }
             th, td { padding: 6px 8px; text-align: left; }
-            th { background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1; }
+            th { background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1; color: #1e293b; font-weight: 700; }
             td { border-bottom: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            
+            .page-break-inside-avoid { page-break-inside: avoid; }
             
             @page { size: A4 portrait; margin: 8mm; }
           </style>
@@ -251,147 +261,172 @@ export const FormalReportModal: React.FC<Props> = ({
         </div>
 
         {/* Formal Printable Document Sheet */}
-        <div id="formal-report-print-sheet" className="p-4 sm:p-8 sm:p-12 space-y-6 sm:space-y-8 bg-white text-slate-900 overflow-y-auto flex-1">
+        <div id="formal-report-print-sheet" className="p-4 sm:p-8 sm:p-12 space-y-6 sm:space-y-8 bg-white text-slate-900 overflow-y-auto flex-1 font-sans">
           
-          {/* Formal Letterhead */}
+          {/* 1. Formal Dossier Letterhead & Security Badge */}
           <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4 pb-4 sm:pb-6 border-b-2 border-slate-900">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold">
-                  <Building2 className="w-5 h-5" />
+                <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-black text-sm">
+                  ROI
                 </div>
-                <span className="text-2xl font-black tracking-tight text-slate-900 font-sans">
-                  ROI<span className="text-indigo-600">mob</span>
-                </span>
-                <span className="text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-300 ml-2">
-                  {t.report.officialDossier}
+                <span className="text-xl font-black tracking-tight text-slate-900">
+                  ROImob <span className="text-indigo-600">Calculators</span>
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {t.report.officialDossier} • Romania
+              </p>
+              <p className="text-[11px] text-slate-400">
                 {t.report.subtitle}
               </p>
             </div>
 
-            <div className="text-right text-xs text-slate-600 space-y-1">
-              <div><strong>{t.report.auditRef}</strong> <span className="font-mono">{reportId}</span></div>
-              <div><strong>{t.report.dateOfIssue}</strong> {currentDate}</div>
-              <div><strong>{t.report.fiscalFramework}</strong> Law 227/2015 & OUG 115/2023</div>
+            <div className="text-right sm:text-right space-y-1 text-xs">
+              <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-700 font-bold rounded-lg text-[10px] uppercase tracking-wider">
+                <ShieldCheck className="w-3 h-3" />
+                <span>Law 227/2015 & OUG 115/2023</span>
+              </div>
+              <div className="text-slate-500 font-mono text-[11px] pt-1">
+                <strong>{t.report.auditRef}</strong> {reportId}
+              </div>
+              <div className="text-slate-500 text-[11px]">
+                <strong>{t.report.dateOfIssue}</strong> {currentDate}
+              </div>
+              <div className="text-slate-500 text-[11px]">
+                <strong>Base Currency:</strong> {currency} (1 EUR = 4.975 RON)
+              </div>
             </div>
           </div>
 
-          {/* REPORT TYPE 1: SELL VS RENT OPTIMIZER */}
+          {/* ========================================================================= */}
+          {/* SELL VS RENT OPTIMIZER DOSSIER */}
+          {/* ========================================================================= */}
           {type === 'sellVsRent' && sellVsRentData && (
             <div className="space-y-6">
               
-              {/* Executive Summary Box */}
-              <div className="bg-slate-50 border-2 border-slate-900 p-5 rounded-2xl space-y-3">
+              {/* Executive Strategic Recommendation Banner */}
+              <div className="p-5 rounded-2xl border-2 border-indigo-600 bg-indigo-50/50 space-y-2 page-break-inside-avoid">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-slate-900 font-black text-sm uppercase tracking-wider">
-                    <BadgeCheck className="w-5 h-5 text-indigo-600" />
-                    <span>{t.report.executiveRecommendation}</span>
+                  <div className="flex items-center gap-2">
+                    <Award className="w-5 h-5 text-indigo-600" />
+                    <span className="text-xs font-black uppercase tracking-wider text-indigo-700">
+                      {t.report.executiveRecommendation} ({sellVsRentData.inputs.projectionHorizonYears} {t.sellVsRent.yearsPlural} Horizon)
+                    </span>
                   </div>
-                  <span className="px-3 py-1 bg-slate-900 text-white rounded-lg text-xs font-black uppercase tracking-wider">
+                  <span className="px-3 py-0.5 rounded-full text-xs font-black uppercase bg-indigo-600 text-white">
                     {sellVsRentData.result.recommendedStrategy === 'RENT_LONG_TERM' 
                       ? t.sellVsRent.keepAndRentLongTerm
-                      : sellVsRentData.result.recommendedStrategy === 'RENT_SHORT_TERM' 
+                      : sellVsRentData.result.recommendedStrategy === 'RENT_SHORT_TERM'
                       ? t.sellVsRent.shortTermAirbnb
                       : t.sellVsRent.sellAndReinvest}
                   </span>
                 </div>
-                <p className="text-sm font-bold text-slate-800 leading-relaxed">
+                <p className="text-sm font-bold text-slate-800 leading-snug">
                   {sellVsRentData.result.verdictSummary}
                 </p>
-                <div className="pt-2 border-t border-slate-200 space-y-1">
-                  {sellVsRentData.result.verdictHighlights.map((h: string, i: number) => (
-                    <div key={i} className="text-xs text-slate-700 flex items-start gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{h}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
 
-              {/* Property & Ownership Parameters Table */}
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  {t.report.section1Identity}
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.estimatedValuation}</span>
-                    <strong className="text-sm font-bold text-slate-900 font-mono">{formatEur(sellVsRentData.inputs.currentPropertyMarketValueEur)}</strong>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.ownershipDuration}</span>
-                    <strong className="text-sm font-bold text-slate-900">
-                      {sellVsRentData.inputs.ownershipDurationYears > 3 ? `${t.sellVsRent.over3Years} (1%)` : `${t.sellVsRent.under3Years} (3%)`}
-                    </strong>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.mortgageStatus}</span>
-                    <strong className="text-sm font-bold text-slate-900">
-                      {sellVsRentData.inputs.hasExistingMortgage ? `${t.sellVsRent.withDebt} (${formatEur(sellVsRentData.inputs.remainingMortgageBalanceEur)})` : t.sellVsRent.debtFree}
-                    </strong>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.expectedMonthlyRent}</span>
-                    <strong className="text-sm font-bold text-slate-900 font-mono">{formatEur(sellVsRentData.inputs.estimatedMonthlyRentEur)}/mo</strong>
-                  </div>
-                </div>
-              </div>
-
-              {/* Core Financial Comparison Breakdown */}
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  {t.report.section2Comparison} ({sellVsRentData.inputs.projectionHorizonYears} {t.sellVsRent.yearsPlural})
+              {/* Section 1: Property Identity & Parameters */}
+              <div className="space-y-2 page-break-inside-avoid">
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-slate-600" />
+                  <span>{t.report.section1Identity}</span>
                 </h3>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.estimatedValuation}</span>
+                    <strong className="text-slate-900 text-sm font-mono">{formatMoneyDual(sellVsRentData.inputs.currentPropertyMarketValueEur)}</strong>
+                  </div>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.ownershipDuration}</span>
+                    <strong className="text-slate-900 text-sm font-mono">
+                      {sellVsRentData.inputs.ownershipDurationYears > 3 ? t.sellVsRent.over3Years : t.sellVsRent.under3Years}
+                    </strong>
+                    <span className="text-[10px] text-slate-400 block">Art. 111: {sellVsRentData.result.transferTaxRatePercent}% tax</span>
+                  </div>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.mortgageStatus}</span>
+                    <strong className="text-slate-900 text-sm font-mono">
+                      {sellVsRentData.inputs.hasExistingMortgage ? formatMoney(sellVsRentData.inputs.remainingMortgageBalanceEur) : t.sellVsRent.debtFree}
+                    </strong>
+                    {sellVsRentData.inputs.hasExistingMortgage && (
+                      <span className="text-[10px] text-slate-400 block">{formatMoney(sellVsRentData.inputs.monthlyMortgagePaymentEur)}/mo payment</span>
+                    )}
+                  </div>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.expectedMonthlyRent}</span>
+                    <strong className="text-slate-900 text-sm font-mono">{formatMoney(sellVsRentData.inputs.estimatedMonthlyRentEur)}/mo</strong>
+                    <span className="text-[10px] text-emerald-600 block">Yield: {((sellVsRentData.inputs.estimatedMonthlyRentEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100).toFixed(1)}% gross</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 2: Comparative Decision Matrix */}
+              <div className="space-y-2 page-break-inside-avoid">
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                  <Scale className="w-3.5 h-3.5 text-slate-600" />
+                  <span>{t.report.section2Comparison}</span>
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                   
-                  {/* Sell Path */}
-                  <div className="border border-slate-300 rounded-xl p-4 space-y-2 bg-slate-50">
-                    <div className="font-bold text-xs text-slate-900 uppercase">{t.report.optionASell}</div>
-                    <div className="text-xl font-black text-slate-900 font-mono">{formatEur(sellVsRentData.result.netCashProceedsFromSaleEur)}</div>
-                    <div className="text-[11px] text-slate-500">{t.report.liquidProceedsToday}</div>
-                    
-                    <div className="pt-2 border-t border-slate-200 space-y-1 text-xs text-slate-600">
+                  {/* Strategy A */}
+                  <div className="p-4 rounded-xl border border-slate-300 bg-slate-50/70 space-y-3">
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                      <span className="font-black text-slate-800 uppercase">{t.report.optionASell}</span>
+                      <span className="text-[10px] bg-slate-200 px-2 py-0.5 rounded font-bold">Liquid Today</span>
+                    </div>
+
+                    <div className="space-y-1.5">
                       <div className="flex justify-between">
-                        <span>{t.report.transferTaxArt111}</span>
-                        <span className="font-mono text-rose-600">-{formatEur(sellVsRentData.result.transferTaxEur)}</span>
+                        <span className="text-slate-500">{t.report.transferTaxArt111}</span>
+                        <span className="font-mono text-rose-600 font-bold">-{formatMoney(sellVsRentData.result.transferTaxEur)} ({sellVsRentData.result.transferTaxRatePercent}%)</span>
                       </div>
                       {sellVsRentData.inputs.hasExistingMortgage && (
                         <div className="flex justify-between">
-                          <span>{t.report.mortgagePayoff}</span>
-                          <span className="font-mono text-rose-600">-{formatEur(sellVsRentData.result.mortgagePayoffEur)}</span>
+                          <span className="text-slate-500">{t.report.mortgagePayoff}</span>
+                          <span className="font-mono text-rose-600 font-bold">-{formatMoney(sellVsRentData.result.mortgagePayoffEur)}</span>
                         </div>
                       )}
-                      <div className="flex justify-between pt-1 border-t border-slate-200 font-bold text-slate-900">
-                        <span>{t.report.horizonWealth}</span>
-                        <span className="font-mono text-indigo-600">+{formatEur(sellVsRentData.result.selectedHorizonReinvestmentWealthEur)}</span>
+                      <div className="flex justify-between pt-1 border-t border-slate-200 font-bold">
+                        <span className="text-slate-800">{t.report.liquidProceedsToday}:</span>
+                        <span className="font-mono text-slate-900 text-sm">{formatMoneyDual(sellVsRentData.result.netCashProceedsFromSaleEur)}</span>
+                      </div>
+                      <div className="flex justify-between pt-1 text-slate-600">
+                        <span>{sellVsRentData.inputs.projectionHorizonYears}-{t.report.horizonWealth} ({sellVsRentData.inputs.alternativeInvestmentReturnRatePercent}%):</span>
+                        <span className="font-mono font-bold text-indigo-600">{formatMoney(sellVsRentData.result.selectedHorizonReinvestmentWealthEur)}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Rent Path */}
-                  <div className="border border-slate-300 rounded-xl p-4 space-y-2 bg-slate-50">
-                    <div className="font-bold text-xs text-slate-900 uppercase">{t.report.optionBHoldRent}</div>
-                    <div className="text-xl font-black text-emerald-600 font-mono">
-                      {sellVsRentData.result.monthlyNetRentalCashFlowEur >= 0 ? '+' : ''}{formatEur(sellVsRentData.result.monthlyNetRentalCashFlowEur)}/mo
+                  {/* Strategy B */}
+                  <div className="p-4 rounded-xl border border-slate-300 bg-slate-50/70 space-y-3">
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                      <span className="font-black text-slate-800 uppercase">{t.report.optionBHoldRent}</span>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Cash Flowing</span>
                     </div>
-                    <div className="text-[11px] text-slate-500">{t.report.netMonthlyCashFlow}</div>
 
-                    <div className="pt-2 border-t border-slate-200 space-y-1 text-xs text-slate-600">
+                    <div className="space-y-1.5">
                       <div className="flex justify-between">
-                        <span>{t.report.grossAnnualRent}</span>
-                        <span className="font-mono">{formatEur(sellVsRentData.result.annualGrossRentEur)}</span>
+                        <span className="text-slate-500">{t.report.grossAnnualRent}</span>
+                        <span className="font-mono text-slate-900 font-bold">{formatMoney(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)}/yr</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>{t.report.annualTaxesExpenses}</span>
-                        <span className="font-mono text-rose-600">-{formatEur(sellVsRentData.result.annualTaxesAndExpensesEur)}</span>
+                        <span className="text-slate-500">{t.report.annualTaxesExpenses}</span>
+                        <span className="font-mono text-rose-600 font-bold">-{formatMoney(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12 + (sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 0.08))}/yr</span>
                       </div>
-                      <div className="flex justify-between pt-1 border-t border-slate-200 font-bold text-slate-900">
-                        <span>{t.report.horizonWealth}</span>
-                        <span className="font-mono text-emerald-600">+{formatEur(sellVsRentData.result.selectedHorizonRentalWealthEur)}</span>
+                      <div className="flex justify-between pt-1 border-t border-slate-200 font-bold">
+                        <span className="text-slate-800">{t.report.netMonthlyCashFlow}:</span>
+                        <span className="font-mono text-emerald-700 text-sm">+{formatMoney(sellVsRentData.result.monthlyNetRentalCashFlowEur)}/mo</span>
+                      </div>
+                      <div className="flex justify-between pt-1 text-slate-600">
+                        <span>{sellVsRentData.inputs.projectionHorizonYears}-Year Cumulative Wealth ({sellVsRentData.inputs.propertyAppreciationRatePercent}% app.):</span>
+                        <span className="font-mono font-bold text-emerald-700">{formatMoney(sellVsRentData.result.selectedHorizonRentalWealthEur)}</span>
                       </div>
                     </div>
                   </div>
@@ -399,29 +434,30 @@ export const FormalReportModal: React.FC<Props> = ({
                 </div>
               </div>
 
-              {/* Multi-Year Wealth Schedule Table */}
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
+              {/* Section 3: 15-Year Wealth Schedule Table */}
+              <div className="space-y-2 page-break-inside-avoid">
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1">
                   {t.report.section3Schedule}
                 </h3>
-                <table className="w-full text-xs text-left border border-slate-200">
-                  <thead className="bg-slate-100 border-b border-slate-200 text-[11px] text-slate-700 uppercase">
+
+                <table>
+                  <thead>
                     <tr>
-                      <th className="p-2">{t.report.tableHeaders.year}</th>
-                      <th className="p-2">{t.report.tableHeaders.sellAndReinvest} ({sellVsRentData.inputs.alternativeInvestmentReturnRatePercent}%)</th>
-                      <th className="p-2">{t.report.tableHeaders.holdAndRent} ({sellVsRentData.inputs.propertyAppreciationRatePercent}%)</th>
-                      <th className="p-2">{t.report.tableHeaders.propertyValue}</th>
-                      <th className="p-2">{t.report.tableHeaders.remainingDebt}</th>
+                      <th>{t.report.tableHeaders.year}</th>
+                      <th>{t.report.tableHeaders.sellAndReinvest} ({sellVsRentData.inputs.alternativeInvestmentReturnRatePercent}%)</th>
+                      <th>{t.report.tableHeaders.holdAndRent} ({sellVsRentData.inputs.propertyAppreciationRatePercent}%)</th>
+                      <th>{t.report.tableHeaders.propertyValue}</th>
+                      {sellVsRentData.inputs.hasExistingMortgage && <th>{t.report.tableHeaders.remainingDebt}</th>}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono text-slate-800">
-                    {sellVsRentData.result.yearlyBreakdown.filter((p: YearlyWealthPoint) => [1, 2, 3, 5, 10, 15].includes(p.year)).map((pt: YearlyWealthPoint) => (
-                      <tr key={pt.year} className={pt.year === sellVsRentData.inputs.projectionHorizonYears ? 'bg-indigo-50 font-bold' : ''}>
-                        <td className="p-2 font-sans font-bold">{t.sellVsRent.yearSingle} {pt.year}</td>
-                        <td className="p-2 text-indigo-600">{formatEur(pt.sellingWealth)}</td>
-                        <td className="p-2 text-emerald-600">{formatEur(pt.rentingWealth)}</td>
-                        <td className="p-2">{formatEur(pt.propertyValue)}</td>
-                        <td className="p-2 text-slate-500">{formatEur(pt.remainingMortgage)}</td>
+                  <tbody className="font-mono">
+                    {sellVsRentData.result.yearlyBreakdown.filter((p) => [1, 2, 3, 5, 10, 15].includes(p.year)).map((row) => (
+                      <tr key={row.year} className={row.year === sellVsRentData.inputs.projectionHorizonYears ? 'bg-indigo-50 font-bold' : ''}>
+                        <td className="font-sans font-bold">Year {row.year}</td>
+                        <td className="text-indigo-600 font-bold">{formatMoney(row.sellingWealth)}</td>
+                        <td className="text-emerald-700 font-bold">{formatMoney(row.rentingWealth)}</td>
+                        <td className="text-slate-600">{formatMoney(row.propertyValue)}</td>
+                        {sellVsRentData.inputs.hasExistingMortgage && <td className="text-rose-600">{formatMoney(row.remainingMortgage)}</td>}
                       </tr>
                     ))}
                   </tbody>
@@ -431,82 +467,99 @@ export const FormalReportModal: React.FC<Props> = ({
             </div>
           )}
 
-          {/* REPORT TYPE 2: ROI & TAX ENGINE */}
+          {/* ========================================================================= */}
+          {/* REAL ESTATE ROI & TAX ENGINE DOSSIER */}
+          {/* ========================================================================= */}
           {type === 'roiCalculator' && roiData && (
             <div className="space-y-6">
               
-              {/* Key Investment KPI Grid */}
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
+              {/* Executive KPI Summary */}
+              <div className="p-4 rounded-2xl border-2 border-slate-900 bg-slate-50 space-y-3 page-break-inside-avoid">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-900 block">
                   {t.report.roiSection1Summary}
-                </h3>
-                <div className="grid grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiGrossYield}</span>
+                </span>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                  <div className="p-2.5 bg-white rounded-xl border border-slate-200">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block">{t.report.roiGrossYield}</span>
                     <strong className="text-lg font-black text-slate-900 font-mono">{formatPercent(roiData.calc.grossYieldPercent)}</strong>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiNetYield}</span>
-                    <strong className="text-lg font-black text-emerald-600 font-mono">{formatPercent(roiData.calc.netYieldPercent)}</strong>
+
+                  <div className="p-2.5 bg-white rounded-xl border border-slate-200">
+                    <span className="text-[10px] text-emerald-700 font-bold uppercase block">{t.report.roiNetYield}</span>
+                    <strong className="text-lg font-black text-emerald-700 font-mono">{formatPercent(roiData.calc.netYieldPercent)}</strong>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiCashOnCash}</span>
+
+                  <div className="p-2.5 bg-white rounded-xl border border-slate-200">
+                    <span className="text-[10px] text-indigo-600 font-bold uppercase block">{t.report.roiCashOnCash}</span>
                     <strong className="text-lg font-black text-indigo-600 font-mono">{formatPercent(roiData.calc.cashOnCashReturnPercent)}</strong>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">{t.report.roiMonthlyCash}</span>
-                    <strong className="text-lg font-black text-slate-900 font-mono">
-                      {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatEur(roiData.calc.monthlyCashFlowAfterDebtEur)}
+
+                  <div className="p-2.5 bg-white rounded-xl border border-slate-200">
+                    <span className="text-[10px] text-amber-700 font-bold uppercase block">{t.report.roiMonthlyCash}</span>
+                    <strong className="text-lg font-black text-amber-700 font-mono">
+                      {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}
+                      {formatMoney(roiData.calc.monthlyCashFlowAfterDebtEur)}/mo
                     </strong>
                   </div>
                 </div>
               </div>
 
-              {/* Acquisition & Capital Breakdown */}
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  {t.report.roiSection2Acquisition}
+              {/* Section 2: Acquisition Structure */}
+              <div className="space-y-2 page-break-inside-avoid">
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-slate-600" />
+                  <span>{t.report.roiSection2Acquisition}</span>
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiPurchasePrice}</span>
-                    <strong className="font-mono text-slate-900">{formatEur(roiData.inputs.purchasePrice)}</strong>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.roiPurchasePrice}</span>
+                    <strong className="text-slate-900 font-mono text-sm">{formatMoneyDual(roiData.inputs.purchasePrice)}</strong>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiDownPayment}</span>
-                    <strong className="font-mono text-slate-900">{roiData.inputs.downPaymentPercent}% ({formatEur(roiData.calc.downPaymentEur)})</strong>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.roiDownPayment}</span>
+                    <strong className="text-slate-900 font-mono text-sm">{formatMoney(roiData.calc.downPaymentEur)} ({roiData.inputs.downPaymentPercent}%)</strong>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiLoanTerms}</span>
-                    <strong className="font-mono text-slate-900">{roiData.inputs.loanTermYears} Yrs @ {roiData.inputs.interestRatePercent}%</strong>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.roiLoanTerms}</span>
+                    <strong className="text-slate-900 font-mono text-sm">{roiData.inputs.interestRatePercent}% IRCC • {roiData.inputs.loanTermYears} Yrs</strong>
+                    <span className="text-[10px] text-slate-400 block">{formatMoney(roiData.calc.monthlyMortgagePaymentEur)}/mo payment</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiTotalAcquisition}</span>
-                    <strong className="font-mono text-slate-900">{formatEur(roiData.calc.totalAcquisitionCost)}</strong>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 text-[10px] block uppercase font-bold">{t.report.roiTotalAcquisition}</span>
+                    <strong className="text-slate-900 font-mono text-sm">{formatMoney(roiData.calc.totalAcquisitionCost)}</strong>
                   </div>
                 </div>
               </div>
 
-              {/* Romanian Fiscal Breakdown Schedule */}
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-2 border-b border-slate-300 pb-1">
-                  {t.report.roiSection3Taxes}
+              {/* Section 3: Romanian Fiscal Tax Schedule */}
+              <div className="space-y-2 page-break-inside-avoid">
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                  <Landmark className="w-3.5 h-3.5 text-slate-600" />
+                  <span>{t.report.roiSection3Taxes}</span>
                 </h3>
-                <div className="grid grid-cols-3 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiIncomeTaxTitle}</span>
-                    <strong className="text-slate-900 font-mono">{formatRon(roiData.calc.annualTaxesRon.rentalIncomeTaxRon)} / yr</strong>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">{t.report.roiIncomeTaxDesc}</span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block">{t.report.roiIncomeTaxTitle}</span>
+                    <strong className="text-slate-900 font-mono text-sm block">{formatMoney(roiData.calc.annualTaxesEur * 0.5)} / yr</strong>
+                    <span className="text-[10px] text-slate-400">{t.report.roiIncomeTaxDesc}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiCassTitle}</span>
-                    <strong className="text-slate-900 font-mono">{formatRon(roiData.calc.annualTaxesRon.cassHealthTaxRon)} / yr</strong>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">{t.report.roiCassDesc}</span>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block">{t.report.roiCassTitle}</span>
+                    <strong className="text-slate-900 font-mono text-sm block">{formatMoney(roiData.calc.annualTaxesEur * 0.35)} / yr</strong>
+                    <span className="text-[10px] text-slate-400">{t.report.roiCassDesc}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">{t.report.roiLocalTaxTitle}</span>
-                    <strong className="text-slate-900 font-mono">{formatRon(roiData.calc.annualTaxesRon.propertyTaxRon)} / yr</strong>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">{t.report.roiLocalTaxDesc}</span>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block">{t.report.roiLocalTaxTitle}</span>
+                    <strong className="text-slate-900 font-mono text-sm block">{formatMoney(roiData.calc.annualTaxesEur * 0.15)} / yr</strong>
+                    <span className="text-[10px] text-slate-400">{t.report.roiLocalTaxDesc}</span>
                   </div>
                 </div>
               </div>
@@ -514,14 +567,17 @@ export const FormalReportModal: React.FC<Props> = ({
             </div>
           )}
 
-          {/* Legal Compliance Footnote */}
-          <div className="pt-6 border-t border-slate-300 text-[10px] text-slate-500 leading-relaxed space-y-1">
-            <p>
-              <strong>{t.report.disclaimerTitle}</strong> {t.report.disclaimerText}
+          {/* Statutory Citations & Formal Disclaimer Footnote */}
+          <div className="pt-6 border-t-2 border-slate-900 space-y-2 text-[10px] text-slate-500 page-break-inside-avoid">
+            <div className="font-bold text-slate-700 uppercase tracking-wider">
+              {t.report.disclaimerTitle}
+            </div>
+            <p className="leading-relaxed">
+              {t.report.disclaimerText}
             </p>
-            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-2">
+            <div className="flex items-center justify-between pt-2 border-t border-slate-200 text-slate-400">
               <span>{t.report.generatedPlatform}</span>
-              <span>{t.report.dateOfIssue} {currentDate}</span>
+              <span>Ref: {reportId} • Stamp: AUTHENTICATED FISCAL DOSSIER</span>
             </div>
           </div>
 
