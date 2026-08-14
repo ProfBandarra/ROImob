@@ -23,6 +23,7 @@ import {
 
 interface Props {
   type: 'sellVsRent' | 'roiCalculator';
+  mode?: 'quick' | 'pro';
   sellVsRentData?: {
     inputs: SellVsRentInputs;
     result: SellVsRentResult;
@@ -292,6 +293,7 @@ const DossierROIChart: React.FC<{
 
 export const FormalReportModal: React.FC<Props> = ({
   type,
+  mode = 'pro',
   sellVsRentData,
   roiData,
   onClose
@@ -345,7 +347,7 @@ export const FormalReportModal: React.FC<Props> = ({
     }
   );
 
-  const reportId = `ROIMOB-${type === 'sellVsRent' ? 'SVR' : 'ROI'}-${Date.now().toString().slice(-6)}`;
+  const reportId = `ROIMOB-${type === 'sellVsRent' ? 'SVR' : 'ROI'}-${mode.toUpperCase()}-${Date.now().toString().slice(-5)}`;
 
   const handlePrint = () => {
     const printContent = document.getElementById('formal-report-print-sheet');
@@ -390,113 +392,90 @@ export const FormalReportModal: React.FC<Props> = ({
               line-height: 1.4;
               padding: 0;
             }
+            .page-break {
+              page-break-after: always;
+              break-after: page;
+            }
+            .page-break-inside-avoid {
+              page-break-inside: avoid;
+              break-inside: avoid;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 4px 0 8px 0;
+              font-size: 10px;
+            }
+            th, td {
+              border: 1px solid #cbd5e1;
+              padding: 4px 6px;
+              text-align: left;
+            }
+            th {
+              background-color: #f1f5f9 !important;
+              font-weight: 700;
+              text-transform: uppercase;
+              font-size: 8.5px;
+              letter-spacing: 0.05em;
+              color: #334155 !important;
+            }
+            .text-right { text-align: right; }
             .font-bold { font-weight: 700; }
             .font-black { font-weight: 900; }
             .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-            .uppercase { text-transform: uppercase; }
-            .tracking-wider { letter-spacing: 0.05em; }
-            
-            .flex { display: flex; }
-            .items-center { align-items: center; }
-            .items-start { align-items: flex-start; }
-            .justify-between { justify-content: space-between; }
-            .justify-center { justify-content: center; }
-            .gap-1 { gap: 4px; }
-            .gap-1\\.5 { gap: 6px; }
-            .gap-2 { gap: 8px; }
-            .gap-3 { gap: 12px; }
-            .gap-4 { gap: 16px; }
-            
-            .grid { display: grid; }
-            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            
-            .p-2 { padding: 8px; }
-            .p-3 { padding: 12px; }
-            .p-3\\.5 { padding: 14px; }
-            .p-4 { padding: 16px; }
-            .p-6 { padding: 24px; }
-            .p-8 { padding: 32px; }
-            .p-10 { padding: 40px; }
-            .pb-1 { padding-bottom: 4px; }
-            .pb-1\\.5 { padding-bottom: 6px; }
-            .pb-2 { padding-bottom: 8px; }
-            .pb-3 { padding-bottom: 12px; }
-            .pt-1 { padding-top: 4px; }
-            .pt-1\\.5 { padding-top: 6px; }
-            .pt-2 { padding-top: 8px; }
-            .pt-3 { padding-top: 12px; }
-            .my-2 { margin-top: 8px; margin-bottom: 8px; }
-            .my-3 { margin-top: 12px; margin-bottom: 12px; }
-            
-            .space-y-1 > * + * { margin-top: 4px; }
-            .space-y-1\\.5 > * + * { margin-top: 6px; }
-            .space-y-2 > * + * { margin-top: 8px; }
-            .space-y-3 > * + * { margin-top: 12px; }
-            .space-y-4 > * + * { margin-top: 16px; }
-            .space-y-5 > * + * { margin-top: 20px; }
-            
-            .bg-white { background-color: #ffffff !important; }
-            .bg-slate-50 { background-color: #f8fafc !important; }
-            .bg-slate-100 { background-color: #f1f5f9 !important; }
-            .bg-slate-900 { background-color: #0f172a !important; color: #ffffff !important; }
-            .bg-emerald-50 { background-color: #ecfdf5 !important; }
-            .bg-emerald-600 { background-color: #059669 !important; color: #ffffff !important; }
-            .bg-indigo-50 { background-color: #eef2ff !important; }
-            .bg-indigo-600 { background-color: #4f46e5 !important; color: #ffffff !important; }
-            
+            .font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+            .text-emerald-700 { color: #047857 !important; }
+            .text-emerald-800 { color: #065f46 !important; }
+            .text-indigo-700 { color: #4338ca !important; }
+            .text-indigo-600 { color: #4f46e5 !important; }
+            .text-rose-600 { color: #e11d48 !important; }
             .text-slate-900 { color: #0f172a !important; }
-            .text-slate-800 { color: #1e293b !important; }
             .text-slate-700 { color: #334155 !important; }
             .text-slate-600 { color: #475569 !important; }
             .text-slate-500 { color: #64748b !important; }
             .text-slate-400 { color: #94a3b8 !important; }
-            .text-slate-300 { color: #cbd5e1 !important; }
-            .text-white { color: #ffffff !important; }
-            .text-emerald-700 { color: #047857 !important; }
-            .text-emerald-800 { color: #065f46 !important; }
-            .text-indigo-600 { color: #4f46e5 !important; }
-            .text-indigo-700 { color: #4338ca !important; }
-            .text-rose-600 { color: #e11d48 !important; }
-            
-            .border { border: 1px solid #e2e8f0; }
+            .bg-slate-900 { background-color: #0f172a !important; color: #ffffff !important; }
+            .bg-emerald-600 { background-color: #059669 !important; color: #ffffff !important; }
+            .bg-slate-50 { background-color: #f8fafc !important; }
+            .bg-slate-100 { background-color: #f1f5f9 !important; }
+            .bg-indigo-50 { background-color: #eef2ff !important; }
+            .border { border: 1px solid #cbd5e1; }
             .border-b { border-bottom: 1px solid #cbd5e1; }
-            .border-b-2 { border-bottom: 2px solid #0f172a; }
-            .border-t { border-top: 1px solid #e2e8f0; }
+            .border-t { border-top: 1px solid #cbd5e1; }
             .border-t-2 { border-top: 2px solid #0f172a; }
-            .border-slate-200 { border-color: #e2e8f0; }
-            .border-slate-300 { border-color: #cbd5e1; }
-            .border-slate-900 { border-color: #0f172a; }
-            
-            .rounded-md { border-radius: 6px; }
-            .rounded-lg { border-radius: 8px; }
-            .rounded-xl { border-radius: 12px; }
-            .rounded-full { border-radius: 9999px; }
-            
-            .text-center { text-align: center; }
-            .text-right { text-align: right; }
-            .text-xs { font-size: 11px; }
-            .text-sm { font-size: 13px; }
-            .text-base { font-size: 14px; }
-            .text-lg { font-size: 16px; }
-            .text-xl { font-size: 20px; }
-            
-            .list-disc { list-style-type: disc; }
-            .pl-4 { padding-left: 16px; }
+            .rounded-lg { border-radius: 6px; }
+            .rounded-xl { border-radius: 8px; }
+            .p-4 { padding: 12px; }
+            .p-3 { padding: 10px; }
+            .p-3\\.5 { padding: 10px; }
+            .py-2 { padding-top: 6px; padding-bottom: 6px; }
+            .px-3 { padding-left: 8px; padding-right: 8px; }
+            .mb-2 { margin-bottom: 6px; }
+            .mb-3 { margin-bottom: 8px; }
+            .space-y-4 > * + * { margin-top: 10px; }
+            .space-y-3 > * + * { margin-top: 8px; }
+            .space-y-1 > * + * { margin-top: 3px; }
+            .space-y-1\\.5 > * + * { margin-top: 4px; }
+            .flex { display: flex; }
+            .items-center { align-items: center; }
+            .justify-between { justify-content: space-between; }
+            .gap-2 { gap: 6px; }
+            .gap-3 { gap: 8px; }
+            .gap-4 { gap: 12px; }
+            .uppercase { text-transform: uppercase; }
+            .tracking-wider { letter-spacing: 0.05em; }
+            .tracking-tight { letter-spacing: -0.02em; }
+            .text-xs { font-size: 10px; }
+            .text-sm { font-size: 11px; }
+            .text-base { font-size: 12px; }
+            .text-lg { font-size: 14px; }
+            .text-xl { font-size: 16px; }
+            .leading-relaxed { line-height: 1.45; }
             .w-full { width: 100%; }
-            .h-auto { height: auto; }
-            
-            table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 10.5px; }
-            th, td { padding: 5px 8px; text-align: left; }
-            th { background-color: #f1f5f9; border-bottom: 1.5px solid #cbd5e1; color: #0f172a; font-weight: 700; }
-            td { border-bottom: 1px solid #e2e8f0; }
-            tr:nth-child(even) { background-color: #f8fafc; }
-            
-            .page-break-before { page-break-before: always; }
-            .page-break-inside-avoid { page-break-inside: avoid; }
-            .page-break-preview-divider { display: none; }
-            
-            @page { size: A4 portrait; margin: 10mm; }
+            @page {
+              size: A4 portrait;
+              margin: 10mm 12mm 10mm 12mm;
+            }
           </style>
         </head>
         <body>
@@ -523,11 +502,20 @@ export const FormalReportModal: React.FC<Props> = ({
           <div className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-400" />
             <div>
-              <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider block">
-                {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi} • {t.report.officialDossier}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider block">
+                  {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi} • {t.report.officialDossier}
+                </span>
+                <span className={`px-2 py-0.5 rounded-full border text-[9px] font-mono font-bold uppercase ${
+                  mode === 'quick' 
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-300' 
+                    : 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300'
+                }`}>
+                  {mode === 'quick' ? '⚡ ' + t.mode.quick : '🔬 ' + t.mode.pro}
+                </span>
+              </div>
               <span className="text-[10px] text-slate-400 font-mono">
-                {reportId} • 2-Page Verified A4 Format
+                {reportId} • 2-Page Verified A4 Format • {primaryCode} + {secondaryCode}
               </span>
             </div>
           </div>
@@ -585,8 +573,18 @@ export const FormalReportModal: React.FC<Props> = ({
                   <div className="font-bold text-slate-900">Jurisdiction: Romania (ANAF)</div>
                   <div>Fiscal Ref: Law 227/2015 & OUG 115/2023</div>
                   <div className="text-slate-500">{t.report.auditRef} {reportId}</div>
-                  <div className="text-emerald-700 font-bold">{primaryCode} + {secondaryCode}</div>
+                  <div className="text-emerald-700 font-bold">
+                    {mode === 'quick' ? t.report.quickAuditBadge : t.report.proAuditBadge}
+                  </div>
                 </div>
+              </div>
+
+              {/* Methodology Scope Note */}
+              <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-[10px] text-slate-600 flex items-start gap-2">
+                <span className="font-bold text-slate-800 uppercase shrink-0">
+                  {mode === 'quick' ? '⚡ ' + t.mode.quick : '🔬 ' + t.mode.pro}:
+                </span>
+                <span>{mode === 'quick' ? t.report.quickAuditDesc : t.report.proAuditDesc}</span>
               </div>
 
               {/* SELL VS RENT OPTIMIZER CONTENT (PAGE 1) */}
@@ -855,6 +853,10 @@ export const FormalReportModal: React.FC<Props> = ({
                   {t.report.commentaryTitle}
                 </span>
                 <ul className="list-disc pl-4 space-y-1 text-[11px] leading-relaxed">
+                  <li>
+                    <strong>{mode === 'quick' ? t.report.quickAuditBadge : t.report.proAuditBadge}:</strong>{' '}
+                    {mode === 'quick' ? t.report.quickAuditDesc : t.report.proAuditDesc}
+                  </li>
                   {type === 'sellVsRent' && sellVsRentData ? (
                     <>
                       <li>

@@ -337,6 +337,7 @@ export const QuickSellVsRent: React.FC<Props> = ({ onSwitchToPro }) => {
       {showReportModal && (
         <FormalReportModal
           type="sellVsRent"
+          mode="quick"
           sellVsRentData={{
             inputs: calculationInputs,
             result

@@ -1044,6 +1044,7 @@ export const SellVsRentCalculator: React.FC<Props> = ({ onSwitchToSimple }) => {
       {showReportModal && (
         <FormalReportModal
           type="sellVsRent"
+          mode="pro"
           sellVsRentData={{
             inputs,
             result

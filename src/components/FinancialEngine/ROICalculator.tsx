@@ -572,6 +572,7 @@ export const ROICalculator: React.FC<Props> = ({ onSwitchToSimple }) => {
       {showReportModal && (
         <FormalReportModal
           type="roiCalculator"
+          mode="pro"
           roiData={{
             inputs: {
               purchasePrice,

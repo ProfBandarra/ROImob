@@ -113,6 +113,10 @@ export interface TranslationDictionary {
   report: {
     titleSvr: string;
     titleRoi: string;
+    quickAuditBadge: string;
+    proAuditBadge: string;
+    quickAuditDesc: string;
+    proAuditDesc: string;
     printBtn: string;
     officialDossier: string;
     suiteTitle: string;

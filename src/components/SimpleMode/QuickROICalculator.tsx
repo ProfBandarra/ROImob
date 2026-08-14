@@ -312,6 +312,7 @@ export const QuickROICalculator: React.FC<Props> = ({ onSwitchToPro }) => {
       {showReportModal && (
         <FormalReportModal
           type="roiCalculator"
+          mode="quick"
           roiData={{
             inputs: calculationInputs,
             calc,
