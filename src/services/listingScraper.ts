@@ -20,8 +20,10 @@ export interface ScrapedListingData {
   county: string;
   thumbnailUrl: string;
   description: string;
-  platform: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro';
+  platform: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro' | 'Homezz.ro';
   sourceUrl: string;
+  missingFields: string[];
+  isPartial: boolean;
 }
 
 // 1. Live Real-Time HTML Fetcher with multi-gateway fallback
@@ -61,31 +63,33 @@ async function fetchLiveListingHtml(targetUrl: string): Promise<string> {
     // Fallback
   }
 
-  throw new Error('Unable to connect to live listing server. Please check URL accessibility.');
+  throw new Error('Unable to connect to live listing server. Please verify the URL.');
 }
 
-// 2. Intelligent Real-Time Parser extracting JSON-LD, OpenGraph & DOM
+// 2. Multi-Platform Real-Time Parser for OLX, Imobiliare, Storia, and HomeZZ
 export function parseListingHtml(html: string, url: string): ScrapedListingData {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
+  const missingFields: string[] = [];
 
   let title = '';
   let description = '';
   let thumbnailUrl = 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80';
-  let priceEur = 120000;
-  let usableAreaSqm = 55;
-  let rooms = 2;
+  let priceEur = 0;
+  let usableAreaSqm = 0;
+  let rooms = 0;
   let floor = 2;
   let totalFloors = 4;
-  let yearBuilt = 1980;
+  let yearBuilt = 0;
   let address = '';
   let city: 'Bucharest' | 'Cluj-Napoca' | 'Timișoara' | 'Iași' | 'Brașov' | 'Constanța' | 'Sibiu' | 'Oradea' | 'Ilfov' = 'Bucharest';
   let county = 'București';
 
   // Determine Platform
-  let platform: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro' = 'OLX.ro';
+  let platform: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro' | 'Homezz.ro' = 'OLX.ro';
   if (url.includes('imobiliare.ro')) platform = 'Imobiliare.ro';
   else if (url.includes('storia.ro')) platform = 'Storia.ro';
+  else if (url.includes('homezz.ro')) platform = 'Homezz.ro';
 
   // Strategy 1: Extract JSON-LD (<script type="application/ld+json">)
   const jsonLdScripts = doc.querySelectorAll('script[type="application/ld+json"]');
@@ -122,11 +126,54 @@ export function parseListingHtml(html: string, url: string): ScrapedListingData 
         }
       }
     } catch (e) {
-      // ignore invalid json-ld
+      // ignore
     }
   }
 
-  // Strategy 2: OpenGraph Meta Tags
+  // Strategy 2: Platform-Specific CSS Selectors
+  // OLX.ro Selectors
+  if (platform === 'OLX.ro') {
+    const olxTitle = doc.querySelector('h1[data-cy="ad_title"], [data-testid="ad_title"]')?.textContent;
+    if (olxTitle) title = olxTitle.trim();
+
+    const olxPrice = doc.querySelector('[data-testid="ad-price-container"] h3, [data-cy="ad-price"]')?.textContent;
+    if (olxPrice) {
+      const pNum = Number(olxPrice.replace(/\D/g, ''));
+      if (pNum > 1000) {
+        if (/lei|ron/i.test(olxPrice)) priceEur = Math.round(pNum / 4.975);
+        else priceEur = pNum;
+      }
+    }
+
+    const olxDesc = doc.querySelector('[data-cy="ad_description"], [data-testid="main-description"]')?.textContent;
+    if (olxDesc) description = olxDesc.trim();
+  }
+
+  // Imobiliare.ro Selectors
+  if (platform === 'Imobiliare.ro') {
+    const imobTitle = doc.querySelector('h1.titlu-oferta, h1.titlu')?.textContent;
+    if (imobTitle) title = imobTitle.trim();
+
+    const imobPrice = doc.querySelector('.pret-mare, .pret_principal, .first-content-price')?.textContent;
+    if (imobPrice) {
+      const pNum = Number(imobPrice.replace(/\D/g, ''));
+      if (pNum > 1000) priceEur = pNum;
+    }
+  }
+
+  // Homezz.ro Selectors
+  if (platform === 'Homezz.ro') {
+    const homezzTitle = doc.querySelector('h1[itemprop="name"], h1.offer-title')?.textContent;
+    if (homezzTitle) title = homezzTitle.trim();
+
+    const homezzPrice = doc.querySelector('span[itemprop="price"], .offer-price')?.textContent;
+    if (homezzPrice) {
+      const pNum = Number(homezzPrice.replace(/\D/g, ''));
+      if (pNum > 1000) priceEur = pNum;
+    }
+  }
+
+  // Strategy 3: OpenGraph Meta Tags Fallback
   if (!title) {
     const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content');
     if (ogTitle) title = ogTitle;
@@ -143,45 +190,49 @@ export function parseListingHtml(html: string, url: string): ScrapedListingData 
     if (ogImg) thumbnailUrl = ogImg;
   }
 
-  // Strategy 3: Regex Pattern Matching across raw text for Romanian specs
+  // Strategy 4: Regex Parsing across full DOM text for Romanian Real Estate Tokens
   const fullText = (doc.body ? doc.body.textContent || '' : '') + ' ' + title + ' ' + description;
 
-  // Price Regex (€ / EUR / RON / lei)
-  const priceMatches = fullText.match(/(\d{1,3}(?:[.,]\d{3})*|\d+)\s*(?:€|EUR|euro)/i);
-  if (priceMatches && priceMatches[1]) {
-    const cleanNum = Number(priceMatches[1].replace(/[.,]/g, ''));
-    if (cleanNum > 10000 && cleanNum < 10000000) {
-      priceEur = cleanNum;
+  // Price Regex
+  if (priceEur === 0) {
+    const priceMatches = fullText.match(/(\d{1,3}(?:[.,]\d{3})*|\d+)\s*(?:€|EUR|euro)/i);
+    if (priceMatches && priceMatches[1]) {
+      const cleanNum = Number(priceMatches[1].replace(/[.,]/g, ''));
+      if (cleanNum > 10000 && cleanNum < 10000000) priceEur = cleanNum;
     }
   }
 
   // Area Regex (m² / mp / metri patrati)
-  const areaMatches = fullText.match(/(\d{2,4}(?:[.,]\d+)?)\s*(?:mp|m2|m²|metri\s*p[aă]tra[tț]i)/i);
+  const areaMatches = fullText.match(/(\d{2,4}(?:[.,]\d+)?)\s*(?:mp|m2|m²|metri\s*p[aă]tra[tț]i|suprafata\s*utila)/i);
   if (areaMatches && areaMatches[1]) {
     const parsedArea = parseFloat(areaMatches[1].replace(',', '.'));
-    if (parsedArea >= 15 && parsedArea <= 1000) {
-      usableAreaSqm = Math.round(parsedArea);
-    }
+    if (parsedArea >= 15 && parsedArea <= 1000) usableAreaSqm = Math.round(parsedArea);
   }
 
-  // Rooms Regex (1, 2, 3, 4, 5 camere / garsoniera)
+  // Rooms Regex
   if (/garsonier[aă]|studio/i.test(fullText)) {
     rooms = 1;
   } else {
-    const roomMatch = fullText.match(/(\d)\s*(?:camere|camera|cam)/i);
+    const roomMatch = fullText.match(/(\d)\s*(?:camere|camera|cam\b)/i);
     if (roomMatch && roomMatch[1]) {
       rooms = Math.min(6, Math.max(1, parseInt(roomMatch[1], 10)));
     }
   }
 
-  // Year Built Regex (1920 - 2026)
+  // Year Built Regex
   const yearMatch = fullText.match(/(?:an\s*construc[tț]ie|construit\s*[îi]n|bloc\s*din|anul)\s*:?\s*(\d{4})/i) ||
                     fullText.match(/\b(19[2-9]\d|20[0-2]\d)\b/);
   if (yearMatch && yearMatch[1]) {
     const yr = parseInt(yearMatch[1], 10);
-    if (yr >= 1900 && yr <= 2026) {
-      yearBuilt = yr;
-    }
+    if (yr >= 1900 && yr <= 2026) yearBuilt = yr;
+  }
+
+  // Floor Regex
+  const floorMatch = fullText.match(/etaj(?:ul)?\s*:?\s*(\d+|parter|demisol)/i);
+  if (floorMatch && floorMatch[1]) {
+    if (/parter/i.test(floorMatch[1])) floor = 0;
+    else if (/demisol/i.test(floorMatch[1])) floor = -1;
+    else floor = parseInt(floorMatch[1], 10) || 2;
   }
 
   // City & County Detection
@@ -218,6 +269,24 @@ export function parseListingHtml(html: string, url: string): ScrapedListingData 
     address = `${city}, România`;
   }
 
+  // 5. Track Missing Fields & Apply Sensible Defaults for Partial Results
+  if (!priceEur) {
+    missingFields.push('Asking Price (€)');
+    priceEur = 115000;
+  }
+  if (!usableAreaSqm) {
+    missingFields.push('Usable Area (m²)');
+    usableAreaSqm = 55;
+  }
+  if (!rooms) {
+    missingFields.push('Number of Rooms');
+    rooms = 2;
+  }
+  if (!yearBuilt) {
+    missingFields.push('Year Built (An Construcție)');
+    yearBuilt = 1982;
+  }
+
   return {
     title: title.trim().substring(0, 120),
     priceEur,
@@ -230,9 +299,11 @@ export function parseListingHtml(html: string, url: string): ScrapedListingData 
     city,
     county,
     thumbnailUrl,
-    description: description.trim().substring(0, 300) || 'Proprietate importată în timp real.',
+    description: description.trim().substring(0, 300) || 'Proprietate importată în timp real din anunț.',
     platform,
     sourceUrl: url,
+    missingFields,
+    isPartial: missingFields.length > 0,
   };
 }
 
@@ -253,7 +324,7 @@ export async function geocodeAddressRealTime(query: string, city: string): Promi
       }
     }
   } catch (e) {
-    // Fallback to city center
+    // Fallback
   }
 
   const CITY_COORDS: Record<string, [number, number]> = {
@@ -287,12 +358,7 @@ export async function fetchLiveAirQuality(lat: number, lng: number): Promise<{ a
         else if (euaqi > 50 || pm25 > 25) status = 'Unhealthy for Sensitive';
         else if (euaqi > 30 || pm25 > 15) status = 'Moderate';
 
-        return {
-          aqi: euaqi,
-          pm25,
-          pm10,
-          status
-        };
+        return { aqi: euaqi, pm25, pm10, status };
       }
     }
   } catch (e) {
@@ -326,6 +392,15 @@ export async function evaluateLiveListingUrl(
   // Step 5: Official Seismic & School Cross-Check
   onProgress?.({ step: 'SEISMIC_AUDIT', message: 'Cross-referencing AMCCRS Seismic Expertises & Min. Educației School exam pass rates...' });
   
+  return buildEvaluatedProperty(scraped, coordinates, air);
+}
+
+// Helper to construct / recompute evaluated Property
+export function buildEvaluatedProperty(
+  scraped: ScrapedListingData,
+  coordinates: [number, number],
+  air: { aqi: number; pm25: number; pm10: number; status: 'Good' | 'Moderate' | 'Unhealthy for Sensitive' | 'Unhealthy' }
+): Property {
   // Seismic Risk Classification
   let riskClass: SeismicRiskClass = 'POST_1977_SAFE';
   let structuralType = 'Cadre și Diafragme Beton Armat Post-1977';
@@ -363,9 +438,7 @@ export async function evaluateLiveListingUrl(
 
   const estimatedMonthlyRent = Math.round(scraped.priceEur * 0.0055); // realistic ~6.6% gross yield benchmark
 
-  onProgress?.({ step: 'DONE', message: 'Evaluation Complete! Official Diagnostic Dossier Generated.' });
-
-  const evaluatedProperty: Property = {
+  return {
     id: `live-${Date.now()}`,
     title: scraped.title,
     address: scraped.address,
@@ -385,6 +458,8 @@ export async function evaluateLiveListingUrl(
     features: [`${scraped.rooms} Camere`, `${scraped.usableAreaSqm} m² Utili`, `An ${scraped.yearBuilt}`, `Sursă: ${scraped.platform}`],
     sourcePlatform: scraped.platform,
     sourceListingUrl: scraped.sourceUrl,
+    isPartial: scraped.isPartial,
+    missingFields: scraped.missingFields,
     diagnostics: {
       seismic: {
         riskClass,
@@ -442,7 +517,7 @@ export async function evaluateLiveListingUrl(
       },
       education: {
         nearestSchoolName: nearestSchool.name,
-        schoolDistanceMeters: nearestSchool.studentsCount ? 450 : 500,
+        schoolDistanceMeters: 450,
         examAverageScore: nearestSchool.examAverageScore,
         provenance: {
           sourceName: 'Ministerul Educației / data.gov.ro',
@@ -476,6 +551,4 @@ export async function evaluateLiveListingUrl(
       estimatedRenovationCostEur: 2500
     }
   };
-
-  return evaluatedProperty;
 }

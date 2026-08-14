@@ -32,8 +32,12 @@ export interface Property {
   thumbnailUrl: string;
   description: string;
   features: string[];
-  sourcePlatform?: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro' | 'Direct Cadastre';
+  sourcePlatform?: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro' | 'Homezz.ro' | 'Direct Cadastre';
   sourceListingUrl?: string;
+  
+  // Partial Info Audit
+  isPartial?: boolean;
+  missingFields?: string[];
   
   // Real Estate Diagnostics & Official Risk Metadata
   diagnostics: {
@@ -173,26 +177,26 @@ export interface SellVsRentInputs {
   monthlyMortgagePaymentEur: number;
   remainingMortgageYears: number;
   mortgageInterestRatePercent: number;
-  earlyMortgagePrepaymentFeePercent: number; // 0% (standard variable) or up to 1% (fixed)
+  earlyMortgagePrepaymentFeePercent: number;
   
   // Transaction & Selling Costs
-  realEstateAgentCommissionPercent: number; // 0% (Direct Owner) to 3%
-  sellingPreparationCostEur: number; // Painting, staging, repairs
+  realEstateAgentCommissionPercent: number;
+  sellingPreparationCostEur: number;
 
   // Renting Assumptions
   estimatedMonthlyRentEur: number;
   monthlyOperatingExpensesEur: number;
-  propertyAppreciationRatePercent: number; // 0% to 8% p.a., default 3.5%
+  propertyAppreciationRatePercent: number;
   
   // Short-Term Rental Toggle & Assumptions
   includeShortTermOption: boolean;
   estimatedShortTermMonthlyNetEur: number;
 
-  // Alternative Reinvestment for Sale Proceeds (Supports 0% to 15%)
+  // Alternative Reinvestment for Sale Proceeds
   alternativeInvestmentReturnRatePercent: number;
 
   // Projection Horizon
-  projectionHorizonYears: number; // 1, 3, 5, 10, 15
+  projectionHorizonYears: number;
 }
 
 export interface YearlyWealthPoint {
@@ -206,9 +210,8 @@ export interface YearlyWealthPoint {
 }
 
 export interface SellVsRentResult {
-  // Selling Route Breakdown
   grossSalePriceEur: number;
-  transferTaxRatePercent: number; // 1% or 3% (Cod Fiscal Art. 111)
+  transferTaxRatePercent: number;
   transferTaxEur: number;
   notaryAndAgentFeesEur: number;
   prepaymentPenaltyEur: number;
@@ -216,13 +219,11 @@ export interface SellVsRentResult {
   mortgagePayoffEur: number;
   netCashProceedsFromSaleEur: number;
   
-  // Reinvestment of Sale Proceeds
   annualReinvestmentIncomeEur: number;
   selectedHorizonReinvestmentWealthEur: number;
   fiveYearReinvestmentWealthEur: number;
   tenYearReinvestmentWealthEur: number;
 
-  // Long-Term Renting Route Breakdown
   annualGrossRentEur: number;
   annualTaxesAndExpensesEur: number;
   annualMortgagePaymentsEur: number;
@@ -232,16 +233,13 @@ export interface SellVsRentResult {
   fiveYearRentalWealthEur: number;
   tenYearRentalWealthEur: number;
 
-  // Short-Term Renting Route Breakdown (if enabled)
   includeShortTermOption: boolean;
   annualShortTermNetCashFlowEur: number;
   selectedHorizonShortTermWealthEur: number;
   fiveYearShortTermWealthEur: number;
 
-  // Multi-Year Amortization Schedule
   yearlyBreakdown: YearlyWealthPoint[];
 
-  // Final Verdict & Recommendation
   recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM';
   wealthDifferenceAtHorizonEur: number;
   breakEvenHorizonYears: number;

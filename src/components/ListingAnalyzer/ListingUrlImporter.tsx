@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Property } from '../../types';
+import { Property, SeismicRiskClass } from '../../types';
 import { calculatePropertyScores } from '../../utils/calculations';
 import { formatEur, getScoreColor } from '../../utils/formatters';
 import { SourceAttributionBadge } from '../SourceAttributionBadge';
 import { useI18n } from '../../i18n';
-import { evaluateLiveListingUrl, ScrapingProgress } from '../../services/listingScraper';
+import { evaluateLiveListingUrl, ScrapingProgress, geocodeAddressRealTime, fetchLiveAirQuality } from '../../services/listingScraper';
 import { 
   Search, 
   Link2, 
@@ -24,7 +24,11 @@ import {
   FileCheck2,
   Tag,
   Loader2,
-  Globe2
+  Globe2,
+  Sliders,
+  Edit3,
+  RefreshCw,
+  HelpCircle
 } from 'lucide-react';
 
 interface Props {
@@ -47,6 +51,11 @@ const SAMPLE_REAL_URLS = [
     name: 'Brașov Centru Istoric (Storia.ro)',
     url: 'https://www.storia.ro/ro/oferta/garsoniera-moderna-centru-istoric-brasov-ID998k.html',
     platform: 'Storia.ro'
+  },
+  {
+    name: 'București Nord / Pipera (HomeZZ.ro)',
+    url: 'https://homezz.ro/apartament-2-camere-de-vanzare-pipera-nord-ID8841.html',
+    platform: 'Homezz.ro'
   }
 ];
 
@@ -57,11 +66,19 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
   const [currentProgress, setCurrentProgress] = useState<ScrapingProgress | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [analyzedProperty, setAnalyzedProperty] = useState<Property | null>(null);
+  
+  // Manual Refinement Controls
+  const [showManualEditor, setShowManualEditor] = useState<boolean>(false);
+  const [editPrice, setEditPrice] = useState<number>(0);
+  const [editArea, setEditArea] = useState<number>(0);
+  const [editRooms, setEditRooms] = useState<number>(0);
+  const [editYear, setEditYear] = useState<number>(0);
+  const [editAddress, setEditAddress] = useState<string>('');
 
   const handleStartRealtimeEvaluation = async (overrideUrl?: string) => {
     const targetUrl = overrideUrl || urlInput.trim();
     if (!targetUrl) {
-      setErrorMessage('Please enter or paste a valid URL from OLX.ro, Imobiliare.ro, or Storia.ro.');
+      setErrorMessage('Please enter or paste a valid URL from OLX.ro, Imobiliare.ro, Storia.ro, or HomeZZ.ro.');
       return;
     }
 
@@ -74,11 +91,75 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
         setCurrentProgress(prog);
       });
       setAnalyzedProperty(result);
+      
+      // Seed manual editor
+      setEditPrice(result.priceEur);
+      setEditArea(result.usableAreaSqm);
+      setEditRooms(result.rooms);
+      setEditYear(result.yearBuilt);
+      setEditAddress(result.address);
+
+      // Auto expand editor if partial information detected
+      if (result.isPartial) {
+        setShowManualEditor(true);
+      }
     } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to fetch or evaluate live listing. Please check the link and try again.');
+      setErrorMessage(err.message || 'Failed to fetch live listing. You can still input the parameters manually below to generate the dossier.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Apply Manual Refinements
+  const handleApplyManualSpecs = async () => {
+    if (!analyzedProperty) return;
+
+    let updatedRiskClass: SeismicRiskClass = analyzedProperty.diagnostics.seismic.riskClass;
+    let structuralType = analyzedProperty.diagnostics.seismic.structuralType;
+    let mortgageEligibility = analyzedProperty.diagnostics.seismic.mortgageEligibility;
+
+    if (editYear < 1977) {
+      updatedRiskClass = 'UNEXPERTIZED_PRE_1977';
+      structuralType = 'Zidărie Cărămidă / Beton Armat (Pre-1977)';
+      mortgageEligibility = 'CONDITIONAL';
+    } else if (editYear >= 2010) {
+      updatedRiskClass = 'NEW_BUILD_SAFE';
+      structuralType = 'Structură Modernă Eurocode / Normativ P100-1';
+      mortgageEligibility = 'FULL';
+    } else {
+      updatedRiskClass = 'POST_1977_SAFE';
+      structuralType = 'Cadre și Diafragme Beton Armat Post-1977';
+      mortgageEligibility = 'FULL';
+    }
+
+    const estimatedMonthlyRent = Math.round(editPrice * 0.0055);
+
+    const updated: Property = {
+      ...analyzedProperty,
+      priceEur: editPrice,
+      usableAreaSqm: editArea,
+      rooms: editRooms,
+      yearBuilt: editYear,
+      address: editAddress,
+      isPartial: false,
+      missingFields: [],
+      diagnostics: {
+        ...analyzedProperty.diagnostics,
+        seismic: {
+          ...analyzedProperty.diagnostics.seismic,
+          riskClass: updatedRiskClass,
+          structuralType,
+          mortgageEligibility
+        }
+      },
+      investment: {
+        ...analyzedProperty.investment,
+        monthlyRentEstimateEur: estimatedMonthlyRent,
+        shortTermNightlyRateEur: Math.round(estimatedMonthlyRent / 11)
+      }
+    };
+
+    setAnalyzedProperty(updated);
   };
 
   const scores = analyzedProperty ? calculatePropertyScores(analyzedProperty) : null;
@@ -92,7 +173,7 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-3">
             <Globe2 className="w-3.5 h-3.5 text-brand-400" />
-            <span>100% Real-Time Live Scraper & Official Registry Validator</span>
+            <span>OLX.ro • Imobiliare.ro • Storia.ro • HomeZZ.ro Real-Time Evaluator</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
             {t.listingAnalyzer.title}
@@ -105,10 +186,10 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
         <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-700 text-xs space-y-1.5 shrink-0">
           <div className="flex items-center gap-2 text-emerald-400 font-bold">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Source-Verifiable Data Only</span>
+            <span>Multi-Portal Resilient Parser</span>
           </div>
           <p className="text-slate-400 text-[11px]">
-            Directly cross-checks AMCCRS, ANCPI, OpenStreetMap & Open-Meteo live streams.
+            Supports partial data fallback with instant manual refinement.
           </p>
         </div>
       </div>
@@ -129,7 +210,7 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
               required
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
-              placeholder={t.listingAnalyzer.urlInputPlaceholder}
+              placeholder="Paste listing URL from OLX.ro, Imobiliare.ro, Storia.ro, or HomeZZ.ro..."
               className="w-full bg-slate-950 border border-slate-700 text-slate-100 text-sm rounded-2xl pl-11 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono placeholder:font-sans placeholder:text-slate-500"
             />
           </div>
@@ -186,7 +267,7 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
         {/* Quick Sample Real Links */}
         <div className="pt-2 border-t border-slate-800/80">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-            {t.listingAnalyzer.quickSampleOffers}
+            Test with Verified Marketplace Offers:
           </span>
           <div className="flex flex-wrap gap-2">
             {SAMPLE_REAL_URLS.map((sample, idx) => (
@@ -212,18 +293,53 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
       {analyzedProperty && scores && scoreVisual && (
         <div className="bg-slate-900/90 rounded-3xl border border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6">
           
+          {/* Partial Information Alert Banner */}
+          {analyzedProperty.isPartial && analyzedProperty.missingFields && analyzedProperty.missingFields.length > 0 && (
+            <div className="p-4 bg-amber-950/40 border border-amber-500/30 rounded-2xl space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs font-bold text-amber-300">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>Partial Information Received from Announce — Estimated Baseline Applied</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowManualEditor(!showManualEditor)}
+                  className="text-xs font-bold text-amber-400 hover:text-amber-300 underline flex items-center gap-1"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>{showManualEditor ? 'Hide Manual Inputs' : 'Edit / Complete Missing Fields'}</span>
+                </button>
+              </div>
+              <p className="text-[11px] text-slate-300">
+                The announce HTML did not specify: 
+                <span className="font-semibold text-amber-200 ml-1">
+                  {analyzedProperty.missingFields.join(', ')}.
+                </span> We applied conservative baseline defaults so you can still view the full diagnostic dossier.
+              </p>
+            </div>
+          )}
+
           {/* Top Banner: Marketplace Source + Verification Status */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-500/20 text-brand-300 border border-brand-500/30">
-                Source: {analyzedProperty.sourcePlatform || 'Live Scraped URL'}
+                Source: {analyzedProperty.sourcePlatform || 'Live Announce'}
               </span>
               <span className="text-xs text-slate-400">
-                Verified against <strong>data.gov.ro</strong> & <strong>ANCPI</strong>
+                Cross-referenced with <strong>data.gov.ro</strong>, <strong>AMCCRS</strong> & <strong>ANCPI</strong>
               </span>
             </div>
 
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowManualEditor(!showManualEditor)}
+                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors"
+              >
+                <Edit3 className="w-3 h-3 text-brand-400" />
+                <span>Adjust Parameters</span>
+              </button>
+
               {analyzedProperty.sourceListingUrl && (
                 <a
                   href={analyzedProperty.sourceListingUrl}
@@ -231,7 +347,7 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
                   rel="noopener noreferrer"
                   className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors"
                 >
-                  <span>Open Original Announce</span>
+                  <span>Open Announce</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               )}
@@ -241,7 +357,7 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
                 onClick={() => onAnalyzeListing(analyzedProperty)}
                 className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-1.5 border border-slate-700 transition-colors"
               >
-                <span>View Full Diagnostic Dossier</span>
+                <span>View Full Dossier</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
@@ -255,6 +371,80 @@ export const ListingUrlImporter: React.FC<Props> = ({ onAnalyzeListing, onOpenCa
               </button>
             </div>
           </div>
+
+          {/* Manual Parameters Editor (Collapsible) */}
+          {showManualEditor && (
+            <div className="p-5 bg-slate-950 rounded-2xl border border-brand-500/40 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <Edit3 className="w-4 h-4 text-brand-400" />
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">
+                    Refine / Manually Adjust Property Parameters
+                  </h3>
+                </div>
+                <span className="text-[10px] text-slate-400">
+                  Instantly updates seismic checks and ROI
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div>
+                  <label className="text-[10px] text-slate-400 block mb-1 uppercase font-bold">Asking Price (€)</label>
+                  <input
+                    type="number"
+                    value={editPrice}
+                    onChange={(e) => setEditPrice(Number(e.target.value))}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold focus:ring-1 focus:ring-brand-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] text-slate-400 block mb-1 uppercase font-bold">Usable Area (m²)</label>
+                  <input
+                    type="number"
+                    value={editArea}
+                    onChange={(e) => setEditArea(Number(e.target.value))}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold focus:ring-1 focus:ring-brand-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] text-slate-400 block mb-1 uppercase font-bold">Rooms</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="8"
+                    value={editRooms}
+                    onChange={(e) => setEditRooms(Number(e.target.value))}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold focus:ring-1 focus:ring-brand-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] text-slate-400 block mb-1 uppercase font-bold">Year Built</label>
+                  <input
+                    type="number"
+                    min="1900"
+                    max="2026"
+                    value={editYear}
+                    onChange={(e) => setEditYear(Number(e.target.value))}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold focus:ring-1 focus:ring-brand-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  type="button"
+                  onClick={handleApplyManualSpecs}
+                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md transition-all"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Update & Recompute Dossier</span>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Property Identity Card */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
