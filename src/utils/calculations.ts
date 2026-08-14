@@ -4,25 +4,27 @@ import {
   ROITaxSettings, 
   SellVsRentInputs, 
   SellVsRentResult,
-  YearlyWealthPoint
+  YearlyWealthPoint,
+  TaxRegimeComparison,
+  StressScenarioResult
 } from '../types';
 import { COUNTY_MACRO_STATS } from '../data/insseCountyStats';
 
 export const DEFAULT_TAX_SETTINGS: ROITaxSettings = {
   flatTaxRatePercent: 10,
-  flatDeductionPercent: 20, // 20% flat expense deduction => 8% effective tax on rent
+  flatDeductionPercent: 20,
   cassMinWageThresholds: {
-    sixSalaries: 6 * 3700, // 22,200 RON
-    twelveSalaries: 12 * 3700, // 44,400 RON
-    twentyFourSalaries: 24 * 3700, // 88,800 RON
+    sixSalaries: 6 * 3700,
+    twelveSalaries: 12 * 3700,
+    twentyFourSalaries: 24 * 3700,
   },
   minimumWageRon: 3700,
   eurToRonRate: 4.975,
-  localPropertyTaxPercent: 0.1, // 0.1% of taxable value
-  padInsuranceAnnualEur: 26, // approx 130 RON
+  localPropertyTaxPercent: 0.1,
+  padInsuranceAnnualEur: 26,
   facultativeInsuranceAnnualEur: 85,
-  annualMaintenanceReservePercent: 1.0, // 1% of property value
-  vacancyRatePercent: 5.0, // 5% average vacancy
+  annualMaintenanceReservePercent: 1.0,
+  vacancyRatePercent: 5.0,
 };
 
 export interface PropertyScoreResult {
@@ -42,23 +44,19 @@ export function calculatePropertyScores(property: Property): PropertyScoreResult
   const d = property.diagnostics;
   let livability = 0;
 
-  // Walkability & Transit (35% weight)
   livability += (d.mobility.walkScore * 0.20);
   livability += (d.mobility.transitScore * 0.15);
   if (d.mobility.walkScore > 85) highlights.push('Exceptional walkability to daily amenities (15-min city)');
 
-  // Education Quality (25% weight)
   const schoolScoreNorm = Math.min(100, Math.max(0, (d.education.examAverageScore / 10) * 100));
   livability += (schoolScoreNorm * 0.25);
   if (d.education.examAverageScore >= 9.0) highlights.push(`Top rated school nearby (${d.education.nearestSchoolName} - Avg ${d.education.examAverageScore})`);
 
-  // Air Quality (25% weight - AQI is inverted: lower is better)
   const airScore = Math.max(0, 100 - (d.airQuality.aqi * 1.0));
   livability += (airScore * 0.25);
   if (d.airQuality.aqi <= 35) highlights.push('Clean air sensor readings (Low PM2.5 / PM10)');
   else if (d.airQuality.aqi > 70) warnings.push('Elevated urban particulate pollution (PM2.5) during peak traffic hours');
 
-  // Commute Time (15% weight)
   const commuteScore = Math.max(0, 100 - (d.mobility.commuteToCityCenterMin * 3));
   livability += (commuteScore * 0.15);
 
@@ -103,7 +101,6 @@ export function calculatePropertyScores(property: Property): PropertyScoreResult
       break;
   }
 
-  // Flood hazard deduction
   if (d.flood.level === 'HIGH_HQ10') {
     safety -= 30;
     warnings.push('High Flood Hazard Zone (HQ10 10-year river overflow risk)');
@@ -112,7 +109,6 @@ export function calculatePropertyScores(property: Property): PropertyScoreResult
     warnings.push('Medium Flood Hazard Zone (HQ100 100-year return period)');
   }
 
-  // Heritage constraints note
   if (d.heritage.isMonument) {
     warnings.push('Historical Monument (LMI) / Protected Zone: Facade alteration and renovation strictly regulated');
   }
@@ -123,13 +119,11 @@ export function calculatePropertyScores(property: Property): PropertyScoreResult
   const macro = COUNTY_MACRO_STATS[property.city] || COUNTY_MACRO_STATS['Bucharest'];
   let investment = 50;
 
-  // Gross Yield contribution
   const grossYield = ((property.investment.monthlyRentEstimateEur * 12) / property.priceEur) * 100;
   if (grossYield >= 7.0) investment += 25;
   else if (grossYield >= 5.5) investment += 18;
   else if (grossYield >= 4.5) investment += 10;
 
-  // Demographic growth
   if (macro.population5YrGrowthPercent > 5.0) {
     investment += 15;
     highlights.push(`High demographic migration in ${property.city} (+${macro.population5YrGrowthPercent}% 5-yr growth)`);
@@ -137,19 +131,16 @@ export function calculatePropertyScores(property: Property): PropertyScoreResult
     investment += 8;
   }
 
-  // County Transaction Liquidity
   if (macro.transactionsYoYPercent > 5.0) {
     investment += 10;
     highlights.push(`Strong ANCPI transaction liquidity (+${macro.transactionsYoYPercent}% YoY sales)`);
   }
 
-  // Price to Income check
   if (macro.priceToIncomeYears <= 8.5) {
     investment += 10;
     highlights.push(`Favorable Affordability Index (${macro.priceToIncomeYears} years of avg net wage to purchase)`);
   }
 
-  // Penalty if high seismic risk destroys capital exit value
   if (['RsI', 'U1', 'RsII'].includes(d.seismic.riskClass)) {
     investment -= 35;
   }
@@ -184,32 +175,22 @@ export function calculateRealEstateFinancials(
   taxSettings: ROITaxSettings = DEFAULT_TAX_SETTINGS
 ): FinancialCalculationResult {
   const price = inputs.purchasePrice;
-  const notaryAndLegalFees = price * 0.018; // approx 1.8% notary, cadastral registration, land book
+  const notaryAndLegalFees = price * 0.018;
   const furnishingAndReno = inputs.customRenovationEur ?? property.investment.estimatedRenovationCostEur;
   const totalAcquisitionCost = price + notaryAndLegalFees + furnishingAndReno;
 
-  // Annual Gross Income
   const grossMonthlyRent = inputs.monthlyRentEur;
   const grossAnnualRent = grossMonthlyRent * 12;
-
-  // Vacancy deduction
   const effectiveAnnualGrossRent = grossAnnualRent * (1 - inputs.vacancyRatePercent / 100);
 
-  // Annual Operating Expenses
   const managementCostAnnual = effectiveAnnualGrossRent * (inputs.managementFeePercent / 100);
   const maintenanceReserveAnnual = price * (inputs.maintenanceReservePercent / 100);
   const insuranceAnnualEur = taxSettings.padInsuranceAnnualEur + taxSettings.facultativeInsuranceAnnualEur;
 
-  // Romanian Tax Law 2024-2026 for Rental Income (Cedarea Folosinței Bunurilor)
   const effectiveAnnualGrossRentRon = effectiveAnnualGrossRent * taxSettings.eurToRonRate;
-  
-  // 20% Standard Flat Deductible Expense -> Taxable base is 80%
   const taxableRentalBaseRon = effectiveAnnualGrossRentRon * (1 - taxSettings.flatDeductionPercent / 100);
-  
-  // 10% Flat Income Tax
   const rentalIncomeTaxRon = taxableRentalBaseRon * (taxSettings.flatTaxRatePercent / 100);
 
-  // Health Contribution (CASS) Brackets (6, 12, 24 Minimum Gross Wages)
   let cassHealthTaxRon = 0;
   const minWage = taxSettings.minimumWageRon;
   if (taxableRentalBaseRon >= 24 * minWage) {
@@ -220,22 +201,16 @@ export function calculateRealEstateFinancials(
     cassHealthTaxRon = 6 * minWage * 0.10;
   }
 
-  // Local Property Tax on Building
   const propertyTaxRon = (price * (taxSettings.localPropertyTaxPercent / 100)) * taxSettings.eurToRonRate;
-
   const totalTaxesRon = rentalIncomeTaxRon + cassHealthTaxRon + propertyTaxRon;
   const totalTaxesEur = totalTaxesRon / taxSettings.eurToRonRate;
 
   const annualOperatingExpenses = managementCostAnnual + maintenanceReserveAnnual + insuranceAnnualEur + totalTaxesEur;
-
-  // Net Operating Income (NOI)
   const netOperatingIncomeEur = effectiveAnnualGrossRent - annualOperatingExpenses;
 
-  // Gross and Net Yields
   const grossYieldPercent = (grossAnnualRent / price) * 100;
   const netYieldPercent = (netOperatingIncomeEur / totalAcquisitionCost) * 100;
 
-  // Mortgage Calculations
   const downPaymentEur = price * (inputs.downPaymentPercent / 100);
   const loanAmountEur = price - downPaymentEur;
   
@@ -249,20 +224,17 @@ export function calculateRealEstateFinancials(
     annualDebtServiceEur = monthlyMortgagePaymentEur * 12;
   }
 
-  // Leveraged Cash Flow
   const annualCashFlowAfterDebtEur = netOperatingIncomeEur - annualDebtServiceEur;
   const monthlyCashFlowAfterDebtEur = annualCashFlowAfterDebtEur / 12;
 
-  // Cash-on-Cash Return
   const totalOutOfPocketCapital = downPaymentEur + notaryAndLegalFees + furnishingAndReno;
   const cashOnCashReturnPercent = totalOutOfPocketCapital > 0 ? (annualCashFlowAfterDebtEur / totalOutOfPocketCapital) * 100 : 0;
 
-  // Short-Term Rental (Airbnb / Regim Hotelier) Arbitrage
   const nightlyRate = property.investment.shortTermNightlyRateEur;
   const occupancyDays = 365 * (property.investment.shortTermOccupancyPercent / 100);
   const shortTermGrossAnnualEur = nightlyRate * occupancyDays;
-  const platformFeeAndCleaning = shortTermGrossAnnualEur * 0.28; // OTA 15% + Laundry/Cleaning 13%
-  const shortTermUtilities = 1800; // Utilities, Wi-Fi, Consumables
+  const platformFeeAndCleaning = shortTermGrossAnnualEur * 0.28;
+  const shortTermUtilities = 1800;
   const shortTermNetAnnualEur = shortTermGrossAnnualEur - platformFeeAndCleaning - shortTermUtilities - insuranceAnnualEur - totalTaxesEur;
   const shortTermYieldPercent = (shortTermNetAnnualEur / totalAcquisitionCost) * 100;
 
@@ -294,7 +266,7 @@ export function calculateRealEstateFinancials(
 }
 
 // -------------------------------------------------------------
-// ADVANCED SELL VS. RENT DECISION CALCULATOR FOR EXISTING OWNERS
+// ADVANCED SELL VS. RENT DECISION CALCULATOR
 // -------------------------------------------------------------
 export function calculateSellVsRent(
   inputs: SellVsRentInputs,
@@ -303,16 +275,15 @@ export function calculateSellVsRent(
   const salePrice = inputs.currentPropertyMarketValueEur;
   
   // 1. Romanian Real Estate Transfer Tax (Cod Fiscal Art. 111)
-  // Owned > 3 years = 1%, Owned <= 3 years = 3%
   const transferTaxRatePercent = inputs.ownershipDurationYears > 3 ? 1.0 : 3.0;
   const transferTaxEur = salePrice * (transferTaxRatePercent / 100);
   
   // Agency / Marketing commission + Notary seller fee
   const agentCommissionRate = (inputs.realEstateAgentCommissionPercent ?? 0) / 100;
-  const notaryAndAgentFeesEur = (salePrice * agentCommissionRate) + (salePrice * 0.005); // notary seller authentication
+  const notaryAndAgentFeesEur = (salePrice * agentCommissionRate) + (salePrice * 0.005);
   const sellingPreparationCostEur = inputs.sellingPreparationCostEur ?? 0;
 
-  // Early Prepayment Penalty on Mortgage (if any)
+  // Early Prepayment Penalty on Mortgage
   const remainingMortgage = inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur : 0;
   const prepaymentPenaltyRate = (inputs.earlyMortgagePrepaymentFeePercent ?? 0) / 100;
   const prepaymentPenaltyEur = remainingMortgage * prepaymentPenaltyRate;
@@ -328,70 +299,131 @@ export function calculateSellVsRent(
   const reinvestmentRate = Math.max(0, inputs.alternativeInvestmentReturnRatePercent / 100);
   const annualReinvestmentIncomeEur = netCashProceedsFromSaleEur * reinvestmentRate;
 
-  // 3. Long-Term Renting Calculation
+  // 3. Tax Regime Comparison
   const annualGrossRentEur = inputs.estimatedMonthlyRentEur * 12;
   const grossRentRon = annualGrossRentEur * taxSettings.eurToRonRate;
-  
-  // 20% deductible flat expense => 80% taxable base => 10% tax
-  const taxableRentRon = grossRentRon * 0.80;
-  const annualTaxRon = taxableRentRon * 0.10;
-  
-  // CASS health tax
-  let cassRon = 0;
-  const minWage = taxSettings.minimumWageRon;
-  if (taxableRentRon >= 24 * minWage) cassRon = 24 * minWage * 0.10;
-  else if (taxableRentRon >= 12 * minWage) cassRon = 12 * minWage * 0.10;
-  else if (taxableRentRon >= 6 * minWage) cassRon = 6 * minWage * 0.10;
-
-  const annualTaxEur = (annualTaxRon + cassRon) / taxSettings.eurToRonRate;
   const annualMaintenanceAndInsuranceEur = (inputs.monthlyOperatingExpensesEur * 12) + taxSettings.padInsuranceAnnualEur + taxSettings.facultativeInsuranceAnnualEur;
-  const annualTaxesAndExpensesEur = annualTaxEur + annualMaintenanceAndInsuranceEur;
   
+  // A. PF Forfetar (Standard)
+  const taxableRentRonFlat = grossRentRon * 0.80;
+  const taxRonFlat = taxableRentRonFlat * 0.10;
+  let cassRonFlat = 0;
+  const minWage = taxSettings.minimumWageRon;
+  if (taxableRentRonFlat >= 24 * minWage) cassRonFlat = 24 * minWage * 0.10;
+  else if (taxableRentRonFlat >= 12 * minWage) cassRonFlat = 12 * minWage * 0.10;
+  else if (taxableRentRonFlat >= 6 * minWage) cassRonFlat = 6 * minWage * 0.10;
+  const annualTaxEurFlat = (taxRonFlat + cassRonFlat) / taxSettings.eurToRonRate;
+
+  // B. PF Sistem Real (Actual Expenses)
+  const deductibleExpensesRon = annualMaintenanceAndInsuranceEur * taxSettings.eurToRonRate;
+  const netIncomeRealRon = Math.max(0, grossRentRon - deductibleExpensesRon);
+  const taxRonReal = netIncomeRealRon * 0.10;
+  let cassRonReal = 0;
+  if (netIncomeRealRon >= 24 * minWage) cassRonReal = 24 * minWage * 0.10;
+  else if (netIncomeRealRon >= 12 * minWage) cassRonReal = 12 * minWage * 0.10;
+  else if (netIncomeRealRon >= 6 * minWage) cassRonReal = 6 * minWage * 0.10;
+  const annualTaxEurReal = (taxRonReal + cassRonReal) / taxSettings.eurToRonRate;
+
+  // C. SRL Micro (1% or 3% micro + 8% dividend tax on net profit)
+  const microTurnoverTaxRon = grossRentRon * 0.01;
+  const srlAccountingCostEur = 600;
+  const srlNetProfitEur = Math.max(0, annualGrossRentEur - (microTurnoverTaxRon / taxSettings.eurToRonRate) - annualMaintenanceAndInsuranceEur - srlAccountingCostEur);
+  const srlDividendTaxEur = srlNetProfitEur * 0.08;
+  const annualTaxEurSRL = (microTurnoverTaxRon / taxSettings.eurToRonRate) + srlDividendTaxEur + srlAccountingCostEur;
+
+  const taxRegimesComparison: TaxRegimeComparison[] = [
+    {
+      regime: 'INDIVIDUAL_FLAT',
+      label: 'Persoană Fizică (Normă Forfetară 20% Deducere)',
+      annualTaxEur: Math.round(annualTaxEurFlat),
+      effectiveTaxRatePercent: parseFloat(((annualTaxEurFlat / annualGrossRentEur) * 100).toFixed(1)),
+      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurFlat - annualMaintenanceAndInsuranceEur)
+    },
+    {
+      regime: 'INDIVIDUAL_REAL',
+      label: 'Persoană Fizică (Sistem Real pe Bază de Facturi)',
+      annualTaxEur: Math.round(annualTaxEurReal),
+      effectiveTaxRatePercent: parseFloat(((annualTaxEurReal / annualGrossRentEur) * 100).toFixed(1)),
+      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurReal - annualMaintenanceAndInsuranceEur)
+    },
+    {
+      regime: 'SRL_MICRO',
+      label: 'Microîntreprindere SRL (1% Cifră Afaceri + 8% Dividende)',
+      annualTaxEur: Math.round(annualTaxEurSRL),
+      effectiveTaxRatePercent: parseFloat(((annualTaxEurSRL / annualGrossRentEur) * 100).toFixed(1)),
+      annualNetIncomeEur: Math.round(annualGrossRentEur - annualTaxEurSRL - annualMaintenanceAndInsuranceEur)
+    }
+  ];
+
+  // Selected regime tax
+  let selectedAnnualTaxEur = annualTaxEurFlat;
+  if (inputs.taxRegime === 'INDIVIDUAL_REAL') selectedAnnualTaxEur = annualTaxEurReal;
+  else if (inputs.taxRegime === 'SRL_MICRO') selectedAnnualTaxEur = annualTaxEurSRL;
+
+  const annualTaxesAndExpensesEur = selectedAnnualTaxEur + annualMaintenanceAndInsuranceEur;
   const annualMortgagePaymentsEur = inputs.hasExistingMortgage ? inputs.monthlyMortgagePaymentEur * 12 : 0;
   const annualNetRentalCashFlowEur = annualGrossRentEur - annualTaxesAndExpensesEur - annualMortgagePaymentsEur;
   const monthlyNetRentalCashFlowEur = annualNetRentalCashFlowEur / 12;
 
-  // Property Appreciation Rate (User-controlled, e.g. 0% to 8%)
+  // Property Appreciation Rate
   const appreciationRate = Math.max(0, (inputs.propertyAppreciationRatePercent ?? 3.5) / 100);
+  const inflationRate = inputs.adjustForInflation ? (inputs.annualInflationRatePercent ?? 3.0) / 100 : 0;
 
-  // 4. Short-Term Renting Calculation (if enabled)
+  // Short-Term Renting Calculation
   const annualShortTermNetCashFlowEur = inputs.includeShortTermOption
     ? inputs.estimatedShortTermMonthlyNetEur * 12 - annualMortgagePaymentsEur
     : 0;
 
-  // 5. Multi-Year Projection (Year 1 to 15)
+  // 4. Multi-Year Projection (Year 1 to 15) with Accelerated Prepayment support
   const maxYears = 15;
   const yearlyBreakdown: YearlyWealthPoint[] = [];
+  let mortgageDebtFreeYear: number | undefined = undefined;
+  let remainingMortgageTracker = inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur : 0;
+  let cumulativeCashFlowTracker = 0;
 
   for (let yr = 1; yr <= maxYears; yr++) {
-    // Selling Route Wealth at Year yr
-    // If reinvestmentRate is 0%, wealth is simply the initial cash in hand (or cash held)
-    const sellingWealth = reinvestmentRate > 0 
+    // Selling Route
+    let sellingWealth = reinvestmentRate > 0 
       ? netCashProceedsFromSaleEur * Math.pow(1 + reinvestmentRate, yr)
       : netCashProceedsFromSaleEur;
 
-    // Property Value at Year yr
+    // Property Value
     const propertyValue = salePrice * Math.pow(1 + appreciationRate, yr);
 
-    // Remaining Mortgage Principal at Year yr
-    let remMortgage = 0;
-    if (inputs.hasExistingMortgage && inputs.remainingMortgageYears > 0) {
-      const remainingFraction = Math.max(0, 1 - (yr / inputs.remainingMortgageYears));
-      remMortgage = inputs.remainingMortgageBalanceEur * remainingFraction;
+    // Mortgage Amortization (Standard vs Accelerated Prepayment)
+    if (inputs.hasExistingMortgage && remainingMortgageTracker > 0) {
+      if (inputs.reinvestCashFlowToPrepayMortgage && annualNetRentalCashFlowEur > 0) {
+        // Apply surplus cash to accelerate principal payoff
+        const regularPrincipalPayment = inputs.remainingMortgageBalanceEur / Math.max(1, inputs.remainingMortgageYears);
+        const totalPrincipalPaidThisYear = regularPrincipalPayment + annualNetRentalCashFlowEur;
+        remainingMortgageTracker = Math.max(0, remainingMortgageTracker - totalPrincipalPaidThisYear);
+        if (remainingMortgageTracker === 0 && !mortgageDebtFreeYear) {
+          mortgageDebtFreeYear = yr;
+        }
+      } else {
+        const remainingFraction = Math.max(0, 1 - (yr / Math.max(1, inputs.remainingMortgageYears)));
+        remainingMortgageTracker = inputs.remainingMortgageBalanceEur * remainingFraction;
+      }
     }
 
-    // Cumulative Rental Cash Flow at Year yr
-    const cumulativeRentalCashFlow = annualNetRentalCashFlowEur * yr;
+    if (!inputs.reinvestCashFlowToPrepayMortgage) {
+      cumulativeCashFlowTracker += annualNetRentalCashFlowEur;
+    }
 
-    // Renting Wealth = (Property Value - Remaining Mortgage) + Cumulative Cash Flow
-    const rentingWealth = (propertyValue - remMortgage) + cumulativeRentalCashFlow;
+    // Renting Wealth
+    const rentingWealth = (propertyValue - remainingMortgageTracker) + cumulativeCashFlowTracker;
 
-    // Short-Term Wealth (if active)
+    // Short-Term Wealth
     let shortTermWealth: number | undefined = undefined;
     if (inputs.includeShortTermOption) {
-      const cumulativeShortTermCashFlow = annualShortTermNetCashFlowEur * yr;
-      shortTermWealth = (propertyValue - remMortgage) + cumulativeShortTermCashFlow;
+      const cumulativeShortTerm = annualShortTermNetCashFlowEur * yr;
+      shortTermWealth = (propertyValue - remainingMortgageTracker) + cumulativeShortTerm;
     }
+
+    // Inflation adjustments
+    const inflationFactor = Math.pow(1 + inflationRate, yr);
+    const realPurchasingPowerSelling = inputs.adjustForInflation ? sellingWealth / inflationFactor : undefined;
+    const realPurchasingPowerRenting = inputs.adjustForInflation ? rentingWealth / inflationFactor : undefined;
 
     yearlyBreakdown.push({
       year: yr,
@@ -399,19 +431,27 @@ export function calculateSellVsRent(
       rentingWealth,
       shortTermWealth,
       propertyValue,
-      remainingMortgage: remMortgage,
-      cumulativeRentalCashFlow
+      remainingMortgage: remainingMortgageTracker,
+      cumulativeRentalCashFlow: cumulativeCashFlowTracker,
+      realPurchasingPowerSelling,
+      realPurchasingPowerRenting
     });
   }
 
-  // Horizon-specific metrics
+  // Horizon metrics
   const horizon = Math.min(15, Math.max(1, inputs.projectionHorizonYears || 5));
   const horizonPoint = yearlyBreakdown.find((p) => p.year === horizon) || yearlyBreakdown[4];
-  const point5Y = yearlyBreakdown[4]; // Year 5
-  const point10Y = yearlyBreakdown[9]; // Year 10
+  const point5Y = yearlyBreakdown[4];
+  const point10Y = yearlyBreakdown[9];
 
-  const selectedHorizonReinvestmentWealthEur = horizonPoint.sellingWealth;
-  const selectedHorizonRentalWealthEur = horizonPoint.rentingWealth;
+  const selectedHorizonReinvestmentWealthEur = inputs.adjustForInflation 
+    ? (horizonPoint.realPurchasingPowerSelling ?? horizonPoint.sellingWealth)
+    : horizonPoint.sellingWealth;
+
+  const selectedHorizonRentalWealthEur = inputs.adjustForInflation
+    ? (horizonPoint.realPurchasingPowerRenting ?? horizonPoint.rentingWealth)
+    : horizonPoint.rentingWealth;
+
   const selectedHorizonShortTermWealthEur = horizonPoint.shortTermWealth ?? 0;
 
   const fiveYearReinvestmentWealthEur = point5Y.sellingWealth;
@@ -421,7 +461,35 @@ export function calculateSellVsRent(
   const tenYearReinvestmentWealthEur = point10Y.sellingWealth;
   const tenYearRentalWealthEur = point10Y.rentingWealth;
 
-  // 6. Strategic Verdict & Recommendation
+  // 5. Stress-Test Scenarios (Bear, Base, Bull)
+  const stressScenarios: StressScenarioResult[] = [
+    {
+      scenarioName: 'Bear (Pessimistic)',
+      appreciationRate: 0.0,
+      vacancyMonths: 2,
+      sellingWealthHorizon: Math.round(selectedHorizonReinvestmentWealthEur),
+      rentingWealthHorizon: Math.round((salePrice * 1.0) - (inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur * 0.7 : 0) + (annualNetRentalCashFlowEur * 0.7 * horizon)),
+      recommendation: (salePrice * 1.0 + annualNetRentalCashFlowEur * 0.7 * horizon) > selectedHorizonReinvestmentWealthEur ? 'RENT_LONG_TERM' : 'SELL'
+    },
+    {
+      scenarioName: 'Base (Realistic)',
+      appreciationRate: inputs.propertyAppreciationRatePercent,
+      vacancyMonths: 0.6,
+      sellingWealthHorizon: Math.round(selectedHorizonReinvestmentWealthEur),
+      rentingWealthHorizon: Math.round(selectedHorizonRentalWealthEur),
+      recommendation: selectedHorizonRentalWealthEur >= selectedHorizonReinvestmentWealthEur ? 'RENT_LONG_TERM' : 'SELL'
+    },
+    {
+      scenarioName: 'Bull (Optimistic)',
+      appreciationRate: inputs.propertyAppreciationRatePercent + 2.5,
+      vacancyMonths: 0.0,
+      sellingWealthHorizon: Math.round(selectedHorizonReinvestmentWealthEur),
+      rentingWealthHorizon: Math.round((salePrice * Math.pow(1 + (appreciationRate + 0.025), horizon)) - (inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur * 0.6 : 0) + (annualNetRentalCashFlowEur * 1.15 * horizon)),
+      recommendation: 'RENT_LONG_TERM'
+    }
+  ];
+
+  // 6. Strategic Verdict
   let recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM' = 'RENT_LONG_TERM';
   const verdictHighlights: string[] = [];
 
@@ -434,10 +502,13 @@ export function calculateSellVsRent(
     verdictHighlights.push(`Reaches €${Math.round(selectedHorizonShortTermWealthEur).toLocaleString()} net wealth at Year ${horizon} (+€${Math.round(selectedHorizonShortTermWealthEur - selectedHorizonReinvestmentWealthEur).toLocaleString()} more than selling).`);
   } else if (selectedHorizonRentalWealthEur >= selectedHorizonReinvestmentWealthEur) {
     recommendedStrategy = 'RENT_LONG_TERM';
-    verdictHighlights.push(`Holding & Renting delivers +€${Math.round(rentAdvantageAtHorizon).toLocaleString()} more total net worth at Year ${horizon} compared to selling.`);
+    verdictHighlights.push(`Holding & Renting delivers +€${Math.round(rentAdvantageAtHorizon).toLocaleString()} more net worth at Year ${horizon} compared to selling.`);
     verdictHighlights.push(`Captures ${inputs.propertyAppreciationRatePercent}% p.a. property appreciation while tenants fund mortgage debt principal.`);
     if (monthlyNetRentalCashFlowEur > 0) {
       verdictHighlights.push(`Positive monthly net cash flow: +€${Math.round(monthlyNetRentalCashFlowEur)}/month in your pocket.`);
+    }
+    if (inputs.reinvestCashFlowToPrepayMortgage && mortgageDebtFreeYear) {
+      verdictHighlights.push(`Accelerated prepayment makes the property 100% DEBT-FREE in Year ${mortgageDebtFreeYear} (saving thousands in bank interest).`);
     }
   } else {
     recommendedStrategy = 'SELL';
@@ -449,7 +520,6 @@ export function calculateSellVsRent(
     }
   }
 
-  // Find break-even year
   let breakEvenHorizonYears = 3;
   for (const pt of yearlyBreakdown) {
     if (pt.rentingWealth >= pt.sellingWealth) {
@@ -495,6 +565,9 @@ export function calculateSellVsRent(
     selectedHorizonShortTermWealthEur,
     fiveYearShortTermWealthEur,
     yearlyBreakdown,
+    taxRegimesComparison,
+    stressScenarios,
+    mortgageDebtFreeYear,
     recommendedStrategy,
     wealthDifferenceAtHorizonEur,
     breakEvenHorizonYears,

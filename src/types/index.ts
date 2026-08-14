@@ -9,7 +9,7 @@ export interface DataProvenance {
   authority: string;
   endpointUrl: string;
   updateCadence: 'Hourly' | 'Daily' | 'Monthly' | 'Quarterly' | 'Annually' | 'Static/Official Regs';
-  lastSynced: string; // ISO String
+  lastSynced: string;
   reliability: 'Verified Official' | 'Live Stream' | 'INSSE Validated' | 'Cadastre Direct' | 'Marketplace Scraped';
   datasetId?: string;
 }
@@ -20,7 +20,7 @@ export interface Property {
   address: string;
   city: 'Bucharest' | 'Cluj-Napoca' | 'Timișoara' | 'Iași' | 'Brașov' | 'Constanța' | 'Sibiu' | 'Oradea' | 'Ilfov';
   county: string;
-  coordinates: [number, number]; // [lat, lng]
+  coordinates: [number, number];
   priceEur: number;
   usableAreaSqm: number;
   rooms: number;
@@ -35,18 +35,16 @@ export interface Property {
   sourcePlatform?: 'OLX.ro' | 'Imobiliare.ro' | 'Storia.ro' | 'Homezz.ro' | 'Direct Cadastre';
   sourceListingUrl?: string;
   
-  // Partial Info Audit
   isPartial?: boolean;
   missingFields?: string[];
   
-  // Real Estate Diagnostics & Official Risk Metadata
   diagnostics: {
     seismic: {
       riskClass: SeismicRiskClass;
       amccrsCode?: string;
       expertizeYear?: number;
       structuralType: string;
-      groundAccelerationAg: number; // e.g. 0.30g in Bucharest, 0.20g in Brasov
+      groundAccelerationAg: number;
       mortgageEligibility: 'FULL' | 'CONDITIONAL' | 'INELIGIBLE';
       provenance: DataProvenance;
     };
@@ -63,8 +61,8 @@ export interface Property {
       provenance: DataProvenance;
     };
     airQuality: {
-      aqi: number; // 0 - 500 (lower is better, <50 is Good)
-      pm25: number; // ug/m3
+      aqi: number;
+      pm25: number;
       pm10: number;
       status: 'Good' | 'Moderate' | 'Unhealthy for Sensitive' | 'Unhealthy';
       nearestSensor: string;
@@ -73,12 +71,12 @@ export interface Property {
     education: {
       nearestSchoolName: string;
       schoolDistanceMeters: number;
-      examAverageScore: number; // out of 10 (Evaluarea Nationala)
+      examAverageScore: number;
       provenance: DataProvenance;
     };
     mobility: {
-      walkScore: number; // 0-100
-      transitScore: number; // 0-100
+      walkScore: number;
+      transitScore: number;
       nearestMetroStation?: string;
       metroDistanceMeters?: number;
       commuteToCityCenterMin: number;
@@ -86,7 +84,6 @@ export interface Property {
     };
   };
 
-  // Investment Financial Baseline
   investment: {
     monthlyRentEstimateEur: number;
     shortTermNightlyRateEur: number;
@@ -110,20 +107,20 @@ export interface CountyMacroStats {
   countyCode: string;
   countyName: string;
   cityCenterCoords: [number, number];
-  averageNetSalaryEur: number; // INSSE FOM107D
+  averageNetSalaryEur: number;
   salaryYoYGrowthPercent: number;
-  monthlyAncpiTransactions: number; // ANCPI Sales
+  monthlyAncpiTransactions: number;
   transactionsYoYPercent: number;
-  buildingPermitsQuarterly: number; // INSSE LOC101A
-  populationResident: number; // INSSE POP105A
+  buildingPermitsQuarterly: number;
+  populationResident: number;
   population5YrGrowthPercent: number;
-  priceToIncomeYears: number; // Years of avg local salary to buy 60sqm apt
+  priceToIncomeYears: number;
   provenance: DataProvenance;
 }
 
 export interface ROITaxSettings {
-  flatTaxRatePercent: number; // 10%
-  flatDeductionPercent: number; // 20% deductible flat expense => 8% effective rate
+  flatTaxRatePercent: number;
+  flatDeductionPercent: number;
   cassMinWageThresholds: {
     sixSalaries: number;
     twelveSalaries: number;
@@ -169,9 +166,11 @@ export interface FinancialCalculationResult {
 // -------------------------------------------------------------
 // ADVANCED SELL VS RENT OWNER OPTIMIZER TYPES
 // -------------------------------------------------------------
+export type RentalTaxRegime = 'INDIVIDUAL_FLAT' | 'INDIVIDUAL_REAL' | 'SRL_MICRO';
+
 export interface SellVsRentInputs {
   currentPropertyMarketValueEur: number;
-  ownershipDurationYears: number; // >3 years = 1% RO tax, <=3 years = 3% RO tax
+  ownershipDurationYears: number;
   hasExistingMortgage: boolean;
   remainingMortgageBalanceEur: number;
   monthlyMortgagePaymentEur: number;
@@ -188,12 +187,22 @@ export interface SellVsRentInputs {
   monthlyOperatingExpensesEur: number;
   propertyAppreciationRatePercent: number;
   
+  // Tax Regime
+  taxRegime: RentalTaxRegime;
+
   // Short-Term Rental Toggle & Assumptions
   includeShortTermOption: boolean;
   estimatedShortTermMonthlyNetEur: number;
 
   // Alternative Reinvestment for Sale Proceeds
   alternativeInvestmentReturnRatePercent: number;
+
+  // Inflation & Real vs Nominal
+  adjustForInflation: boolean;
+  annualInflationRatePercent: number; // e.g. 3.0%
+
+  // Accelerated Prepayment Toggle
+  reinvestCashFlowToPrepayMortgage: boolean;
 
   // Projection Horizon
   projectionHorizonYears: number;
@@ -207,6 +216,25 @@ export interface YearlyWealthPoint {
   propertyValue: number;
   remainingMortgage: number;
   cumulativeRentalCashFlow: number;
+  realPurchasingPowerSelling?: number;
+  realPurchasingPowerRenting?: number;
+}
+
+export interface StressScenarioResult {
+  scenarioName: 'Bear (Pessimistic)' | 'Base (Realistic)' | 'Bull (Optimistic)';
+  appreciationRate: number;
+  vacancyMonths: number;
+  sellingWealthHorizon: number;
+  rentingWealthHorizon: number;
+  recommendation: 'SELL' | 'RENT_LONG_TERM';
+}
+
+export interface TaxRegimeComparison {
+  regime: RentalTaxRegime;
+  label: string;
+  annualTaxEur: number;
+  effectiveTaxRatePercent: number;
+  annualNetIncomeEur: number;
 }
 
 export interface SellVsRentResult {
@@ -238,8 +266,20 @@ export interface SellVsRentResult {
   selectedHorizonShortTermWealthEur: number;
   fiveYearShortTermWealthEur: number;
 
+  // Multi-Year Amortization Schedule
   yearlyBreakdown: YearlyWealthPoint[];
 
+  // Tax Regimes Comparison (PF Flat vs PF Real vs SRL)
+  taxRegimesComparison: TaxRegimeComparison[];
+
+  // Stress-Test Scenarios
+  stressScenarios: StressScenarioResult[];
+
+  // Mortgage Accelerated Payoff stats
+  mortgageDebtFreeYear?: number;
+  totalMortgageInterestSavedEur?: number;
+
+  // Final Verdict & Recommendation
   recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM';
   wealthDifferenceAtHorizonEur: number;
   breakEvenHorizonYears: number;
