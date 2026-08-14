@@ -9,14 +9,16 @@ import {
   Activity, 
   CheckCircle2, 
   FileText,
-  ChevronDown
+  ChevronDown,
+  Link2,
+  Scale
 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { Language } from '../types';
 
 interface Props {
-  activeTab: 'map' | 'properties' | 'calculator' | 'openDataHub' | 'report';
-  setActiveTab: (tab: 'map' | 'properties' | 'calculator' | 'openDataHub' | 'report') => void;
+  activeTab: 'map' | 'properties' | 'listingAnalyzer' | 'sellVsRent' | 'calculator' | 'openDataHub' | 'report';
+  setActiveTab: (tab: 'map' | 'properties' | 'listingAnalyzer' | 'sellVsRent' | 'calculator' | 'openDataHub' | 'report') => void;
   openSyncModal: () => void;
 }
 
@@ -53,7 +55,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal
                   ROI<span className="text-brand-400">mob</span>
                 </span>
                 <span className="px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-brand-500/20 text-brand-300 rounded border border-brand-500/30">
-                  Data.gov.ro Inside
+                  Data.gov.ro + OLX/Imobiliare
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 hidden sm:block">
@@ -63,52 +65,64 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-800/60 p-1 rounded-xl border border-slate-700/60">
+          <nav className="hidden lg:flex items-center gap-1 bg-slate-800/60 p-1 rounded-xl border border-slate-700/60">
             <button
               onClick={() => setActiveTab('map')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'map'
                   ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
                   : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
               }`}
             >
-              <Map className="w-4 h-4" />
+              <Map className="w-3.5 h-3.5" />
               <span>{t.nav.map}</span>
             </button>
 
             <button
-              onClick={() => setActiveTab('properties')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'properties'
+              onClick={() => setActiveTab('listingAnalyzer')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                activeTab === 'listingAnalyzer'
                   ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
                   : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
               }`}
             >
-              <Layers className="w-4 h-4" />
-              <span>{t.nav.properties}</span>
+              <Link2 className="w-3.5 h-3.5 text-brand-300" />
+              <span>{t.nav.listingAnalyzer}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('sellVsRent')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                activeTab === 'sellVsRent'
+                  ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+              }`}
+            >
+              <Scale className="w-3.5 h-3.5 text-emerald-300" />
+              <span>{t.nav.sellVsRent}</span>
             </button>
 
             <button
               onClick={() => setActiveTab('calculator')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'calculator'
                   ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
                   : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
               }`}
             >
-              <Calculator className="w-4 h-4" />
+              <Calculator className="w-3.5 h-3.5" />
               <span>{t.nav.calculator}</span>
             </button>
 
             <button
               onClick={() => setActiveTab('openDataHub')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'openDataHub'
                   ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
                   : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
               }`}
             >
-              <Database className="w-4 h-4" />
+              <Database className="w-3.5 h-3.5" />
               <span>{t.nav.openDataHub}</span>
             </button>
           </nav>
@@ -127,7 +141,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="hidden lg:inline text-[11px] font-semibold">{t.hero.quickStats.lastSync}</span>
+              <span className="hidden xl:inline text-[11px] font-semibold">{t.hero.quickStats.lastSync}</span>
               <Activity className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
             </button>
 
@@ -174,8 +188,8 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal
         </div>
       </div>
       
-      {/* Mobile Sub-Nav */}
-      <div className="flex md:hidden overflow-x-auto px-4 py-2 border-t border-slate-800/80 gap-2 bg-slate-900/90 text-xs">
+      {/* Mobile / Tablet Sub-Nav */}
+      <div className="flex lg:hidden overflow-x-auto px-4 py-2 border-t border-slate-800/80 gap-2 bg-slate-900/90 text-xs">
         <button
           onClick={() => setActiveTab('map')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg whitespace-nowrap ${
@@ -186,13 +200,22 @@ export const Navbar: React.FC<Props> = ({ activeTab, setActiveTab, openSyncModal
           <span>{t.nav.map}</span>
         </button>
         <button
-          onClick={() => setActiveTab('properties')}
+          onClick={() => setActiveTab('listingAnalyzer')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg whitespace-nowrap ${
-            activeTab === 'properties' ? 'bg-brand-600 text-white' : 'text-slate-300 bg-slate-800'
+            activeTab === 'listingAnalyzer' ? 'bg-brand-600 text-white' : 'text-slate-300 bg-slate-800'
           }`}
         >
-          <Layers className="w-3.5 h-3.5" />
-          <span>{t.nav.properties}</span>
+          <Link2 className="w-3.5 h-3.5 text-brand-300" />
+          <span>{t.nav.listingAnalyzer}</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('sellVsRent')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg whitespace-nowrap ${
+            activeTab === 'sellVsRent' ? 'bg-brand-600 text-white' : 'text-slate-300 bg-slate-800'
+          }`}
+        >
+          <Scale className="w-3.5 h-3.5 text-emerald-300" />
+          <span>{t.nav.sellVsRent}</span>
         </button>
         <button
           onClick={() => setActiveTab('calculator')}

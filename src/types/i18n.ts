@@ -4,6 +4,8 @@ export interface TranslationDictionary {
   nav: {
     map: string;
     properties: string;
+    listingAnalyzer: string;
+    sellVsRent: string;
     calculator: string;
     openDataHub: string;
     report: string;
@@ -23,6 +25,54 @@ export interface TranslationDictionary {
       cadastralRecords: string;
       lastSync: string;
     };
+  };
+  listingAnalyzer: {
+    title: string;
+    subtitle: string;
+    urlInputPlaceholder: string;
+    analyzeButton: string;
+    analyzing: string;
+    supportedPlatforms: string;
+    quickSampleOffers: string;
+    trySample: string;
+    dossierReady: string;
+    extractedSpecs: string;
+    officialCrossCheck: string;
+    valuationComparison: string;
+  };
+  sellVsRent: {
+    title: string;
+    subtitle: string;
+    propertyValuation: string;
+    ownershipDuration: string;
+    moreThan3Years: string;
+    lessThan3Years: string;
+    mortgageStatus: string;
+    hasMortgage: string;
+    noMortgage: string;
+    remainingLoanBalance: string;
+    monthlyInstallment: string;
+    alternativeReinvestmentRate: string;
+    rentalExpectation: string;
+    verdictTitle: string;
+    sellScenario: {
+      title: string;
+      netProceeds: string;
+      transferTax: string;
+      reinvestmentGain5Y: string;
+    };
+    rentScenario: {
+      title: string;
+      monthlyCashFlow: string;
+      equityBuilt5Y: string;
+      totalWealth5Y: string;
+    };
+    shortTermScenario: {
+      title: string;
+      airbnbMonthlyNet: string;
+      totalWealth5Y: string;
+    };
+    recommendationLabel: string;
   };
   mapLayers: {
     title: string;

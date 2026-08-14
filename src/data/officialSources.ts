@@ -3,19 +3,47 @@ import { DataProvenance } from '../types';
 export interface OfficialDatasetItem {
   id: string;
   name: string;
-  category: 'Risk & Safety' | 'Cadastre & Transactions' | 'Demographics & Economics' | 'Environment & Air' | 'Education & Social';
+  category: 'Risk & Safety' | 'Cadastre & Transactions' | 'Demographics & Economics' | 'Environment & Air' | 'Education & Social' | 'Marketplace & Listings';
   authority: string;
   endpointUrl: string;
   portalUrl: string;
   updateCadence: 'Hourly' | 'Daily' | 'Monthly' | 'Quarterly' | 'Annually' | 'Static/Official Regs';
   lastSynced: string;
   recordsCount: number;
-  format: 'JSON / REST' | 'CSV / WMS' | 'WFS / GeoJSON' | 'SDMX / XML' | 'CKAN API';
+  format: 'JSON / REST' | 'CSV / WMS' | 'WFS / GeoJSON' | 'SDMX / XML' | 'CKAN API' | 'HTML / Scraped API';
   description: string;
   legalBasis: string;
 }
 
 export const OFFICIAL_DATASETS: OfficialDatasetItem[] = [
+  {
+    id: 'olx-real-estate',
+    name: 'OLX.ro Real Estate Listings & Private Offers Feed',
+    category: 'Marketplace & Listings',
+    authority: 'OLX Romania / Prosus Group',
+    endpointUrl: 'https://www.olx.ro/d/imobiliare/',
+    portalUrl: 'https://www.olx.ro/imobiliare/',
+    updateCadence: 'Hourly',
+    lastSynced: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
+    recordsCount: 185400,
+    format: 'HTML / Scraped API',
+    description: 'Real-time property listings from direct owners and agencies, capturing asking prices, photos, and micro-location descriptors.',
+    legalBasis: 'Termeni și Condiții de Utilizare OLX.ro & Date Agregate Publice',
+  },
+  {
+    id: 'imobiliare-market-index',
+    name: 'Imobiliare.ro Market Index & Verified Portfolios',
+    category: 'Marketplace & Listings',
+    authority: 'Imobiliare.ro (Realmedia Network)',
+    endpointUrl: 'https://www.imobiliare.ro/indicele-imobiliare-ro',
+    portalUrl: 'https://www.imobiliare.ro',
+    updateCadence: 'Daily',
+    lastSynced: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    recordsCount: 94200,
+    format: 'JSON / REST',
+    description: 'National and city-level average asking price per m² indices, rental benchmarks, and verified agency property dossiers.',
+    legalBasis: 'Indicele Imobiliare.ro Standard de Evaluare & Rapoarte Trimestriale',
+  },
   {
     id: 'data-gov-schools',
     name: 'National School Network & Evaluation Metrics',

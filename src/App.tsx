@@ -9,6 +9,8 @@ import { InteractiveMap } from './components/MapView/InteractiveMap';
 import { LayerControl, LayerState } from './components/MapView/LayerControl';
 import { PropertyCard } from './components/PropertyDossier/PropertyCard';
 import { PropertyDetailModal } from './components/PropertyDossier/PropertyDetailModal';
+import { ListingUrlImporter } from './components/ListingAnalyzer/ListingUrlImporter';
+import { SellVsRentCalculator } from './components/SellVsRent/SellVsRentCalculator';
 import { ROICalculator } from './components/FinancialEngine/ROICalculator';
 import { DataCatalog } from './components/OpenDataHub/DataCatalog';
 import { DataSyncManager } from './components/OpenDataHub/DataSyncManager';
@@ -24,14 +26,16 @@ import {
   BarChart2,
   TrendingUp,
   Map as MapIcon,
-  ShieldAlert
+  ShieldAlert,
+  Link2,
+  Scale
 } from 'lucide-react';
 
 const MainAppContent: React.FC = () => {
   const { t } = useI18n();
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<'map' | 'properties' | 'calculator' | 'openDataHub' | 'report'>('map');
+  const [activeTab, setActiveTab] = useState<'map' | 'properties' | 'listingAnalyzer' | 'sellVsRent' | 'calculator' | 'openDataHub' | 'report'>('map');
 
   // Search & Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -283,7 +287,20 @@ const MainAppContent: React.FC = () => {
           </div>
         )}
 
-        {/* VIEW 3: Real Estate ROI & Romanian Tax Calculator */}
+        {/* VIEW 3: OLX & Imobiliare.ro Listing Analyzer */}
+        {activeTab === 'listingAnalyzer' && (
+          <ListingUrlImporter
+            onAnalyzeListing={handleSelectProperty}
+            onOpenCalculator={handleOpenCalculator}
+          />
+        )}
+
+        {/* VIEW 4: Sell vs. Rent Owner Strategy Optimizer */}
+        {activeTab === 'sellVsRent' && (
+          <SellVsRentCalculator />
+        )}
+
+        {/* VIEW 5: Real Estate ROI & Romanian Tax Calculator */}
         {activeTab === 'calculator' && (
           <ROICalculator
             selectedProperty={selectedProperty}
@@ -292,7 +309,7 @@ const MainAppContent: React.FC = () => {
           />
         )}
 
-        {/* VIEW 4: Official Open Data Hub & Live API Catalog */}
+        {/* VIEW 6: Official Open Data Hub & Live API Catalog */}
         {activeTab === 'openDataHub' && (
           <DataCatalog
             onTriggerSync={handleTriggerSync}

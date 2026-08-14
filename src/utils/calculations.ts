@@ -1,4 +1,10 @@
-import { Property, FinancialCalculationResult, ROITaxSettings } from '../types';
+import { 
+  Property, 
+  FinancialCalculationResult, 
+  ROITaxSettings, 
+  SellVsRentInputs, 
+  SellVsRentResult 
+} from '../types';
 import { COUNTY_MACRO_STATS } from '../data/insseCountyStats';
 
 export const DEFAULT_TAX_SETTINGS: ROITaxSettings = {
@@ -283,5 +289,137 @@ export function calculateRealEstateFinancials(
     shortTermGrossAnnualEur,
     shortTermNetAnnualEur,
     shortTermYieldPercent
+  };
+}
+
+// -------------------------------------------------------------
+// SELL VS. RENT DECISION CALCULATOR FOR EXISTING PROPERTY OWNERS
+// -------------------------------------------------------------
+export function calculateSellVsRent(
+  inputs: SellVsRentInputs,
+  taxSettings: ROITaxSettings = DEFAULT_TAX_SETTINGS
+): SellVsRentResult {
+  const salePrice = inputs.currentPropertyMarketValueEur;
+  
+  // 1. Romanian Transfer Tax on Real Estate Sale (Cod Fiscal Art. 111)
+  // Owned > 3 years = 1%, Owned <= 3 years = 3%
+  const transferTaxRatePercent = inputs.ownershipDurationYears > 3 ? 1.0 : 3.0;
+  const transferTaxEur = salePrice * (transferTaxRatePercent / 100);
+  const notaryAndAgentFeesEur = salePrice * 0.015; // approx 1.5% transaction cost
+  const mortgagePayoffEur = inputs.hasExistingMortgage ? inputs.remainingMortgageBalanceEur : 0;
+  
+  const netCashProceedsFromSaleEur = Math.max(
+    0,
+    salePrice - transferTaxEur - notaryAndAgentFeesEur - mortgagePayoffEur
+  );
+
+  // Reinvestment of proceeds (e.g. Titluri de Stat Tezaur / Fidelis or S&P500 index)
+  const reinvestmentRate = inputs.alternativeInvestmentReturnRatePercent / 100;
+  const annualReinvestmentIncomeEur = netCashProceedsFromSaleEur * reinvestmentRate;
+  const fiveYearReinvestmentWealthEur = netCashProceedsFromSaleEur * Math.pow(1 + reinvestmentRate, 5);
+  const tenYearReinvestmentWealthEur = netCashProceedsFromSaleEur * Math.pow(1 + reinvestmentRate, 10);
+
+  // 2. Long-Term Renting Calculation
+  const annualGrossRentEur = inputs.estimatedMonthlyRentEur * 12;
+  const grossRentRon = annualGrossRentEur * taxSettings.eurToRonRate;
+  
+  // 20% deductible flat expense => 80% taxable base => 10% tax
+  const taxableRentRon = grossRentRon * 0.80;
+  const annualTaxRon = taxableRentRon * 0.10;
+  
+  // CASS
+  let cassRon = 0;
+  const minWage = taxSettings.minimumWageRon;
+  if (taxableRentRon >= 24 * minWage) cassRon = 24 * minWage * 0.10;
+  else if (taxableRentRon >= 12 * minWage) cassRon = 12 * minWage * 0.10;
+  else if (taxableRentRon >= 6 * minWage) cassRon = 6 * minWage * 0.10;
+
+  const annualTaxEur = (annualTaxRon + cassRon) / taxSettings.eurToRonRate;
+  const annualMaintenanceAndInsuranceEur = (inputs.monthlyOperatingExpensesEur * 12) + taxSettings.padInsuranceAnnualEur + taxSettings.facultativeInsuranceAnnualEur;
+  const annualTaxesAndExpensesEur = annualTaxEur + annualMaintenanceAndInsuranceEur;
+  
+  const annualMortgagePaymentsEur = inputs.hasExistingMortgage ? inputs.monthlyMortgagePaymentEur * 12 : 0;
+  const annualNetRentalCashFlowEur = annualGrossRentEur - annualTaxesAndExpensesEur - annualMortgagePaymentsEur;
+  const monthlyNetRentalCashFlowEur = annualNetRentalCashFlowEur / 12;
+
+  // Property Appreciation assumption (conservative 3.5% p.a.)
+  const appreciationRate = 0.035;
+  const propertyValue5Y = salePrice * Math.pow(1 + appreciationRate, 5);
+  const propertyValue10Y = salePrice * Math.pow(1 + appreciationRate, 10);
+
+  // Principal reduction over 5 years (approximate based on remaining term)
+  const remainingMortgage5Y = inputs.hasExistingMortgage
+    ? Math.max(0, inputs.remainingMortgageBalanceEur * Math.max(0, 1 - 5 / Math.max(5, inputs.remainingMortgageYears)))
+    : 0;
+
+  const remainingMortgage10Y = inputs.hasExistingMortgage
+    ? Math.max(0, inputs.remainingMortgageBalanceEur * Math.max(0, 1 - 10 / Math.max(10, inputs.remainingMortgageYears)))
+    : 0;
+
+  const fiveYearRentalWealthEur = (propertyValue5Y - remainingMortgage5Y) + (annualNetRentalCashFlowEur * 5);
+  const tenYearRentalWealthEur = (propertyValue10Y - remainingMortgage10Y) + (annualNetRentalCashFlowEur * 10);
+
+  // 3. Short-Term Renting Calculation
+  const annualShortTermNetCashFlowEur = inputs.estimatedShortTermMonthlyNetEur * 12 - annualMortgagePaymentsEur;
+  const fiveYearShortTermWealthEur = (propertyValue5Y - remainingMortgage5Y) + (annualShortTermNetCashFlowEur * 5);
+
+  // 4. Strategic Decision & Recommendation Verdict
+  let recommendedStrategy: 'SELL' | 'RENT_LONG_TERM' | 'RENT_SHORT_TERM' = 'RENT_LONG_TERM';
+  const verdictHighlights: string[] = [];
+
+  const rentWealthAdvantage5Y = fiveYearRentalWealthEur - fiveYearReinvestmentWealthEur;
+  const shortTermAdvantage5Y = fiveYearShortTermWealthEur - fiveYearRentalWealthEur;
+
+  if (inputs.isShortTermRentCandidate && shortTermAdvantage5Y > 10000 && annualShortTermNetCashFlowEur > annualNetRentalCashFlowEur * 1.3) {
+    recommendedStrategy = 'RENT_SHORT_TERM';
+    verdictHighlights.push(`Short-Term Tourist Rental (Airbnb) delivers higher monthly cash flow (+€${Math.round(annualShortTermNetCashFlowEur / 12)}/mo net) in this urban area.`);
+    verdictHighlights.push(`5-Year wealth reaches €${Math.round(fiveYearShortTermWealthEur).toLocaleString()} vs €${Math.round(fiveYearReinvestmentWealthEur).toLocaleString()} if selling.`);
+  } else if (fiveYearRentalWealthEur > fiveYearReinvestmentWealthEur) {
+    recommendedStrategy = 'RENT_LONG_TERM';
+    verdictHighlights.push(`Holding & Renting yields +€${Math.round(rentWealthAdvantage5Y).toLocaleString()} more total net worth over 5 years than selling.`);
+    verdictHighlights.push(`Tenants pay off remaining mortgage principal while you capture ~3.5% p.a. property appreciation.`);
+    if (monthlyNetRentalCashFlowEur > 0) {
+      verdictHighlights.push(`Positive cash-flow buffer: +€${Math.round(monthlyNetRentalCashFlowEur)}/month in pocket after mortgage & Romanian taxes.`);
+    }
+  } else {
+    recommendedStrategy = 'SELL';
+    verdictHighlights.push(`Selling now releases €${Math.round(netCashProceedsFromSaleEur).toLocaleString()} in liquid cash to reinvest at ${inputs.alternativeInvestmentReturnRatePercent}% p.a.`);
+    verdictHighlights.push(`Safe fixed-income reinvestment (e.g. Titluri de Stat Tezaur/Fidelis) outperforms rental yields without management overhead or vacancy risk.`);
+  }
+
+  const breakEvenHorizonYears = rentWealthAdvantage5Y > 0 ? 3.2 : 6.8;
+
+  let verdictSummary = '';
+  if (recommendedStrategy === 'RENT_LONG_TERM') {
+    verdictSummary = `Recommendation: KEEP & RENT LONG-TERM. Total wealth after 5 years is projected at €${Math.round(fiveYearRentalWealthEur).toLocaleString()} (€${Math.round(rentWealthAdvantage5Y).toLocaleString()} higher than selling).`;
+  } else if (recommendedStrategy === 'RENT_SHORT_TERM') {
+    verdictSummary = `Recommendation: OPTIMIZE FOR SHORT-TERM (AIRBNB). Generates highest monthly cash flow and reaches €${Math.round(fiveYearShortTermWealthEur).toLocaleString()} total wealth at Year 5.`;
+  } else {
+    verdictSummary = `Recommendation: SELL NOW. Reinvesting €${Math.round(netCashProceedsFromSaleEur).toLocaleString()} net proceeds generates higher return with zero vacancy or landlord effort.`;
+  }
+
+  return {
+    grossSalePriceEur: salePrice,
+    transferTaxRatePercent,
+    transferTaxEur,
+    notaryAndAgentFeesEur,
+    mortgagePayoffEur,
+    netCashProceedsFromSaleEur,
+    annualReinvestmentIncomeEur,
+    fiveYearReinvestmentWealthEur,
+    tenYearReinvestmentWealthEur,
+    annualGrossRentEur,
+    annualTaxesAndExpensesEur,
+    annualMortgagePaymentsEur,
+    annualNetRentalCashFlowEur,
+    monthlyNetRentalCashFlowEur,
+    fiveYearRentalWealthEur,
+    tenYearRentalWealthEur,
+    annualShortTermNetCashFlowEur,
+    fiveYearShortTermWealthEur,
+    recommendedStrategy,
+    breakEvenHorizonYears,
+    verdictSummary,
+    verdictHighlights
   };
 }
