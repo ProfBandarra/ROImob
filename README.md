@@ -18,7 +18,7 @@
 
 <br />
 
-<img src="public/screenshots/roimob_homepage_preview.jpg" alt="ROImob Decision Intelligence Hub" width="100%" style="border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);" />
+<img src="public/screenshots/roimob_homepage_preview.png" alt="ROImob Decision Intelligence Hub" width="100%" style="border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);" />
 
 </div>
 
@@ -80,7 +80,7 @@ Users can seamlessly toggle between **EUR (€)** and **Romanian Leu (RON lei)**
 Designed for residential property owners with or without an active bank mortgage evaluating strategic exit vs. retention options:
 
 <div align="center">
-  <img src="public/screenshots/roimob_sell_vs_rent_preview.jpg" alt="Sell vs Rent Optimizer" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
+  <img src="public/screenshots/roimob_sell_vs_rent_preview.png" alt="Sell vs Rent Optimizer" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
 </div>
 
 ### 1. Market Valuation & Auto-Benchmarking
@@ -123,7 +123,7 @@ Designed for residential property owners with or without an active bank mortgage
 An institutional underwriting calculator for buy-to-let acquisitions:
 
 <div align="center">
-  <img src="public/screenshots/roimob_roi_calculator_preview.jpg" alt="Real Estate ROI and Tax Engine" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
+  <img src="public/screenshots/roimob_roi_calculator_preview.png" alt="Real Estate ROI and Tax Engine" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
 </div>
 
 ### 1. Capital Structuring & Financing
@@ -154,7 +154,7 @@ An institutional underwriting calculator for buy-to-let acquisitions:
 Generate verified, notarized-style A4 audit reports formatted for real estate investors, mortgage advisors, and private wealth banks:
 
 <div align="center">
-  <img src="public/screenshots/roimob_audit_report_preview.jpg" alt="ROImob Verified Fiscal Audit Dossier" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
+  <img src="public/screenshots/roimob_audit_report_preview.png" alt="ROImob Verified Fiscal Audit Dossier" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
 </div>
 
 - 🏛️ **Official Dossier Letterhead**: Includes tracking reference ID, date of issue, and BNR currency conversion rates.
