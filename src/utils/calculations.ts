@@ -91,7 +91,11 @@ export function calculateRealEstateFinancials(
   if (loanAmountEur > 0 && inputs.loanTermYears > 0) {
     const monthlyRate = (inputs.interestRatePercent / 100) / 12;
     const totalMonths = inputs.loanTermYears * 12;
-    monthlyMortgagePaymentEur = loanAmountEur * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+    if (monthlyRate === 0) {
+      monthlyMortgagePaymentEur = loanAmountEur / totalMonths;
+    } else {
+      monthlyMortgagePaymentEur = loanAmountEur * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+    }
     annualDebtServiceEur = monthlyMortgagePaymentEur * 12;
   }
 
