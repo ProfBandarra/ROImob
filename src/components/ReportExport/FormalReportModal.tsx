@@ -541,13 +541,12 @@ export const FormalReportModal: React.FC<Props> = ({
         </div>
 
         {/* Scrollable Document Container */}
-        <div className="p-2 sm:p-6 md:p-8 overflow-y-auto bg-slate-950/60 flex justify-center w-full">
+        <div className="p-2 sm:p-6 md:p-8 overflow-y-auto bg-slate-950/80 flex flex-col items-center w-full flex-1">
           
           {/* Printable 2-Page Institutional Dossier Sheet (White Paper Background) */}
           <div 
             id="formal-report-print-sheet" 
-            className="w-full max-w-[780px] bg-white text-slate-900 p-4 sm:p-8 md:p-10 rounded-xl sm:rounded-2xl shadow-2xl space-y-6 sm:space-y-8 border border-slate-200"
-            style={{ minHeight: '1100px' }}
+            className="w-full max-w-[780px] bg-white text-slate-900 p-5 sm:p-8 md:p-10 rounded-2xl shadow-2xl space-y-6 sm:space-y-8 border border-slate-200 shrink-0 h-auto"
           >
 
             {/* ========================================================================= */}
@@ -841,8 +840,20 @@ export const FormalReportModal: React.FC<Props> = ({
             {/* ========================================================================= */}
             {/* PAGE 2: GRAPHICAL PROJECTION & STATUTORY COMMENTARY                       */}
             {/* ========================================================================= */}
-            <div className="space-y-4 pt-4 border-t-2 border-dashed border-slate-300">
+            <div className="space-y-4 pt-2">
               
+              {/* Visual Page Break Separator (Hidden in Print) */}
+              <div className="relative py-2 my-2 print:hidden">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t-2 border-dashed border-slate-300" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-3 py-0.5 bg-slate-100 border border-slate-300 rounded-full text-[9px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+                    📄 Section 2 • Graphical Analysis & Schedules
+                  </span>
+                </div>
+              </div>
+
               {/* Page 2 Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start gap-1.5 pb-2 border-b-2 border-slate-900">
                 <div>
