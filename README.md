@@ -113,8 +113,26 @@ To ensure the platform is intuitive for casual homeowners while providing compre
 
 Generate authenticated, 2-page institutional private bank valuation dossiers in full compliance with Romanian Law nr. 227/2015:
 
+### 📜 Complete 2-Page Institutional Dossier Overview
 <div align="center">
   <img src="public/screenshots/roimob_audit_report_preview.png" alt="2-Page Institutional Audit Report Dossier" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
+</div>
+
+### 🔍 Detailed Page-by-Page Breakdown
+
+<div align="center">
+  <table>
+    <tr>
+      <td width="50%" align="center">
+        <strong>📄 Page 1: Statutory Summary & Valuation Matrix</strong><br /><br />
+        <img src="public/screenshots/roimob_audit_report_page1.png" alt="Page 1 Valuation Matrix" width="100%" style="border-radius: 12px; border: 1px solid #334155;" />
+      </td>
+      <td width="50%" align="center">
+        <strong>📈 Page 2: 15-Yr Trajectory & Schedules</strong><br /><br />
+        <img src="public/screenshots/roimob_audit_report_page2.png" alt="Page 2 Graphical Trajectory" width="100%" style="border-radius: 12px; border: 1px solid #334155;" />
+      </td>
+    </tr>
+  </table>
 </div>
 
 - **⚡ Quick Check vs. 🔬 Pro Engine Dynamic Dossier Customization**:

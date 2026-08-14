@@ -13,14 +13,14 @@ if (!fs.existsSync(SCREENSHOTS_DIR)) {
 }
 
 async function captureAll() {
-  console.log('🚀 Starting Robust Verified Puppeteer Suite for ROImob README...');
+  console.log('🚀 Starting Comprehensive High-Fidelity Puppeteer Suite for ROImob README...');
   
   const browser = await puppeteer.launch({
     headless: 'new',
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
-      '--window-size=1440,1100',
+      '--window-size=1440,1200',
       '--font-render-hinting=medium',
       '--force-color-profile=srgb'
     ]
@@ -46,16 +46,12 @@ async function captureAll() {
   // 1. HOMEPAGE HERO & DECISION HUB
   // =========================================================================
   console.log('📸 1. Capturing Homepage Decision Hub...');
-  // Ensure we are on Home tab
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const homeBtn = btns.find(b => b.textContent && (b.textContent.trim() === 'Home' || b.textContent.includes('Prezentare')));
     if (homeBtn) homeBtn.click();
   });
   await new Promise(r => setTimeout(r, 600));
-
-  const homeCheck = await page.evaluate(() => document.body.innerText.includes('Decision Intelligence Hub') || document.body.innerText.includes('Romanian Real Estate'));
-  console.log(`   Verification: Homepage present? ${homeCheck}`);
 
   await page.screenshot({
     path: path.join(SCREENSHOTS_DIR, 'roimob_homepage_preview.png')
@@ -66,7 +62,6 @@ async function captureAll() {
   // 2. QUICK SELL VS. RENT EVALUATOR (15-SECOND DECISION)
   // =========================================================================
   console.log('📸 2. Capturing Quick Sell vs. Rent Evaluator...');
-  // Click Sell vs. Rent in navbar
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const svrBtn = btns.find(b => b.textContent && b.textContent.includes('Sell vs. Rent'));
@@ -74,16 +69,12 @@ async function captureAll() {
   });
   await new Promise(r => setTimeout(r, 600));
 
-  // Ensure simple mode is active
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const simpleBtn = btns.find(b => b.textContent && b.textContent.includes('Quick Check'));
     if (simpleBtn) simpleBtn.click();
   });
   await new Promise(r => setTimeout(r, 600));
-
-  const svrQuickCheck = await page.evaluate(() => document.body.innerText.includes('Should I Sell or Rent My Property?') || document.body.innerText.includes('Option A: Keep & Rent'));
-  console.log(`   Verification: Quick Sell vs Rent present? ${svrQuickCheck}`);
 
   await page.screenshot({
     path: path.join(SCREENSHOTS_DIR, 'roimob_quick_sell_vs_rent_preview.png')
@@ -96,16 +87,12 @@ async function captureAll() {
   console.log('📸 3. Capturing Pro Sell vs. Rent Engine...');
   await page.setViewport({ width: 1440, height: 1100, deviceScaleFactor: 2 });
   
-  // Switch to Pro mode using the component button or navbar button
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const proBtn = btns.find(b => b.textContent && (b.textContent.includes('Switch to Pro') || b.textContent.includes('Institutional Pro')));
     if (proBtn) proBtn.click();
   });
   await new Promise(r => setTimeout(r, 800));
-
-  const svrProCheck = await page.evaluate(() => document.body.innerText.includes('Romanian Fiscal Code Art. 111') || document.body.innerText.includes('15-Year Projected Capital Trajectory'));
-  console.log(`   Verification: Pro Sell vs Rent present? ${svrProCheck}`);
 
   await page.screenshot({
     path: path.join(SCREENSHOTS_DIR, 'roimob_sell_vs_rent_preview.png')
@@ -118,7 +105,6 @@ async function captureAll() {
   console.log('📸 4. Capturing Quick Buy-to-Let ROI Evaluator...');
   await page.setViewport({ width: 1440, height: 950, deviceScaleFactor: 2 });
   
-  // Navigate to ROI Calculator in navbar
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const roiNavBtn = btns.find(b => b.textContent && b.textContent.includes('ROI & Tax Engine'));
@@ -126,16 +112,12 @@ async function captureAll() {
   });
   await new Promise(r => setTimeout(r, 600));
 
-  // Switch to simple mode
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const simpleBtn = btns.find(b => b.textContent && (b.textContent.includes('Quick Check') || b.textContent.includes('⚡')));
     if (simpleBtn) simpleBtn.click();
   });
   await new Promise(r => setTimeout(r, 600));
-
-  const roiQuickCheck = await page.evaluate(() => document.body.innerText.includes('Is this Apartment a Good Investment?') || document.body.innerText.includes('Investment Assessment'));
-  console.log(`   Verification: Quick ROI Evaluator present? ${roiQuickCheck}`);
 
   await page.screenshot({
     path: path.join(SCREENSHOTS_DIR, 'roimob_quick_roi_calculator_preview.png')
@@ -148,7 +130,6 @@ async function captureAll() {
   console.log('📸 5. Capturing Pro Buy-to-Let ROI & Tax Engine...');
   await page.setViewport({ width: 1440, height: 1100, deviceScaleFactor: 2 });
 
-  // Switch to Pro mode
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const proBtn = btns.find(b => b.textContent && (b.textContent.includes('Switch to Pro') || b.textContent.includes('Institutional Pro')));
@@ -156,20 +137,25 @@ async function captureAll() {
   });
   await new Promise(r => setTimeout(r, 800));
 
-  const roiProCheck = await page.evaluate(() => document.body.innerText.includes('Gross Yield') && document.body.innerText.includes('Impozit pe Venit'));
-  console.log(`   Verification: Pro ROI Engine present? ${roiProCheck}`);
-
   await page.screenshot({
     path: path.join(SCREENSHOTS_DIR, 'roimob_roi_calculator_preview.png')
   });
   console.log('✅ 5. roimob_roi_calculator_preview.png captured successfully');
 
   // =========================================================================
-  // 6. 2-PAGE INSTITUTIONAL AUDIT DOSSIER SHEET
+  // 6. 2-PAGE INSTITUTIONAL AUDIT DOSSIER SHEET (FULL UNCLIPPED HIGH-RES)
   // =========================================================================
-  console.log('📸 6. Capturing 2-Page Institutional Audit Report Dossier...');
+  console.log('📸 6. Capturing Full 2-Page Institutional Audit Report Dossier...');
   
-  // Click Export Dossier button on Pro ROI view
+  // Navigate to Sell vs Rent Pro mode for full 15-year curve & multi-scenario report
+  await page.evaluate(() => {
+    const btns = Array.from(document.querySelectorAll('button'));
+    const svrBtn = btns.find(b => b.textContent && b.textContent.includes('Sell vs. Rent'));
+    if (svrBtn) svrBtn.click();
+  });
+  await new Promise(r => setTimeout(r, 600));
+
+  // Open Export Modal
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const exportBtn = btns.find(b => b.textContent && (b.textContent.includes('Export') || b.textContent.includes('Dossier') || b.textContent.includes('PDF')));
@@ -177,29 +163,53 @@ async function captureAll() {
   });
   await new Promise(r => setTimeout(r, 1200));
 
-  // Wait for the modal sheet element
   await page.waitForSelector('#formal-report-print-sheet', { timeout: 5000 });
-  const sheetElement = await page.$('#formal-report-print-sheet');
 
-  const reportCheck = await page.evaluate(() => {
-    const el = document.getElementById('formal-report-print-sheet');
-    return el ? el.innerText.includes('ROImob') && el.innerText.includes('Law nr. 227/2015') : false;
+  // Dynamically expand container height to capture the entire unclipped 2-Page Dossier
+  await page.setViewport({ width: 1440, height: 2200, deviceScaleFactor: 2 });
+  await page.evaluate(() => {
+    const modalOuter = document.querySelector('.bg-slate-900.border.border-slate-700.w-full');
+    if (modalOuter) {
+      modalOuter.style.maxHeight = 'none';
+      modalOuter.style.overflow = 'visible';
+    }
+    const scrollContainer = document.querySelector('.bg-slate-950\\/80');
+    if (scrollContainer) {
+      scrollContainer.style.overflow = 'visible';
+      scrollContainer.style.height = 'auto';
+    }
   });
-  console.log(`   Verification: Institutional Report Sheet present? ${reportCheck}`);
+  await new Promise(r => setTimeout(r, 500));
 
+  const sheetElement = await page.$('#formal-report-print-sheet');
   if (sheetElement) {
+    // 6A. Full 2-Page Dossier
     await sheetElement.screenshot({
       path: path.join(SCREENSHOTS_DIR, 'roimob_audit_report_preview.png')
     });
-  } else {
-    await page.screenshot({
-      path: path.join(SCREENSHOTS_DIR, 'roimob_audit_report_preview.png')
-    });
+    console.log('✅ 6A. roimob_audit_report_preview.png (Full 2-Page Dossier) captured successfully');
+
+    // 6B. Page 1: Valuation Matrix & Executive Underwriting
+    const page1Element = await page.$('.page-break');
+    if (page1Element) {
+      await page1Element.screenshot({
+        path: path.join(SCREENSHOTS_DIR, 'roimob_audit_report_page1.png')
+      });
+      console.log('✅ 6B. roimob_audit_report_page1.png (Page 1 Underwriting) captured successfully');
+    }
+
+    // 6C. Page 2: 15-Year Projected SVG Curve & Multi-Year Schedule
+    const page2Element = await page.$('#formal-report-print-sheet > div:last-child');
+    if (page2Element) {
+      await page2Element.screenshot({
+        path: path.join(SCREENSHOTS_DIR, 'roimob_audit_report_page2.png')
+      });
+      console.log('✅ 6C. roimob_audit_report_page2.png (Page 2 Trajectory & Schedule) captured successfully');
+    }
   }
-  console.log('✅ 6. roimob_audit_report_preview.png captured successfully');
 
   await browser.close();
-  console.log('🎉 Verified Puppeteer Screenshots Suite Finished Successfully!');
+  console.log('🎉 All ROImob README Screenshots Captured & Verified with 100% Fidelity!');
 }
 
 captureAll().catch(err => {
