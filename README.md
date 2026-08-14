@@ -6,21 +6,22 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
 [![Romanian Fiscal Code](https://img.shields.io/badge/Fiscal%20Code-2024--2026-emerald?style=for-the-badge)](https://static.anaf.ro)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 
-**An institutional-grade decision and tax optimization suite for Romanian real estate owners, buyers, and investors.**
+**An open-source, institutional-grade decision intelligence and tax optimization suite for Romanian real estate owners, buyers, and investors.**
 
-[Explore Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Explore Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Deployment](#-deployment-to-vercel)
+[Overview & Manifesto](#-project-overview) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Legal Basis](#-statutory-romanian-legal-basis) • [Localization](#-6-language-localization) • [Deployment](#-deployment-to-vercel)
 
 </div>
 
 ---
 
-## 📌 Executive Overview
+## 📌 Project Overview
 
-**ROImob** delivers mathematical modeling and compliance-backed financial projections tailored specifically to the Romanian real estate market, fully up-to-date with **Romanian Fiscal Code Law 227/2015, Emergency Ordinance OUG 115/2023, and Emergency Ordinance OUG 52/2016**.
+**ROImob** is an open-source, non-commercial financial modeling platform designed to bring institutional transparency, mathematical precision, and strict fiscal compliance to the Romanian residential real estate market.
 
-The application features two interconnected, zero-dependency calculation engines:
+Unlike commercial portals or simplified rule-of-thumb estimators, ROImob models real-world transaction friction and taxation under **Romanian Law nr. 227/2015 (Codul Fiscal), Emergency Ordinance OUG nr. 115/2023, Emergency Ordinance OUG nr. 52/2016, and Law nr. 241/2005**.
 
 ```
                            ┌─────────────────────────────────────────────────────────┐
@@ -104,18 +105,32 @@ An institutional underwriting calculator for buy-to-let acquisitions:
 
 ### 4. 10-Year Cumulative Cash Flow & Equity Schedule
 - Year-by-year schedule tracking property appreciation (3.5% p.a.), rent growth (2.5% p.a.), annual cash flow, cumulative cash, and total net equity.
-- **PDF & Printable Audit Export**: One-click generation of formatted financial reports for banking applications or personal records.
+- **PDF & Printable Audit Export**: Dedicated isolated print engine generating formal A4 audit dossiers for banking applications or personal records.
 
 ---
 
-## 🌐 5-Language Localization
+## 🏛️ Statutory Romanian Legal Basis
 
-Native multi-language interface:
+The calculations in ROImob directly reflect Romanian statutory legislation and official benchmark indices:
+
+1. **Codul Fiscal al României (Legea nr. 227/2015)**: Art. 111 (transfer tax) & Art. 120 (rental income tax).
+2. **Ordonanța de Urgență OUG nr. 115/2023**: 20% deductible flat expense quota and CASS health insurance tier brackets.
+3. **Banca Națională a României (BNR) — Indicele IRCC**: Statutory consumer mortgage variable benchmark.
+4. **Ministerul Finanțelor — Titluri de Stat Tezaur & Fidelis**: Sovereign bond reinvestment yields (100% tax-free).
+5. **Legea nr. 241/2005**: Criminal compliance framework regarding tax evasion and reporting mandates.
+6. **Directiva Europeană OUG nr. 52/2016**: Mortgage early prepayment penalty statutory caps (max 1% fixed, 0% variable).
+
+---
+
+## 🌐 6-Language Localization
+
+Native multi-language interface with 100% complete key coverage:
 - 🇬🇧 **English** (`en`)
 - 🇷🇴 **Română** (`ro`)
 - 🇫🇷 **Français** (`fr`)
 - 🇩🇪 **Deutsch** (`de`)
 - 🇺🇦 **Українська** (`uk`)
+- 🇵🇹 **Português (PT)** (`pt`)
 
 ---
 
@@ -152,4 +167,4 @@ ROImob is pre-configured for instant zero-configuration deployment on **Vercel**
 
 ## 📜 License
 
-Distributed under the **MIT License**.
+Distributed under the **MIT License**. Free and open-source for educational and individual research use.

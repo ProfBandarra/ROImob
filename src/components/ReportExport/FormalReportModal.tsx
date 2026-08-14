@@ -49,10 +49,6 @@ export const FormalReportModal: React.FC<Props> = ({
 }) => {
   const { language } = useI18n();
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   const currentDate = new Date().toLocaleDateString(
     language === 'ro' ? 'ro-RO' : language === 'fr' ? 'fr-FR' : language === 'de' ? 'de-DE' : language === 'uk' ? 'uk-UA' : language === 'pt' ? 'pt-PT' : 'en-US',
     {
@@ -64,14 +60,169 @@ export const FormalReportModal: React.FC<Props> = ({
 
   const reportId = `ROIMOB-${type === 'sellVsRent' ? 'SVR' : 'ROI'}-${Date.now().toString().slice(-6)}`;
 
+  const handlePrint = () => {
+    const printContent = document.getElementById('formal-report-print-sheet');
+    if (!printContent) {
+      window.print();
+      return;
+    }
+
+    let printIframe = document.getElementById('roimob-print-frame') as HTMLIFrameElement;
+    if (!printIframe) {
+      printIframe = document.createElement('iframe');
+      printIframe.id = 'roimob-print-frame';
+      printIframe.style.position = 'fixed';
+      printIframe.style.right = '0';
+      printIframe.style.bottom = '0';
+      printIframe.style.width = '0';
+      printIframe.style.height = '0';
+      printIframe.style.border = '0';
+      document.body.appendChild(printIframe);
+    }
+
+    const doc = printIframe.contentWindow?.document;
+    if (!doc) {
+      window.print();
+      return;
+    }
+
+    doc.open();
+    doc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>${type === 'sellVsRent' ? 'ROImob - Owner Strategy Dossier' : 'ROImob - ROI & Fiscal Audit'}</title>
+          <meta charset="utf-8" />
+          <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+              background: #ffffff !important;
+              color: #0f172a !important;
+              padding: 24px;
+              font-size: 11px;
+              line-height: 1.45;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+            .font-bold { font-weight: 700; }
+            .font-black { font-weight: 900; }
+            .uppercase { text-transform: uppercase; }
+            .tracking-wider { letter-spacing: 0.05em; }
+            .tracking-tight { letter-spacing: -0.025em; }
+            
+            .grid { display: grid; }
+            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .gap-3 { gap: 12px; }
+            .gap-4 { gap: 16px; }
+            
+            .flex { display: flex; }
+            .items-center { align-items: center; }
+            .items-start { align-items: flex-start; }
+            .justify-between { justify-content: space-between; }
+            
+            .p-2 { padding: 8px; }
+            .p-3 { padding: 12px; }
+            .p-4 { padding: 16px; }
+            .p-5 { padding: 20px; }
+            .p-8 { padding: 24px; }
+            .px-2 { padding-left: 8px; padding-right: 8px; }
+            .py-0\\.5 { padding-top: 2px; padding-bottom: 2px; }
+            .px-3 { padding-left: 12px; padding-right: 12px; }
+            .py-1 { padding-top: 4px; padding-bottom: 4px; }
+            .pb-1 { padding-bottom: 4px; }
+            .pb-6 { padding-bottom: 20px; }
+            .pt-1 { padding-top: 4px; }
+            .pt-2 { padding-top: 8px; }
+            .pt-6 { padding-top: 20px; }
+            .mb-1 { margin-bottom: 4px; }
+            .mb-2 { margin-bottom: 8px; }
+            .ml-2 { margin-left: 8px; }
+            
+            .space-y-1 > * + * { margin-top: 4px; }
+            .space-y-2 > * + * { margin-top: 8px; }
+            .space-y-3 > * + * { margin-top: 12px; }
+            .space-y-6 > * + * { margin-top: 20px; }
+            .space-y-8 > * + * { margin-top: 24px; }
+            
+            .bg-white { background-color: #ffffff !important; }
+            .bg-slate-50 { background-color: #f8fafc !important; }
+            .bg-slate-100 { background-color: #f1f5f9 !important; }
+            .bg-slate-900 { background-color: #0f172a !important; color: #ffffff !important; }
+            .bg-indigo-50 { background-color: #eef2ff !important; }
+            
+            .text-slate-900 { color: #0f172a !important; }
+            .text-slate-800 { color: #1e293b !important; }
+            .text-slate-700 { color: #334155 !important; }
+            .text-slate-600 { color: #475569 !important; }
+            .text-slate-500 { color: #64748b !important; }
+            .text-slate-400 { color: #94a3b8 !important; }
+            .text-white { color: #ffffff !important; }
+            .text-indigo-600 { color: #4f46e5 !important; }
+            .text-emerald-600 { color: #059669 !important; }
+            .text-rose-600 { color: #e11d48 !important; }
+            
+            .border { border: 1px solid #e2e8f0; }
+            .border-2 { border: 2px solid #0f172a; }
+            .border-b { border-bottom: 1px solid #cbd5e1; }
+            .border-b-2 { border-bottom: 2px solid #0f172a; }
+            .border-t { border-top: 1px solid #e2e8f0; }
+            .border-slate-200 { border-color: #e2e8f0; }
+            .border-slate-300 { border-color: #cbd5e1; }
+            .border-slate-900 { border-color: #0f172a; }
+            
+            .rounded { border-radius: 4px; }
+            .rounded-lg { border-radius: 8px; }
+            .rounded-xl { border-radius: 12px; }
+            .rounded-2xl { border-radius: 16px; }
+            
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .text-xs { font-size: 11px; }
+            .text-sm { font-size: 13px; }
+            .text-lg { font-size: 16px; }
+            .text-xl { font-size: 18px; }
+            .text-2xl { font-size: 22px; }
+            .text-\\[10px\\] { font-size: 10px; }
+            .text-\\[11px\\] { font-size: 11px; }
+            
+            .w-8 { width: 32px; }
+            .h-8 { height: 32px; }
+            .w-full { width: 100%; }
+            
+            table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 10.5px; }
+            th, td { padding: 6px 8px; text-align: left; }
+            th { background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1; }
+            td { border-bottom: 1px solid #e2e8f0; }
+            
+            @page { size: A4 portrait; margin: 8mm; }
+          </style>
+        </head>
+        <body>
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+    doc.close();
+
+    setTimeout(() => {
+      printIframe.contentWindow?.focus();
+      printIframe.contentWindow?.print();
+    }, 250);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 print:p-0 print:bg-white print:static print:inset-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
       
       {/* Modal Container */}
-      <div className="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden print:border-none print:shadow-none print:bg-white print:text-slate-900 print:w-full print:max-w-none print:rounded-none">
+      <div className="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden text-slate-900">
         
-        {/* Top Control Bar (Hidden when Printing) */}
-        <div className="bg-slate-950 p-4 border-b border-slate-800 flex items-center justify-between print:hidden">
+        {/* Top Control Bar */}
+        <div className="bg-slate-950 p-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-400" />
             <span className="text-sm font-bold text-white uppercase tracking-wider">
@@ -83,7 +234,7 @@ export const FormalReportModal: React.FC<Props> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-brand-600/30 transition-all"
+              className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-brand-600/30 transition-all cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               <span>Print / Save as PDF</span>
@@ -92,7 +243,7 @@ export const FormalReportModal: React.FC<Props> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -100,7 +251,7 @@ export const FormalReportModal: React.FC<Props> = ({
         </div>
 
         {/* Formal Printable Document Sheet */}
-        <div id="formal-report-print-sheet" className="p-8 sm:p-12 space-y-8 bg-white text-slate-900 print:p-0">
+        <div id="formal-report-print-sheet" className="p-8 sm:p-12 space-y-8 bg-white text-slate-900">
           
           {/* Formal Letterhead */}
           <div className="flex items-start justify-between pb-6 border-b-2 border-slate-900">
