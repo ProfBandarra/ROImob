@@ -83,15 +83,15 @@ const DossierWealthChart: React.FC<{
   const xYears = [1, 3, 5, 7, 10, 12, 15];
 
   return (
-    <div className="w-full bg-slate-50 p-3 rounded-xl border border-slate-300 page-break-inside-avoid my-2">
-      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200 mb-2">
+    <div className="w-full bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-300 page-break-inside-avoid my-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-2 border-b border-slate-200 mb-2">
         <div className="flex items-center gap-1.5">
-          <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
-          <span className="text-[11px] font-black uppercase tracking-wider text-slate-800">
+          <TrendingUp className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-800">
             15-Year Projected Capital Trajectory Chart
           </span>
         </div>
-        <div className="flex items-center gap-3 text-[9px] font-bold">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[8.5px] sm:text-[9px] font-bold">
           <span className="flex items-center gap-1 text-emerald-700">
             <span className="w-2 h-2 rounded-full bg-emerald-600 inline-block" />
             Hold & Rent
@@ -213,15 +213,15 @@ const DossierROIChart: React.FC<{
   const opexPct = totalOutflows > 0 ? (annualOpex / totalOutflows) * 100 : 0;
 
   return (
-    <div className="w-full bg-slate-50 p-3 rounded-xl border border-slate-300 page-break-inside-avoid my-2">
-      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200 mb-2">
+    <div className="w-full bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-300 page-break-inside-avoid my-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-2 border-b border-slate-200 mb-2">
         <div className="flex items-center gap-1.5">
-          <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
-          <span className="text-[11px] font-black uppercase tracking-wider text-slate-800">
+          <BarChart3 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-800">
             10-Year Built Net Equity Progression
           </span>
         </div>
-        <span className="text-[9px] font-bold text-slate-500">
+        <span className="text-[8.5px] sm:text-[9px] font-bold text-slate-500">
           +3.5% Compounding Appreciation
         </span>
       </div>
@@ -281,7 +281,7 @@ const DossierROIChart: React.FC<{
           <div style={{ width: `${taxPct}%` }} className="bg-rose-500" />
           <div style={{ width: `${opexPct}%` }} className="bg-slate-500" />
         </div>
-        <div className="flex items-center justify-between text-[9px] pt-1 text-slate-500 font-bold">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-[8.5px] sm:text-[9px] pt-1.5 text-slate-600 font-bold gap-1">
           <span className="text-indigo-700">Bank Debt: {debtPct.toFixed(0)}%</span>
           <span className="text-rose-700">Romanian Taxes: {taxPct.toFixed(0)}%</span>
           <span className="text-slate-700">Opex & Reserves: {opexPct.toFixed(0)}%</span>
@@ -492,21 +492,21 @@ export const FormalReportModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-1 sm:p-4">
       
       {/* Modal Outer Container */}
-      <div className="bg-slate-900 border border-slate-700 w-full max-w-5xl max-h-[94vh] flex flex-col rounded-3xl shadow-2xl overflow-hidden text-slate-900">
+      <div className="bg-slate-900 border border-slate-700 w-full max-w-5xl max-h-[96vh] sm:max-h-[94vh] flex flex-col rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden text-slate-900">
         
         {/* Top Control Bar */}
-        <div className="sticky top-0 z-20 bg-slate-950 p-3 sm:p-4 border-b border-slate-800 flex items-center justify-between shrink-0 shadow-lg">
-          <div className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-brand-400" />
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider block">
-                  {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi} • {t.report.officialDossier}
+        <div className="sticky top-0 z-20 bg-slate-950 p-2.5 sm:p-4 border-b border-slate-800 flex items-center justify-between gap-2 shrink-0 shadow-lg">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <FileText className="w-5 h-5 text-brand-400 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider truncate block max-w-[180px] sm:max-w-md">
+                  {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi}
                 </span>
-                <span className={`px-2 py-0.5 rounded-full border text-[9px] font-mono font-bold uppercase ${
+                <span className={`px-2 py-0.5 rounded-full border text-[9px] font-mono font-bold uppercase shrink-0 ${
                   mode === 'quick' 
                     ? 'bg-amber-500/10 border-amber-500/30 text-amber-300' 
                     : 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300'
@@ -514,26 +514,26 @@ export const FormalReportModal: React.FC<Props> = ({
                   {mode === 'quick' ? '⚡ ' + t.mode.quick : '🔬 ' + t.mode.pro}
                 </span>
               </div>
-              <span className="text-[10px] text-slate-400 font-mono">
-                {reportId} • 2-Page Verified A4 Format • {primaryCode} + {secondaryCode}
+              <span className="text-[10px] text-slate-400 font-mono block truncate">
+                {reportId} • 2-Page Verified A4 • {primaryCode} + {secondaryCode}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-brand-600/30 transition-all cursor-pointer"
+              className="px-3 sm:px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-brand-600/30 transition-all cursor-pointer shrink-0"
             >
               <Printer className="w-4 h-4" />
-              <span>{t.report.printBtn}</span>
+              <span className="hidden xs:inline sm:inline">{t.report.printBtn}</span>
             </button>
 
             <button
               type="button"
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
+              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
             >
               <X className="w-5 h-5" />
             </button>
@@ -541,12 +541,12 @@ export const FormalReportModal: React.FC<Props> = ({
         </div>
 
         {/* Scrollable Document Container */}
-        <div className="p-4 sm:p-8 overflow-y-auto bg-slate-950/60 flex justify-center">
+        <div className="p-2 sm:p-6 md:p-8 overflow-y-auto bg-slate-950/60 flex justify-center w-full">
           
           {/* Printable 2-Page Institutional Dossier Sheet (White Paper Background) */}
           <div 
             id="formal-report-print-sheet" 
-            className="w-full max-w-[780px] bg-white text-slate-900 p-8 sm:p-10 rounded-2xl shadow-2xl space-y-8 border border-slate-200"
+            className="w-full max-w-[780px] bg-white text-slate-900 p-4 sm:p-8 md:p-10 rounded-xl sm:rounded-2xl shadow-2xl space-y-6 sm:space-y-8 border border-slate-200"
             style={{ minHeight: '1100px' }}
           >
 
@@ -556,20 +556,23 @@ export const FormalReportModal: React.FC<Props> = ({
             <div className="space-y-4 page-break">
               
               {/* Institutional Header Banner */}
-              <div className="flex justify-between items-start pb-3 border-b-2 border-slate-900">
-                <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 pb-3 border-b-2 border-slate-900">
+                <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-slate-900 inline-block" />
-                    <span className="font-black text-lg sm:text-xl tracking-tight text-slate-900">
+                    <span className="w-3 h-3 rounded-full bg-slate-900 inline-block shrink-0" />
+                    <span className="font-black text-base sm:text-xl tracking-tight text-slate-900">
                       ROImob • {t.report.suiteTitle}
                     </span>
                   </div>
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mt-0.5">
+                  <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
                     {type === 'sellVsRent' ? t.report.titleSvr : t.report.titleRoi}
                   </span>
+                  <p className="text-[9px] text-slate-400">
+                    Statutory Romanian Fiscal Code (Law nr. 227/2015, OUG nr. 115/2023 & BNR IRCC)
+                  </p>
                 </div>
 
-                <div className="text-right font-mono text-[10px] text-slate-600">
+                <div className="text-left sm:text-right font-mono text-[9.5px] text-slate-600 space-y-0.5 shrink-0">
                   <div className="font-bold text-slate-900">Jurisdiction: Romania (ANAF)</div>
                   <div>Fiscal Ref: Law 227/2015 & OUG 115/2023</div>
                   <div className="text-slate-500">{t.report.auditRef} {reportId}</div>
@@ -584,7 +587,7 @@ export const FormalReportModal: React.FC<Props> = ({
                 <span className="font-bold text-slate-800 uppercase shrink-0">
                   {mode === 'quick' ? '⚡ ' + t.mode.quick : '🔬 ' + t.mode.pro}:
                 </span>
-                <span>{mode === 'quick' ? t.report.quickAuditDesc : t.report.proAuditDesc}</span>
+                <span className="leading-relaxed">{mode === 'quick' ? t.report.quickAuditDesc : t.report.proAuditDesc}</span>
               </div>
 
               {/* SELL VS RENT OPTIMIZER CONTENT (PAGE 1) */}
@@ -592,12 +595,12 @@ export const FormalReportModal: React.FC<Props> = ({
                 <div className="space-y-4">
                   
                   {/* Executive Recommendation Banner */}
-                  <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex items-center justify-between">
+                  <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                     <div>
-                      <span className="text-xs font-black uppercase tracking-wider text-slate-300 block">
+                      <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-300 block">
                         {t.report.execRecommendationLabel}
                       </span>
-                      <span className="text-base sm:text-lg font-black text-white">
+                      <span className="text-sm sm:text-lg font-black text-white block mt-0.5">
                         {sellVsRentData.result.recommendedStrategy === 'RENT_LONG_TERM' 
                           ? t.sellVsRent.keepAndRentLongTerm
                           : sellVsRentData.result.recommendedStrategy === 'RENT_SHORT_TERM'
@@ -605,48 +608,48 @@ export const FormalReportModal: React.FC<Props> = ({
                           : t.sellVsRent.sellAndReinvest}
                       </span>
                     </div>
-                    <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase">
+                    <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase shrink-0 self-start sm:self-auto">
                       {sellVsRentData.inputs.projectionHorizonYears} {t.sellVsRent.yearsPlural}
                     </span>
                   </div>
 
                   {/* 2-Column Side-by-Side Financial Valuation Table (Primary vs Secondary Currency) */}
-                  <div>
-                    <table>
+                  <div className="overflow-x-auto w-full -mx-1 sm:mx-0">
+                    <table className="w-full min-w-[340px] sm:min-w-full">
                       <thead>
                         <tr>
                           <th>{t.report.financialMetricHeader}</th>
-                          <th className="text-right">{primaryCode} ({primaryConfig.symbol})</th>
-                          <th className="text-right">{secondaryCode} ({secondaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{primaryCode} ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{secondaryCode} ({secondaryConfig.symbol})</th>
                         </tr>
                       </thead>
                       <tbody className="font-mono">
                         <tr>
                           <td className="font-sans font-bold">{t.report.propertyValue}</td>
-                          <td className="text-right font-bold text-slate-900">{formatPrimary(sellVsRentData.inputs.currentPropertyMarketValueEur)}</td>
-                          <td className="text-right text-slate-700">{formatSecondary(sellVsRentData.inputs.currentPropertyMarketValueEur)}</td>
+                          <td className="text-right font-bold text-slate-900 whitespace-nowrap">{formatPrimary(sellVsRentData.inputs.currentPropertyMarketValueEur)}</td>
+                          <td className="text-right text-slate-700 whitespace-nowrap">{formatSecondary(sellVsRentData.inputs.currentPropertyMarketValueEur)}</td>
                         </tr>
                         <tr>
                           <td className="font-sans">{t.report.annualRentalIncome}</td>
-                          <td className="text-right text-emerald-700 font-bold">{formatPrimary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)}</td>
-                          <td className="text-right text-emerald-700">{formatSecondary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)}</td>
+                          <td className="text-right text-emerald-700 font-bold whitespace-nowrap">{formatPrimary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)}</td>
+                          <td className="text-right text-emerald-700 whitespace-nowrap">{formatSecondary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12)}</td>
                         </tr>
                         <tr>
                           <td className="font-sans">{t.report.operatingExpenses}</td>
-                          <td className="text-right text-rose-600">-{formatPrimary(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12)}</td>
-                          <td className="text-right text-rose-600">-{formatSecondary(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12)}</td>
+                          <td className="text-right text-rose-600 whitespace-nowrap">-{formatPrimary(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12)}</td>
+                          <td className="text-right text-rose-600 whitespace-nowrap">-{formatSecondary(sellVsRentData.inputs.monthlyOperatingExpensesEur * 12)}</td>
                         </tr>
                         <tr>
                           <td className="font-sans font-bold">{t.report.netOperatingIncome}</td>
-                          <td className="text-right font-bold text-emerald-800">{formatPrimary(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12)}</td>
-                          <td className="text-right font-bold text-emerald-800">{formatSecondary(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12)}</td>
+                          <td className="text-right font-bold text-emerald-800 whitespace-nowrap">{formatPrimary(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12)}</td>
+                          <td className="text-right font-bold text-emerald-800 whitespace-nowrap">{formatSecondary(sellVsRentData.result.monthlyNetRentalCashFlowEur * 12)}</td>
                         </tr>
                         <tr>
                           <td className="font-sans font-bold">{t.report.estimatedNetYield}</td>
-                          <td className="text-right font-bold text-emerald-700">
+                          <td className="text-right font-bold text-emerald-700 whitespace-nowrap">
                             {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
                           </td>
-                          <td className="text-right text-slate-600">
+                          <td className="text-right text-slate-600 whitespace-nowrap">
                             {formatPercent((sellVsRentData.result.monthlyNetRentalCashFlowEur * 12 / sellVsRentData.inputs.currentPropertyMarketValueEur) * 100)}
                           </td>
                         </tr>
@@ -660,64 +663,66 @@ export const FormalReportModal: React.FC<Props> = ({
                       {t.report.multiScenarioTitle}
                     </h4>
                     
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>{t.report.horizonMetricHeader}</th>
-                          <th className="text-right">{t.report.holdAndRentHeader}</th>
-                          <th className="text-right">{t.report.sellAndReinvestHeader}</th>
-                        </tr>
-                      </thead>
-                      <tbody className="font-mono text-xs">
-                        {/* 5 Years */}
-                        <tr className="bg-slate-100 font-bold font-sans">
-                          <td colSpan={3}>{t.report.fiveYearHorizon}</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans">{t.report.cumulativeRent}</td>
-                          <td className="text-right text-emerald-700 font-bold">{formatPrimary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 5)}</td>
-                          <td className="text-right text-slate-400">-</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans">{t.report.projectedAppreciation}</td>
-                          <td className="text-right text-emerald-700 font-bold">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 5)}</td>
-                          <td className="text-right text-indigo-600 font-bold">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 5)}</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans font-bold">{t.report.totalHorizonWealth}</td>
-                          <td className="text-right text-emerald-800 font-black">
-                            {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.rentingWealth ?? 0)}
-                          </td>
-                          <td className="text-right text-indigo-700 font-black">
-                            {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.sellingWealth ?? 0)}
-                          </td>
-                        </tr>
+                    <div className="overflow-x-auto w-full -mx-1 sm:mx-0">
+                      <table className="w-full min-w-[340px] sm:min-w-full">
+                        <thead>
+                          <tr>
+                            <th>{t.report.horizonMetricHeader}</th>
+                            <th className="text-right whitespace-nowrap">{t.report.holdAndRentHeader}</th>
+                            <th className="text-right whitespace-nowrap">{t.report.sellAndReinvestHeader}</th>
+                          </tr>
+                        </thead>
+                        <tbody className="font-mono text-xs">
+                          {/* 5 Years */}
+                          <tr className="bg-slate-100 font-bold font-sans">
+                            <td colSpan={3}>{t.report.fiveYearHorizon}</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans">{t.report.cumulativeRent}</td>
+                            <td className="text-right text-emerald-700 font-bold whitespace-nowrap">{formatPrimary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 5)}</td>
+                            <td className="text-right text-slate-400 whitespace-nowrap">-</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans">{t.report.projectedAppreciation}</td>
+                            <td className="text-right text-emerald-700 font-bold whitespace-nowrap">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 5)}</td>
+                            <td className="text-right text-indigo-600 font-bold whitespace-nowrap">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 5)}</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans font-bold">{t.report.totalHorizonWealth}</td>
+                            <td className="text-right text-emerald-800 font-black whitespace-nowrap">
+                              {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.rentingWealth ?? 0)}
+                            </td>
+                            <td className="text-right text-indigo-700 font-black whitespace-nowrap">
+                              {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 5)?.sellingWealth ?? 0)}
+                            </td>
+                          </tr>
 
-                        {/* 10 Years */}
-                        <tr className="bg-slate-100 font-bold font-sans">
-                          <td colSpan={3}>{t.report.tenYearHorizon}</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans">{t.report.cumulativeRent}</td>
-                          <td className="text-right text-emerald-700 font-bold">{formatPrimary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 10)}</td>
-                          <td className="text-right text-slate-400">-</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans">{t.report.projectedAppreciation}</td>
-                          <td className="text-right text-emerald-700 font-bold">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 10)}</td>
-                          <td className="text-right text-indigo-600 font-bold">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 10)}</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans font-bold">{t.report.totalHorizonWealth}</td>
-                          <td className="text-right text-emerald-800 font-black">
-                            {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.rentingWealth ?? 0)}
-                          </td>
-                          <td className="text-right text-indigo-700 font-black">
-                            {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.sellingWealth ?? 0)}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          {/* 10 Years */}
+                          <tr className="bg-slate-100 font-bold font-sans">
+                            <td colSpan={3}>{t.report.tenYearHorizon}</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans">{t.report.cumulativeRent}</td>
+                            <td className="text-right text-emerald-700 font-bold whitespace-nowrap">{formatPrimary(sellVsRentData.inputs.estimatedMonthlyRentEur * 12 * 10)}</td>
+                            <td className="text-right text-slate-400 whitespace-nowrap">-</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans">{t.report.projectedAppreciation}</td>
+                            <td className="text-right text-emerald-700 font-bold whitespace-nowrap">{formatPercent(sellVsRentData.inputs.propertyAppreciationRatePercent * 10)}</td>
+                            <td className="text-right text-indigo-600 font-bold whitespace-nowrap">{formatPercent(sellVsRentData.inputs.alternativeInvestmentReturnRatePercent * 10)}</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans font-bold">{t.report.totalHorizonWealth}</td>
+                            <td className="text-right text-emerald-800 font-black whitespace-nowrap">
+                              {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.rentingWealth ?? 0)}
+                            </td>
+                            <td className="text-right text-indigo-700 font-black whitespace-nowrap">
+                              {formatPrimary(sellVsRentData.result.yearlyBreakdown.find((p) => p.year === 10)?.sellingWealth ?? 0)}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               )}
@@ -725,65 +730,67 @@ export const FormalReportModal: React.FC<Props> = ({
               {/* REAL ESTATE ROI CALCULATOR (PAGE 1) */}
               {type === 'roiCalculator' && roiData && (
                 <div className="space-y-4">
-                  <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex items-center justify-between">
+                  <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-lg shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                     <div>
-                      <span className="text-xs font-black uppercase tracking-wider text-slate-300 block">
+                      <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-300 block">
                         {t.report.verdictUnderwritingLabel}
                       </span>
-                      <span className="text-base sm:text-lg font-black text-white">
+                      <span className="text-sm sm:text-lg font-black text-white block mt-0.5">
                         {roiData.calc.grossYieldPercent >= 7.0 ? t.report.highYieldAsset : t.report.stableAsset}
                       </span>
                     </div>
-                    <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase">
+                    <span className="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-xs uppercase shrink-0 self-start sm:self-auto">
                       {formatPercent(roiData.calc.netYieldPercent)} {t.report.estimatedNetYield}
                     </span>
                   </div>
 
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>{t.report.financialMetricHeader}</th>
-                        <th className="text-right">{primaryCode} ({primaryConfig.symbol})</th>
-                        <th className="text-right">{secondaryCode} ({secondaryConfig.symbol})</th>
-                      </tr>
-                    </thead>
-                    <tbody className="font-mono">
-                      <tr>
-                        <td className="font-sans font-bold">{t.roiCalculator.purchasePrice}</td>
-                        <td className="text-right font-bold text-slate-900">{formatPrimary(roiData.inputs.purchasePrice)}</td>
-                        <td className="text-right text-slate-700">{formatSecondary(roiData.inputs.purchasePrice)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">{t.roiCalculator.downPayment}</td>
-                        <td className="text-right text-slate-900">{formatPrimary(roiData.calc.downPaymentEur)} ({roiData.inputs.downPaymentPercent}%)</td>
-                        <td className="text-right text-slate-700">{formatSecondary(roiData.calc.downPaymentEur)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">Mortgage Loan Balance</td>
-                        <td className="text-right text-slate-900">{formatPrimary(roiData.calc.loanAmountEur)}</td>
-                        <td className="text-right text-slate-700">{formatSecondary(roiData.calc.loanAmountEur)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans font-bold">{t.report.annualRentalIncome}</td>
-                        <td className="text-right font-bold text-emerald-700">{formatPrimary(roiData.inputs.monthlyRentEur * 12)}</td>
-                        <td className="text-right text-emerald-700">{formatSecondary(roiData.inputs.monthlyRentEur * 12)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans">{t.roiCalculator.totalAnnualTaxes}</td>
-                        <td className="text-right text-rose-600 font-bold">-{formatPrimary(roiData.calc.annualTaxesEur)}</td>
-                        <td className="text-right text-rose-600">-{formatSecondary(roiData.calc.annualTaxesEur)}</td>
-                      </tr>
-                      <tr>
-                        <td className="font-sans font-bold">{t.roiCalculator.kpi.monthlyCashFlow}</td>
-                        <td className="text-right font-bold text-emerald-800">
-                          {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatPrimary(roiData.calc.monthlyCashFlowAfterDebtEur)}/mo
-                        </td>
-                        <td className="text-right font-bold text-emerald-800">
-                          {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatSecondary(roiData.calc.monthlyCashFlowAfterDebtEur)}/mo
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="overflow-x-auto w-full -mx-1 sm:mx-0">
+                    <table className="w-full min-w-[340px] sm:min-w-full">
+                      <thead>
+                        <tr>
+                          <th>{t.report.financialMetricHeader}</th>
+                          <th className="text-right whitespace-nowrap">{primaryCode} ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{secondaryCode} ({secondaryConfig.symbol})</th>
+                        </tr>
+                      </thead>
+                      <tbody className="font-mono">
+                        <tr>
+                          <td className="font-sans font-bold">{t.roiCalculator.purchasePrice}</td>
+                          <td className="text-right font-bold text-slate-900 whitespace-nowrap">{formatPrimary(roiData.inputs.purchasePrice)}</td>
+                          <td className="text-right text-slate-700 whitespace-nowrap">{formatSecondary(roiData.inputs.purchasePrice)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.roiCalculator.downPayment}</td>
+                          <td className="text-right text-slate-900 whitespace-nowrap">{formatPrimary(roiData.calc.downPaymentEur)} ({roiData.inputs.downPaymentPercent}%)</td>
+                          <td className="text-right text-slate-700 whitespace-nowrap">{formatSecondary(roiData.calc.downPaymentEur)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">Mortgage Loan Balance</td>
+                          <td className="text-right text-slate-900 whitespace-nowrap">{formatPrimary(roiData.calc.loanAmountEur)}</td>
+                          <td className="text-right text-slate-700 whitespace-nowrap">{formatSecondary(roiData.calc.loanAmountEur)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.report.annualRentalIncome}</td>
+                          <td className="text-right font-bold text-emerald-700 whitespace-nowrap">{formatPrimary(roiData.inputs.monthlyRentEur * 12)}</td>
+                          <td className="text-right text-emerald-700 whitespace-nowrap">{formatSecondary(roiData.inputs.monthlyRentEur * 12)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans">{t.roiCalculator.totalAnnualTaxes}</td>
+                          <td className="text-right text-rose-600 font-bold whitespace-nowrap">-{formatPrimary(roiData.calc.annualTaxesEur)}</td>
+                          <td className="text-right text-rose-600 whitespace-nowrap">-{formatSecondary(roiData.calc.annualTaxesEur)}</td>
+                        </tr>
+                        <tr>
+                          <td className="font-sans font-bold">{t.roiCalculator.kpi.monthlyCashFlow}</td>
+                          <td className="text-right font-bold text-emerald-800 whitespace-nowrap">
+                            {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatPrimary(roiData.calc.monthlyCashFlowAfterDebtEur)}/mo
+                          </td>
+                          <td className="text-right font-bold text-emerald-800 whitespace-nowrap">
+                            {roiData.calc.monthlyCashFlowAfterDebtEur >= 0 ? '+' : ''}{formatSecondary(roiData.calc.monthlyCashFlowAfterDebtEur)}/mo
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
                   {/* Applicable Tax Itemization Table */}
                   <div className="space-y-1">
@@ -791,38 +798,40 @@ export const FormalReportModal: React.FC<Props> = ({
                       {t.report.applicableTaxesTitle}
                     </h4>
 
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>{t.report.taxRegimeItemHeader}</th>
-                          <th>Statutory Base</th>
-                          <th className="text-right">Annual Liability ({primaryConfig.symbol})</th>
-                        </tr>
-                      </thead>
-                      <tbody className="font-mono text-xs">
-                        <tr>
-                          <td className="font-sans font-bold">{t.roiCalculator.incomeTaxTitle}</td>
-                          <td className="font-sans text-slate-600">{t.roiCalculator.incomeTaxDesc}</td>
-                          <td className="text-right font-bold text-rose-600">{formatPrimary(roiData.calc.annualTaxesEur * 0.5)}</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans font-bold">{t.roiCalculator.cassHealthTitle}</td>
-                          <td className="font-sans text-slate-600">{t.roiCalculator.cassHealthDesc}</td>
-                          <td className="text-right font-bold text-rose-600">{formatPrimary(roiData.calc.annualTaxesEur * 0.35)}</td>
-                        </tr>
-                        <tr>
-                          <td className="font-sans font-bold">{t.roiCalculator.localTaxTitle}</td>
-                          <td className="font-sans text-slate-600">{t.roiCalculator.localTaxDesc}</td>
-                          <td className="text-right font-bold text-slate-700">{formatPrimary(roiData.calc.annualTaxesEur * 0.15)}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <div className="overflow-x-auto w-full -mx-1 sm:mx-0">
+                      <table className="w-full min-w-[340px] sm:min-w-full">
+                        <thead>
+                          <tr>
+                            <th>{t.report.taxRegimeItemHeader}</th>
+                            <th>Statutory Base</th>
+                            <th className="text-right whitespace-nowrap">Annual Liability ({primaryConfig.symbol})</th>
+                          </tr>
+                        </thead>
+                        <tbody className="font-mono text-xs">
+                          <tr>
+                            <td className="font-sans font-bold">{t.roiCalculator.incomeTaxTitle}</td>
+                            <td className="font-sans text-slate-600">{t.roiCalculator.incomeTaxDesc}</td>
+                            <td className="text-right font-bold text-rose-600 whitespace-nowrap">{formatPrimary(roiData.calc.annualTaxesEur * 0.5)}</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans font-bold">{t.roiCalculator.cassHealthTitle}</td>
+                            <td className="font-sans text-slate-600">{t.roiCalculator.cassHealthDesc}</td>
+                            <td className="text-right font-bold text-rose-600 whitespace-nowrap">{formatPrimary(roiData.calc.annualTaxesEur * 0.35)}</td>
+                          </tr>
+                          <tr>
+                            <td className="font-sans font-bold">{t.roiCalculator.localTaxTitle}</td>
+                            <td className="font-sans text-slate-600">{t.roiCalculator.localTaxDesc}</td>
+                            <td className="text-right font-bold text-slate-700 whitespace-nowrap">{formatPrimary(roiData.calc.annualTaxesEur * 0.15)}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Page 1 Footer */}
-              <div className="flex justify-between items-center pt-3 text-[9.5px] text-slate-400 border-t border-slate-200">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1.5 pt-3 text-[9px] sm:text-[9.5px] text-slate-400 border-t border-slate-200">
                 <span>{currentDate}</span>
                 <span>Ref: {reportId} • {t.report.stamp} • {t.report.bnrRate} • {t.report.page1Of2}</span>
               </div>
@@ -835,24 +844,24 @@ export const FormalReportModal: React.FC<Props> = ({
             <div className="space-y-4 pt-4 border-t-2 border-dashed border-slate-300">
               
               {/* Page 2 Header */}
-              <div className="flex justify-between items-start pb-2 border-b-2 border-slate-900">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-1.5 pb-2 border-b-2 border-slate-900">
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-wider text-slate-900">
+                  <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900">
                     {t.report.page2Title}
                   </h3>
-                  <p className="text-[10px] text-slate-500 font-medium">
+                  <p className="text-[9.5px] sm:text-[10px] text-slate-500 font-medium">
                     {t.report.page2Subtitle}
                   </p>
                 </div>
-                <span className="text-[10px] font-mono text-slate-400">{reportId}</span>
+                <span className="text-[10px] font-mono text-slate-400 shrink-0">{reportId}</span>
               </div>
 
               {/* Bulleted Strategic Analysis Commentary */}
-              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 text-xs text-slate-700">
+              <div className="p-3 sm:p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 text-xs text-slate-700">
                 <span className="font-bold text-slate-900 block uppercase tracking-wider text-[10px]">
                   {t.report.commentaryTitle}
                 </span>
-                <ul className="list-disc pl-4 space-y-1 text-[11px] leading-relaxed">
+                <ul className="list-disc pl-4 space-y-1 text-[10.5px] sm:text-[11px] leading-relaxed">
                   <li>
                     <strong>{mode === 'quick' ? t.report.quickAuditBadge : t.report.proAuditBadge}:</strong>{' '}
                     {mode === 'quick' ? t.report.quickAuditDesc : t.report.proAuditDesc}
@@ -917,63 +926,67 @@ export const FormalReportModal: React.FC<Props> = ({
                 </h4>
 
                 {type === 'sellVsRent' && sellVsRentData && (
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>{t.sellVsRent.scheduleHeaders.year}</th>
-                        <th className="text-right">{t.sellVsRent.scheduleHeaders.holdAndRent} ({primaryConfig.symbol})</th>
-                        <th className="text-right">{t.sellVsRent.scheduleHeaders.sellAndReinvest} ({primaryConfig.symbol})</th>
-                        <th className="text-right">Airbnb ({primaryConfig.symbol})</th>
-                        <th className="text-right">{t.sellVsRent.scheduleHeaders.propertyValue} ({primaryConfig.symbol})</th>
-                      </tr>
-                    </thead>
-                    <tbody className="font-mono text-xs">
-                      {sellVsRentData.result.yearlyBreakdown.filter((p) => [1, 2, 3, 5, 7, 10, 15].includes(p.year)).map((r) => (
-                        <tr key={r.year} className={r.year === sellVsRentData.inputs.projectionHorizonYears ? 'bg-indigo-50 font-bold' : ''}>
-                          <td className="font-sans font-bold">Year {r.year}</td>
-                          <td className="text-right text-emerald-700 font-bold">{formatPrimary(r.rentingWealth)}</td>
-                          <td className="text-right text-indigo-700">{formatPrimary(r.sellingWealth)}</td>
-                          <td className="text-right text-amber-700">{formatPrimary(r.shortTermWealth ?? 0)}</td>
-                          <td className="text-right text-slate-600">{formatPrimary(r.propertyValue)}</td>
+                  <div className="overflow-x-auto w-full -mx-1 sm:mx-0">
+                    <table className="w-full min-w-[420px] sm:min-w-full">
+                      <thead>
+                        <tr>
+                          <th>{t.sellVsRent.scheduleHeaders.year}</th>
+                          <th className="text-right whitespace-nowrap">{t.sellVsRent.scheduleHeaders.holdAndRent} ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{t.sellVsRent.scheduleHeaders.sellAndReinvest} ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">Airbnb ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{t.sellVsRent.scheduleHeaders.propertyValue} ({primaryConfig.symbol})</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="font-mono text-xs">
+                        {sellVsRentData.result.yearlyBreakdown.filter((p) => [1, 2, 3, 5, 7, 10, 15].includes(p.year)).map((r) => (
+                          <tr key={r.year} className={r.year === sellVsRentData.inputs.projectionHorizonYears ? 'bg-indigo-50 font-bold' : ''}>
+                            <td className="font-sans font-bold whitespace-nowrap">Year {r.year}</td>
+                            <td className="text-right text-emerald-700 font-bold whitespace-nowrap">{formatPrimary(r.rentingWealth)}</td>
+                            <td className="text-right text-indigo-700 whitespace-nowrap">{formatPrimary(r.sellingWealth)}</td>
+                            <td className="text-right text-amber-700 whitespace-nowrap">{formatPrimary(r.shortTermWealth ?? 0)}</td>
+                            <td className="text-right text-slate-600 whitespace-nowrap">{formatPrimary(r.propertyValue)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
 
                 {type === 'roiCalculator' && roiData && (
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>{t.roiCalculator.scheduleHeaders.year}</th>
-                        <th className="text-right">{t.roiCalculator.scheduleHeaders.propertyValue} ({primaryConfig.symbol})</th>
-                        <th className="text-right">{t.roiCalculator.scheduleHeaders.annualCashFlow} ({primaryConfig.symbol})</th>
-                        <th className="text-right">{t.roiCalculator.scheduleHeaders.cumulativeCash} ({primaryConfig.symbol})</th>
-                        <th className="text-right">{t.roiCalculator.scheduleHeaders.totalNetEquity} ({primaryConfig.symbol})</th>
-                      </tr>
-                    </thead>
-                    <tbody className="font-mono text-xs">
-                      {[1, 2, 3, 4, 5, 7, 10].map((yr) => {
-                        const propVal = roiData.inputs.purchasePrice * Math.pow(1.035, yr);
-                        const annualCF = roiData.calc.annualCashFlowAfterDebtEur;
-                        const cumCF = annualCF * yr;
-                        const debtPayoffPerYear = (roiData.calc.loanAmountEur / (roiData.inputs.loanTermYears || 30)) * 0.85;
-                        const equity = (roiData.calc.downPaymentEur) + (debtPayoffPerYear * yr) + (propVal - roiData.inputs.purchasePrice);
+                  <div className="overflow-x-auto w-full -mx-1 sm:mx-0">
+                    <table className="w-full min-w-[420px] sm:min-w-full">
+                      <thead>
+                        <tr>
+                          <th>{t.roiCalculator.scheduleHeaders.year}</th>
+                          <th className="text-right whitespace-nowrap">{t.roiCalculator.scheduleHeaders.propertyValue} ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{t.roiCalculator.scheduleHeaders.annualCashFlow} ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{t.roiCalculator.scheduleHeaders.cumulativeCash} ({primaryConfig.symbol})</th>
+                          <th className="text-right whitespace-nowrap">{t.roiCalculator.scheduleHeaders.totalNetEquity} ({primaryConfig.symbol})</th>
+                        </tr>
+                      </thead>
+                      <tbody className="font-mono text-xs">
+                        {[1, 2, 3, 4, 5, 7, 10].map((yr) => {
+                          const propVal = roiData.inputs.purchasePrice * Math.pow(1.035, yr);
+                          const annualCF = roiData.calc.annualCashFlowAfterDebtEur;
+                          const cumCF = annualCF * yr;
+                          const debtPayoffPerYear = (roiData.calc.loanAmountEur / (roiData.inputs.loanTermYears || 30)) * 0.85;
+                          const equity = (roiData.calc.downPaymentEur) + (debtPayoffPerYear * yr) + (propVal - roiData.inputs.purchasePrice);
 
-                        return (
-                          <tr key={yr}>
-                            <td className="font-sans font-bold">Year {yr}</td>
-                            <td className="text-right text-slate-700">{formatPrimary(propVal)}</td>
-                            <td className={`text-right ${annualCF >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold'}`}>
-                              {annualCF >= 0 ? '+' : ''}{formatPrimary(annualCF)}
-                            </td>
-                            <td className="text-right text-indigo-700 font-bold">{formatPrimary(cumCF)}</td>
-                            <td className="text-right text-emerald-800 font-black">{formatPrimary(equity)}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                          return (
+                            <tr key={yr}>
+                              <td className="font-sans font-bold whitespace-nowrap">Year {yr}</td>
+                              <td className="text-right text-slate-700 whitespace-nowrap">{formatPrimary(propVal)}</td>
+                              <td className={`text-right whitespace-nowrap ${annualCF >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold'}`}>
+                                {annualCF >= 0 ? '+' : ''}{formatPrimary(annualCF)}
+                              </td>
+                              <td className="text-right text-indigo-700 font-bold whitespace-nowrap">{formatPrimary(cumCF)}</td>
+                              <td className="text-right text-emerald-800 font-black whitespace-nowrap">{formatPrimary(equity)}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
               </div>
 
@@ -985,7 +998,7 @@ export const FormalReportModal: React.FC<Props> = ({
                 <p className="leading-relaxed">
                   {t.report.disclaimerText}
                 </p>
-                <div className="flex justify-between pt-1 border-t border-slate-200 text-slate-400">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 pt-1 border-t border-slate-200 text-slate-400">
                   <span>{currentDate}</span>
                   <span>Ref: {reportId} • {t.report.stamp} • {primaryCode} + {secondaryCode} • {t.report.page2Of2}</span>
                 </div>
