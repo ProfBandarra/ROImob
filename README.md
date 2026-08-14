@@ -117,7 +117,13 @@ Generate authenticated, 2-page institutional private bank valuation dossiers in 
   <img src="public/screenshots/roimob_audit_report_preview.png" alt="2-Page Institutional Audit Report Dossier" width="100%" style="border-radius: 16px; border: 1px solid #334155; margin: 12px 0;" />
 </div>
 
-- **Page 1**: Official serialized letterhead (`ROIMOB-SVR-XXXXXX`), dark executive recommendation banner, dual-currency `EUR` + `RON` side-by-side valuation schedules, 5-yr & 10-yr multi-scenario projection matrices, and statutory tax itemization.
+- **⚡ Quick Check vs. 🔬 Pro Engine Dynamic Dossier Customization**:
+  - Automatically identifies whether the evaluation originated from Quick Check or Pro Engine.
+  - Customizes audit reference tags (`ROIMOB-SVR-QUICK-...` vs `ROIMOB-SVR-PRO-...`), header compliance badges, methodology scope notes, and analytical commentary.
+- **💱 Dynamic Dual-Currency Formatting**:
+  - Dynamically pairs the user's selected primary currency (`EUR`, `RON`, `USD`, `GBP`, `CHF`) alongside local statutory `RON` (with an intelligent fallback to `EUR` if RON is primary).
+  - All tables, multi-year projection schedules, and embedded vector SVG charts automatically adapt their units and conversion rates.
+- **Page 1**: Official serialized letterhead, executive recommendation banner, dual-currency valuation tables, 5-yr & 10-yr multi-scenario projection matrices, and statutory tax itemization.
 - **Page 2**: Executive strategic commentary, embedded vector SVG trajectory graphs, multi-year wealth schedules, and legal disclaimers.
 
 ---
@@ -181,8 +187,8 @@ npm install
 # Start local dev server
 npm run dev
 
-# Run automated authentic Puppeteer screenshot capture
-node scripts/capture_all_new_screenshots.js
+# Run automated authentic Puppeteer screenshot suite
+npm run screenshots
 
 # Build production bundle with TypeScript verification
 npm run build
