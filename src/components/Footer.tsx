@@ -3,7 +3,7 @@ import { Building2, ShieldCheck, AlertCircle, ExternalLink, Github } from 'lucid
 import { useI18n } from '../i18n';
 import { useTheme } from '../theme';
 
-const ISSUES_URL = 'https://github.com/ProfBandarra/ROImob/issues/new';
+const ISSUES_URL = 'https://github.com/ProfBandarra/ROImob/issues/new?template=bug_report.md';
 const REVOLUT_DONATE_URL = 'https://revolut.me/nbandarra';
 const BMAC_DONATE_URL = 'https://buymeacoffee.com/nbandarra';
 
