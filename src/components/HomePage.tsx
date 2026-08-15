@@ -75,7 +75,7 @@ const OFFICIAL_REFERENCES = [
 ];
 
 const REPO_URL = 'https://github.com/ProfBandarra/ROImob';
-const ISSUES_URL = 'https://github.com/ProfBandarra/ROImob/issues/new';
+const ISSUES_URL = 'https://github.com/ProfBandarra/ROImob/issues/new?template=bug_report.md';
 
 export const HomePage: React.FC<Props> = ({
   onNavigateToSellVsRent,
