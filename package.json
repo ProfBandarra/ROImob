@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "type-check": "tsc --noEmit",
+    "test": "node scripts/verify_calculations.js",
     "preview": "vite preview",
     "screenshots": "node scripts/generate_readme_screenshots.js"
   },

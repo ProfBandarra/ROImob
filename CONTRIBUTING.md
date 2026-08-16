@@ -57,13 +57,57 @@ npm run build
 
 ---
 
-## 📋 Pull Request Process
+---
 
-1. Fork the repository and create your branch from `main` (`git checkout -b feat/my-improvement`).
-2. Implement your changes adhering to existing architectural patterns and clean Tailwind CSS styling.
-3. Ensure `npm run build` succeeds with **0 errors**.
-4. Push your branch (`git push origin feat/my-improvement`) and open a Pull Request.
-5. Provide a clear explanation of what changed in your PR description.
+## 🌿 GitFlow Branching Strategy & CI/CD Pipeline
+
+To ensure maximum stability and continuous delivery, ROImob follows a structured **GitFlow** model with full CI/CD automation:
+
+```
+feature/*  ──┐
+bugfix/*   ──┴─► [develop] ────► [staging] ────► [main] (🚀 https://www.roimob.eu/)
+                   (CI Gate)       (QA Testing)    (Production Deploy)
+```
+
+| Branch | Role | Deployment Target | Protection Rules |
+| :--- | :--- | :--- | :--- |
+| **`develop`** | Active development & integration | Local / Feature Preview | PR required + CI passes |
+| **`staging`** | Pre-production testing & QA | Release Candidate artifact | PR from `develop` + CI passes |
+| **`main`** | **Official Production** | 🌐 **[https://www.roimob.eu/](https://www.roimob.eu/)** | **Protected** (No direct push. Release PR only) |
+
+---
+
+## 📋 Pull Request & Development Workflow
+
+1. **Branch off `develop`**:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/my-new-feature
+   # or: git checkout -b bugfix/issue-description
+   ```
+2. **Implement your changes** adhering to existing architectural patterns and clean Tailwind CSS styling.
+3. **Run local CI validation commands**:
+   ```bash
+   # Run mathematical & tax assertion tests
+   npm test
+
+   # Strict TypeScript type check
+   npm run type-check
+
+   # Production build verification
+   npm run build
+   ```
+4. **Push your branch & Open a Pull Request**:
+   ```bash
+   git push origin feature/my-new-feature
+   ```
+   - Target **`develop`** as the base branch in your PR.
+   - Fill in the [PR template](.github/PULL_REQUEST_TEMPLATE.md).
+   - The automated GitHub Actions CI workflow will validate your code.
+5. **Promotion to Production**:
+   - Features in `develop` are promoted to `staging` for final regression testing.
+   - Tested releases are merged via PR into `main`, which automatically triggers continuous deployment to **[https://www.roimob.eu/](https://www.roimob.eu/)**.
 
 ---
 

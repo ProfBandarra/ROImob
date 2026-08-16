@@ -3,6 +3,7 @@
 <div align="center">
 
 [![Live App](https://img.shields.io/badge/🌐%20Official%20Live%20App-www.roimob.eu-emerald?style=for-the-badge&logo=google-chrome)](https://www.roimob.eu/)
+[![CI](https://github.com/ProfBandarra/ROImob/actions/workflows/ci.yml/badge.svg)](https://github.com/ProfBandarra/ROImob/actions/workflows/ci.yml)
 [![Buy Me A Coffee](https://img.shields.io/badge/☕%20Buy%20Me%20A%20Coffee-Support%20ROImob-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/nbandarra)
 [![Support on Revolut](https://img.shields.io/badge/💳%20Revolut-Support%20ROImob-0075eb?style=for-the-badge&logo=revolut&logoColor=white)](https://revolut.me/nbandarra)
 [![Suggest Improvement](https://img.shields.io/badge/💡%20Suggest%20Improvement-Open%20Issue-brand?style=for-the-badge&color=6366f1)](https://github.com/ProfBandarra/ROImob/issues/new?template=feature_request.md)
@@ -16,7 +17,7 @@
 
 🌐 **Live Application:** [**https://www.roimob.eu/**](https://www.roimob.eu/) • ☕ **Support:** [**Buy Me a Coffee**](https://buymeacoffee.com/nbandarra) & [**Revolut**](https://revolut.me/nbandarra)
 
-[Overview](#-project-overview) • [Live App](https://www.roimob.eu/) • [Support Development](#-support-roimob-development) • [Dual Modes](#-dual-mode-architecture-quick-⚡-vs-pro-🔬) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Audit Reports](#-institutional-audit-reports--printable-dossiers) • [Contributing](#-contributing--community-improvements) • [Legal Basis](#-statutory-romanian-legal-basis)
+[Overview](#-project-overview) • [Live App](https://www.roimob.eu/) • [CI/CD Lifecycle](#-gitflow-cicd-pipeline) • [Support Development](#-support-roimob-development) • [Dual Modes](#-dual-mode-architecture-quick-⚡-vs-pro-🔬) • [Engine 1: Sell vs. Rent](#-engine-1-owner-strategy--sell-vs-rent-optimizer) • [Engine 2: ROI & Taxes](#-engine-2-romanian-real-estate-roi--fiscal-engine) • [Audit Reports](#-institutional-audit-reports--printable-dossiers) • [Contributing](#-contributing--community-improvements) • [Legal Basis](#-statutory-romanian-legal-basis)
 
 <br />
 
@@ -228,7 +229,23 @@ ROImob is 100% open-source and welcoming contributions from the community:
 
 ---
 
-## 🛠️ Quick Start for Developers
+## 🌿 GitFlow CI/CD Pipeline & Release Engineering
+
+ROImob runs a **fully automated CI/CD pipeline** with zero direct pushes to `main`:
+
+```
+feature/*  ──┐
+bugfix/*   ──┴─► [develop] ────► [staging] ────► [main] (🚀 https://www.roimob.eu/)
+                   (CI Gate)       (QA Testing)    (Production Deploy)
+```
+
+- **`develop`**: Integration branch for new features, calculations, and community PRs.
+- **`staging`**: Pre-production test environment & release candidate validation.
+- **`main`**: Protected production branch driving **`https://www.roimob.eu/`**.
+
+---
+
+## 🛠️ Developer Commands & CI Gates
 
 ```bash
 # Clone the repository
@@ -241,11 +258,17 @@ npm install
 # Start local dev server
 npm run dev
 
+# Run automated mathematical and fiscal unit assertions (CI Gate)
+npm test
+
+# Run strict TypeScript type verification (CI Gate)
+npm run type-check
+
+# Build production bundle with distribution validation (CI Gate)
+npm run build
+
 # Run automated authentic Puppeteer screenshot suite
 npm run screenshots
-
-# Build production bundle with TypeScript verification
-npm run build
 ```
 
 ---
