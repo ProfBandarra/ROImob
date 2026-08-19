@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Rounded App Tile Background -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+
+  <!-- Inner Subtle Stroke -->
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="none" stroke="#ffffff" stroke-width="8" stroke-opacity="0.25" />
+
+  <!-- Building2 Icon Silhouette -->
+  <g fill="none" stroke="#ffffff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main Tower -->
+    <path d="M120 420V140a20 20 0 0 1 20-20h140a20 20 0 0 1 20 20v280" fill="#ffffff" fill-opacity="0.08" />
+    <!-- Annex Tower -->
+    <path d="M300 420V240a20 20 0 0 1 20-20h60a20 20 0 0 1 20 20v180" fill="#ffffff" fill-opacity="0.05" />
+    <!-- Ground Baseline -->
+    <path d="M80 420h352" />
+
+    <!-- Main Tower Windows -->
+    <path d="M170 180h40" />
+    <path d="M170 240h40" />
+    <path d="M170 300h40" />
+    <path d="M170 360h40" />
+
+    <!-- Main Tower Center/Right Windows -->
+    <path d="M230 180h30" />
+    <path d="M230 240h30" />
+    <path d="M230 300h30" />
+    <path d="M230 360h30" />
+
+    <!-- Annex Windows -->
+    <path d="M340 280h24" />
+    <path d="M340 340h24" />
+  </g>
+
+  <!-- Emerald Live Status Badge Dot -->
+  <circle cx="410" cy="102" r="38" fill="#10b981" stroke="#080d1a" stroke-width="12" filter="url(#glow)" />
+</svg>
