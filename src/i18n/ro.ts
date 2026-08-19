@@ -113,6 +113,38 @@ export const ro: TranslationDictionary = {
     reportIssueBtn: 'Raportează o Problemă pe GitHub',
     aiFootnote: 'Notă: Dezvoltarea acestei platforme a fost asistată de IA și, deși atent auditată conform Codului Fiscal, mici discrepanțe sau interpretări fiscale locale sunt posibile. Consultați întotdeauna notarul sau consultantul fiscal pentru tranzacții oficiale.',
   },
+  faq: {
+    sectionTitle: 'Ghid Fiscal & Întrebări Frecvente (FAQ)',
+    sectionSubtitle: 'Răspunsuri fundamentate legislativ la cele mai comune întrebări despre investiții, taxe și chirii în România:',
+    badge: 'Ghid & Fiscalitate 2026',
+    items: [
+      {
+        q: 'Cum se calculează randamentul net dintr-o chirie (Net Yield vs. Gross Yield)?',
+        a: 'Randamentul Brut (Gross Yield) reprezintă raportul dintre chiria anuală brută și prețul total de achiziție al imobilului. Randamentul Net (Net Yield / Cap Rate) deduce toate costurile reale suportate de proprietar: impozitul pe venit din chirii (8% efectiv conform OUG 115/2023), contribuția CASS sănătate (la depășirea plafoanelor), impozitul local pe clădiri, asigurarea obligatorie PAD și rata de neocupare/mentenanță anuală.',
+        tag: 'Randament ROI'
+      },
+      {
+        q: 'Cât este impozitul pe chirii în România în 2026 conform OUG 115/2023?',
+        a: 'Conform OUG 115/2023, persoanele fizice beneficiază de o cotă forfetară de 20% cheltuieli deductibile, ceea ce înseamnă că cota de impozit de 10% se aplică doar pe 80% din venitul brut din chirie (rezultând o cotă efectivă de 8%). În plus, dacă veniturile anuale cumulate din chirii depășesc 6, 12 sau 24 de salarii minime brute pe economie, se datorează suplimentar contribuția CASS (10% calculat la plafon).',
+        tag: 'OUG 115/2023'
+      },
+      {
+        q: 'Care este impozitul la vânzarea unui apartament conform Art. 111 din Codul Fiscal?',
+        a: 'Impozitul pe venitul din transferul proprietăților imobiliare din patrimoniul personal este stabilit prin Legea 227/2015 Art. 111: 1% dacă proprietatea a fost deținută o perioadă mai mare de 3 ani, respectiv 3% dacă a fost deținută până la 3 ani inclusiv. Deducerea istorică de 450.000 lei a fost eliminată.',
+        tag: 'Art. 111 Cod Fiscal'
+      },
+      {
+        q: 'Vânzare vs. Închiriere: Când este mai profitabil să vinzi o proprietate?',
+        a: 'Vânzarea este statistic mai avantajoasă atunci când randamentul net din chirie este inferior randamentului oferit de instrumentele cu risc zero (cum ar fi Titlurile de Stat Tezaur / Fidelis de 6.5%–7.5% neimpozabile), sau când imobilul necesită investiții mari de renovare, iar capitalul net eliberat din vânzare reinvestit compus produce o avere netă superioară pe 5–15 ani.',
+        tag: 'Strategie Proprietar'
+      },
+      {
+        q: 'Ce este indicele BNR IRCC și cum afectează rata la creditul ipotecar?',
+        a: 'Indicele de Referință pentru Creditele Consumatorilor (IRCC) este calculat trimestrial de Banca Națională a României (BNR) pe baza tranzacțiilor interbancare efective. Rata dobânzii la un credit ipotecar standard în lei este compusă din valoarea IRCC + marja băncii (uzual între 2.0% și 2.5%). Conform OUG 52/2016, rambursarea anticipată la creditele cu dobândă variabilă are 0% comision de penalizare.',
+        tag: 'BNR IRCC'
+      }
+    ]
+  },
   report: {
     titleSvr: 'Raport Oficial de Evaluare și Optimizare: Vânzare vs. Închiriere',
     titleRoi: 'Dosar Instituțional de Analiză a Randamentului și Fiscalității Imobiliare',

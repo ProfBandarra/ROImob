@@ -110,8 +110,40 @@ export const en: TranslationDictionary = {
     devTitle: 'Open-Source Project & Developer Community',
     devDesc: 'ROImob is an open-source project released under the MIT License. Built with React 18, TypeScript, Tailwind CSS, and Vite. Developers and researchers are welcome to audit calculations, submit pull requests, or adapt the formulas for other jurisdictions on GitHub.',
     githubRepoBtn: 'GitHub Repository',
-    reportIssueBtn: 'Report an Issue on GitHub',
-    aiFootnote: 'Note: The development of this platform was assisted by AI and, while carefully audited against Romanian fiscal laws, small discrepancies or changes in local tax interpretations can happen. Always double-check with your notary or certified tax advisor for official transactions.',
+    reportIssueBtn: 'Report Issue / Suggestion',
+    aiFootnote: 'Note: Platform development was assisted by AI. While strictly audited against the Romanian Fiscal Code, consult a certified tax advisor or public notary for binding operations.',
+  },
+  faq: {
+    sectionTitle: 'Real Estate Tax Guide & FAQ',
+    sectionSubtitle: 'Statutory answers to key questions on Romanian property investments, rental yields, and tax regulations:',
+    badge: '2026 Tax Guide',
+    items: [
+      {
+        q: 'How is net rental yield calculated (Net Yield vs. Gross Yield)?',
+        a: 'Gross Yield is the annual rent divided by total purchase price. Net Yield (Cap Rate) deducts all actual landlord expenses: 8% effective rental income tax (OUG 115/2023), CASS health insurance contribution if thresholds are exceeded, local building tax, mandatory PAD insurance, and maintenance/vacancy allowances.',
+        tag: 'Yield & ROI'
+      },
+      {
+        q: 'What is the Romanian rental income tax in 2026 under OUG 115/2023?',
+        a: 'Under OUG 115/2023, individual landlords receive a flat 20% deductible expense quota. This means the 10% income tax applies to only 80% of gross rent, producing an effective tax rate of 8%. If total annual rental income exceeds 6, 12, or 24 national gross minimum wages, mandatory CASS health contributions (10% on the bracket) apply.',
+        tag: 'OUG 115/2023'
+      },
+      {
+        q: 'What is the property transfer tax when selling an apartment in Romania?',
+        a: 'Under Romanian Fiscal Code (Law 227/2015 Art. 111), the transfer tax is 1% for properties owned for more than 3 years, and 3% for properties owned for up to 3 years. The historic 450,000 RON non-taxable allowance has been repealed.',
+        tag: 'Law 227/2015'
+      },
+      {
+        q: 'Sell vs. Rent: When is it better to sell a residential property?',
+        a: 'Selling is mathematically superior when net rental yields fall below risk-free sovereign yields (e.g., tax-free Romanian Treasury Tezaur/Fidelis bonds yielding 6.5%–7.5%), or when compounding the net proceeds over 5–15 years outpaces property appreciation after maintenance and taxes.',
+        tag: 'Owner Strategy'
+      },
+      {
+        q: 'What is the BNR IRCC benchmark and how does it affect mortgage payments?',
+        a: 'The Consumer Loans Benchmark Index (IRCC) is published quarterly by the National Bank of Romania (BNR). Variable interest rates on RON mortgages consist of the IRCC index plus the bank fixed margin (typically 2.0%–2.5%). Under OUG 52/2016, early prepayments carry 0% penalty fees.',
+        tag: 'BNR IRCC'
+      }
+    ]
   },
   report: {
     titleSvr: 'Comparative Real Estate Sell vs. Rent Financial Optimization Report',

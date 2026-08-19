@@ -111,6 +111,16 @@ export interface TranslationDictionary {
     reportIssueBtn: string;
     aiFootnote: string;
   };
+  faq: {
+    sectionTitle: string;
+    sectionSubtitle: string;
+    badge: string;
+    items: {
+      q: string;
+      a: string;
+      tag?: string;
+    }[];
+  };
   report: {
     titleSvr: string;
     titleRoi: string;

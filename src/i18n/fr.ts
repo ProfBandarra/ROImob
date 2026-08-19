@@ -110,8 +110,40 @@ export const fr: TranslationDictionary = {
     devTitle: 'Projet Open-Source & Communauté de Développeurs',
     devDesc: 'ROImob est un projet open-source sous licence MIT, conçu avec React 18, TypeScript, Tailwind CSS et Vite. Développeurs et chercheurs sont invités à auditer les calculs ou proposer des contributions sur GitHub.',
     githubRepoBtn: 'Dépôt GitHub',
-    reportIssueBtn: 'Signaler un Problème sur GitHub',
-    aiFootnote: 'Note: Le développement de cette plateforme a été assisté par l’IA. Bien que rigoureusement auditée selon le Code Fiscal, de légères variations d’interprétation locale restent possibles. Consultez toujours un notaire ou un conseiller fiscal certifié.',
+    reportIssueBtn: 'Signaler un Problème / Suggestion',
+    aiFootnote: 'Note : Le développement a été assisté par l\'IA. Bien que rigoureusement conforme au Code Fiscal Roumain, consultez un conseiller fiscal pour toute opération officielle.',
+  },
+  faq: {
+    sectionTitle: 'Guide Fiscal & Questions Fréquentes (FAQ)',
+    sectionSubtitle: 'Réponses détaillées sur les investissements, rendements et impôts immobiliers en Roumanie :',
+    badge: 'Guide Fiscalité 2026',
+    items: [
+      {
+        q: 'Comment calcule-t-on le rendement locatif net (Net Yield vs Gross Yield) ?',
+        a: 'Le Rendement Brut est le loyer annuel divisé par le prix d\'achat. Le Rendement Net (Cap Rate) déduit l\'impôt sur le revenu (8% effectif selon l\'OUG 115/2023), les cotisations santé CASS, la taxe foncière locale, l\'assurance PAD et les frais d\'entretien/vacance.',
+        tag: 'Rendement ROI'
+      },
+      {
+        q: 'Quel est l\'impôt sur les loyers en Roumanie en 2026 selon l\'OUG 115/2023 ?',
+        a: 'Selon l\'OUG 115/2023, les particuliers bénéficient d\'un abattement forfaitaire de 20%, ce qui donne un taux d\'imposition effectif de 8% sur les loyers bruts. Si les revenus locatifs annuels dépassent 6, 12 ou 24 salaires minimaux bruts, la cotisation CASS (10%) est également due.',
+        tag: 'OUG 115/2023'
+      },
+      {
+        q: 'Quel est l\'impôt sur la vente d\'un appartement en Roumanie (Art. 111) ?',
+        a: 'Selon l\'Art. 111 de la Loi 227/2015, l\'impôt est de 1% pour les biens détenus plus de 3 ans et de 3% pour les biens détenus 3 ans ou moins. L\'abattement historique de 450 000 RON a été supprimé.',
+        tag: 'Loi 227/2015'
+      },
+      {
+        q: 'Vendre ou Louer : quand est-il plus avantageux de vendre ?',
+        a: 'La vente est mathématiquement plus avantageuse lorsque le rendement net locatif est inférieur aux obligations d\'État sans risque (Titres Tezaur/Fidelis à 6.5%–7.5% non imposables) ou lorsque le capital réinvesti génère une plus-value supérieure sur 5–15 ans.',
+        tag: 'Stratégie'
+      },
+      {
+        q: 'Qu\'est-ce que l\'indice BNR IRCC et quel impact a-t-il sur les crédits ?',
+        a: 'L\'IRCC est calculé chaque trimestre par la Banque Nationale de Roumanie (BNR). Les taux variables des crédits immobiliers en lei se composent de l\'IRCC + la marge fixe de la banque. Selon l\'OUG 52/2016, le remboursement anticipé est sans frais (0%).',
+        tag: 'BNR IRCC'
+      }
+    ]
   },
   report: {
     titleSvr: 'Rapport d’Optimisation et d’Arbitrage Immobilier : Vendre vs Louer',

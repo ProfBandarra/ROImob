@@ -14,7 +14,9 @@ import {
   Code2, 
   Bot, 
   AlertCircle,
-  ShieldCheck
+  ShieldCheck,
+  HelpCircle,
+  BookOpen
 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { useTheme } from '../theme';
@@ -86,6 +88,8 @@ export const HomePage: React.FC<Props> = ({
   const { t } = useI18n();
   const { themeConfig } = useTheme();
   const [showAllRefs, setShowAllRefs] = useState<boolean>(false);
+  const [showFaqSection, setShowFaqSection] = useState<boolean>(true);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6 sm:space-y-10">
@@ -244,7 +248,86 @@ export const HomePage: React.FC<Props> = ({
 
       </div>
 
-      {/* 3. Compact Legislative Accordion */}
+      {/* 3. Compact & Elegant Real Estate FAQ & Tax Guide Accordion */}
+      {t.faq && (
+        <div className={`${themeConfig.cardBg} rounded-2xl sm:rounded-3xl border ${themeConfig.cardBorder} p-4 sm:p-6 space-y-3 shadow-lg transition-colors`}>
+          <div 
+            onClick={() => setShowFaqSection(!showFaqSection)}
+            className="flex items-center justify-between cursor-pointer select-none"
+          >
+            <div className="flex items-center gap-2.5">
+              <HelpCircle className="w-4 h-4 text-brand-400 shrink-0" />
+              <h2 className={`text-xs sm:text-sm font-black ${themeConfig.textPrimary}`}>
+                {t.faq.sectionTitle}
+              </h2>
+              <span className="text-[10px] text-brand-400 font-mono font-bold bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20 hidden sm:inline-block">
+                {t.faq.badge}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              className="text-xs text-brand-400 font-bold flex items-center gap-1 cursor-pointer"
+            >
+              <span>{showFaqSection ? 'Less' : `View FAQ (${t.faq.items.length})`}</span>
+              {showFaqSection ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
+          </div>
+
+          {showFaqSection && (
+            <div className="space-y-2 pt-2 border-t border-slate-800/60">
+              <p className={`text-[11px] ${themeConfig.textSecondary} mb-2`}>
+                {t.faq.sectionSubtitle}
+              </p>
+              <div className="space-y-2">
+                {t.faq.items.map((item, idx) => {
+                  const isOpen = openFaqIndex === idx;
+                  return (
+                    <div 
+                      key={idx}
+                      className={`rounded-xl border transition-all ${
+                        isOpen 
+                          ? 'border-brand-500/40 bg-brand-950/20 shadow-sm' 
+                          : 'border-slate-800/80 bg-slate-950/40 hover:border-slate-700'
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                        className="w-full text-left p-3 sm:p-3.5 flex items-center justify-between gap-3 cursor-pointer select-none"
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          {item.tag && (
+                            <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-800 text-brand-300 shrink-0">
+                              {item.tag}
+                            </span>
+                          )}
+                          <h3 className={`text-xs sm:text-sm font-bold ${isOpen ? 'text-brand-300' : themeConfig.textPrimary} truncate`}>
+                            {item.q}
+                          </h3>
+                        </div>
+                        <div className="shrink-0 text-slate-400">
+                          {isOpen ? <ChevronUp className="w-4 h-4 text-brand-400" /> : <ChevronDown className="w-4 h-4" />}
+                        </div>
+                      </button>
+
+                      {isOpen && (
+                        <div className="px-3 pb-3 sm:px-3.5 sm:pb-3.5 pt-0 text-xs leading-relaxed text-slate-300 border-t border-slate-800/40">
+                          <p className="pt-2 text-[11px] sm:text-xs text-slate-300 font-normal leading-relaxed">
+                            {item.a}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 4. Compact Legislative Accordion */}
       <div className={`${themeConfig.cardBg} rounded-2xl sm:rounded-3xl border ${themeConfig.cardBorder} p-4 sm:p-6 space-y-3 shadow-lg`}>
         <div 
           onClick={() => setShowAllRefs(!showAllRefs)}

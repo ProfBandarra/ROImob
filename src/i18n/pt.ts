@@ -110,8 +110,40 @@ export const pt: TranslationDictionary = {
     devTitle: 'Projeto Open-Source & Comunidade de Desenvolvedores',
     devDesc: 'O ROImob é um projeto de código aberto sob licença MIT, construído com React 18, TypeScript, Tailwind CSS e Vite. Desenvolvedores e investigadores são bem-vindos para auditar cálculos no GitHub.',
     githubRepoBtn: 'Repositório GitHub',
-    reportIssueBtn: 'Reportar um Problema no GitHub',
-    aiFootnote: 'Nota: O desenvolvimento desta plataforma foi assistido por IA. Embora rigorosamente auditada segundo o Código Fiscal romeno, pequenas discrepâncias de interpretação local são possíveis. Consulte sempre um notário ou contabilista certificado.',
+    reportIssueBtn: 'Reportar Problema / Sugestão',
+    aiFootnote: 'Nota: O desenvolvimento desta plataforma foi assistido por IA. Embora rigorosamente auditada segundo o Código Fiscal romeno, consulte sempre um notário ou contabilista certificado.',
+  },
+  faq: {
+    sectionTitle: 'Guia Fiscal & Perguntas Frequentes (FAQ)',
+    sectionSubtitle: 'Respostas fundamentadas na lei romena sobre investimentos, rentabilidade e impostos imobiliários:',
+    badge: 'Guia Fiscal 2026',
+    items: [
+      {
+        q: 'Como se calcula a rentabilidade líquida de arrendamento (Net Yield vs. Gross Yield)?',
+        a: 'A Rentabilidade Bruta (Gross Yield) é a renda anual dividida pelo preço de aquisição. A Rentabilidade Líquida (Cap Rate) deduz todos os custos reais suportados pelo proprietário: imposto sobre rendimentos prediais (8% efetivo segundo a OUG 115/2023), contribuição CASS de saúde, imposto predial local, seguro PAD e manutenção.',
+        tag: 'Rentabilidade ROI'
+      },
+      {
+        q: 'Qual é o imposto sobre rendas na Roménia em 2026 segundo a OUG 115/2023?',
+        a: 'Segundo a OUG 115/2023, as pessoas singulares beneficiam de uma dedução forfetária de 20%, o que significa que a taxa de 10% incide apenas sobre 80% do valor bruto da renda (taxa efetiva de 8%). Caso o rendimento anual exceda 6, 12 ou 24 salários mínimos nacionais, acresce a contribuição CASS de saúde.',
+        tag: 'OUG 115/2023'
+      },
+      {
+        q: 'Qual é o imposto na venda de um imóvel segundo o Art. 111 do Código Fiscal?',
+        a: 'O imposto sobre a alienação de imóveis particulares é de 1% para propriedades detidas há mais de 3 anos, e 3% para propriedades detidas até 3 anos inclusive. A dedução histórica de 450.000 lei foi revogada.',
+        tag: 'Art. 111'
+      },
+      {
+        q: 'Vender vs. Arrendar: quando é mais rentável vender um imóvel?',
+        a: 'Vender é matematicamente mais vantajoso quando a rentabilidade líquida do arrendamento fica abaixo dos títulos do tesouro romenos sem risco (Tezaur/Fidelis a 6.5%–7.5% isentos de imposto), ou quando o capital reinvestido gera um valor líquido superior a 5–15 anos.',
+        tag: 'Estratégia'
+      },
+      {
+        q: 'O que é o índice BNR IRCC e como influencia as prestações do crédito à habitação?',
+        a: 'O IRCC é a taxa de referência para o crédito a consumidores calculada trimestralmente pelo Banco Nacional da Roménia (BNR). A taxa de juro variável em lei é composta pelo IRCC + margem fixa do banco. Segundo a OUG 52/2016, a amortização antecipada tem 0% de comissão.',
+        tag: 'BNR IRCC'
+      }
+    ]
   },
   report: {
     titleSvr: 'Relatório Oficial de Arbitragem Financeira: Vender vs. Arrendar',

@@ -109,9 +109,41 @@ export const de: TranslationDictionary = {
     viewOfficialSource: 'Offizielle Rechtsquelle Einsehen',
     devTitle: 'Open-Source-Projekt & Entwickler-Community',
     devDesc: 'ROImob ist ein Open-Source-Projekt unter MIT-Lizenz, entwickelt mit React 18, TypeScript, Tailwind CSS und Vite. Entwickler und Forscher sind herzlich eingeladen, auf GitHub beizutragen.',
-    githubRepoBtn: 'GitHub-Repository',
-    reportIssueBtn: 'Problem auf GitHub Melden',
-    aiFootnote: 'Hinweis: Die Entwicklung dieser Plattform wurde durch KI unterstützt. Trotz sorgfältiger Prüfung können lokale steuerliche Auslegungen variieren. Wenden Sie sich für verbindliche Rechtsgeschäfte an einen Notar oder Steuerberater.',
+    githubRepoBtn: 'GitHub Repository',
+    reportIssueBtn: 'Problem / Vorschlag Melden',
+    aiFootnote: 'Hinweis: ROImob bietet mathematische und steuerliche Simulationen auf Basis des rumänischen Steuergesetzes (Gesetz 227/2015 & OUG 115/2023). Dient ausschließlich zu Informationszwecken.',
+  },
+  faq: {
+    sectionTitle: 'Steuerleitfaden & Häufige Fragen (FAQ)',
+    sectionSubtitle: 'Fundierte Antworten zu Immobilieninvestitionen, Mietrenditen und Steuern in Rumänien:',
+    badge: 'Steuer-Leitfaden 2026',
+    items: [
+      {
+        q: 'Wie berechnet man die Netto-Mietrendite (Net Yield vs. Gross Yield)?',
+        a: 'Die Bruttorendite ist die Jahreskaltmiete geteilt durch den Kaufpreis. Die Nettorendite (Cap Rate) zieht alle Kosten ab: 8% effektive Mieteinkommensteuer (OUG 115/2023), CASS-Krankenversicherungsbeiträge, lokale Gebäudesteuer, PAD-Pflichtversicherung und Instandhaltung.',
+        tag: 'Mietrendite ROI'
+      },
+      {
+        q: 'Wie hoch ist die Steuer auf Mieteinnahmen in Rumänien 2026 (OUG 115/2023)?',
+        a: 'Gemäß OUG 115/2023 erhalten Vermieter einen pauschalen Werbekostenabzug von 20%, sodass der 10%-Steuersatz nur auf 80% der Bruttomiete anfällt (effektiver Steuersatz von 8%). Bei Überschreitung von 6, 12 oder 24 Mindestlöhnen fällt zusätzlich der CASS-Krankenversicherungsbeitrag an.',
+        tag: 'OUG 115/2023'
+      },
+      {
+        q: 'Wie hoch ist die Grunderwerbsteuer beim Verkauf (Art. 111 Steuergesetz)?',
+        a: 'Gemäß Art. 111 des Gesetzes 227/2015 beträgt die Übertragungssteuer 1% bei einer Haltedauer von über 3 Jahren und 3% bei bis zu 3 Jahren. Der historische Freibetrag von 450.000 Lei wurde abgeschafft.',
+        tag: 'Art. 111'
+      },
+      {
+        q: 'Verkaufen vs. Vermieten: Wann lohnt sich der Verkauf einer Immobilie?',
+        a: 'Ein Verkauf ist vorteilhaft, wenn die Netto-Mietrendite unter der risikofreien Rendite rumänischer Staatsanleihen (Tezaur/Fidelis mit 6.5%–7.5% steuerfrei) liegt oder das freigesetzte Kapital über 5–15 Jahre einen höheren Zinseszinseffekt erzielt.',
+        tag: 'Eigentümerstrategie'
+      },
+      {
+        q: 'Was ist der BNR IRCC-Index und wie beeinflusst er Hypothekendarlehen?',
+        a: 'Der IRCC ist der Referenzzinssatz der Nationalbank Rumäniens (BNR) für Verbraucherkredite. Variable Zinssätze bestehen aus dem IRCC-Index plus der Bankmarge. Nach OUG 52/2016 fallen bei vorzeitiger Tilgung 0% Vorfälligkeitsentschädigung an.',
+        tag: 'BNR IRCC'
+      }
+    ]
   },
   report: {
     titleSvr: 'Offizieller Optimierungsbericht: Immobilie Verkaufen vs. Vermieten',
